@@ -14,13 +14,6 @@ This module can be used to provision and configure [Context Based Restrictions](
 
 ## Usage
 
-<!--
-Add an example of the use of the module in the following code block.
-
-Use real values instead of "var.<var_name>" or other placeholder values
-unless real values don't help users know what to change.
--->
-
 ```hcl
 module "ibm_cbr" "zone" {
   # replace main with version
