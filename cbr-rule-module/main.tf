@@ -5,9 +5,9 @@
 ##############################################################################
 
 locals {
-  operations = var.operations == null && length(var.operations) == 0 ? null : var.operations
-  resources  = var.resources == null && length(var.resources) == 0 ? null : var.resources
-  contexts   = var.rule_contexts == null && length(var.rule_contexts) == 0 ? null : var.rule_contexts
+  operations = var.operations == null || length(var.operations) == 0 ? null : var.operations
+  resources  = var.resources == null || length(var.resources) == 0 ? null : var.resources
+  contexts   = var.rule_contexts == null || length(var.rule_contexts) == 0 ? null : var.rule_contexts
 }
 
 resource "ibm_cbr_rule" "cbr_rule" {
