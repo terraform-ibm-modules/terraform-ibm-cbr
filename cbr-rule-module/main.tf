@@ -5,9 +5,9 @@
 ##############################################################################
 
 locals {
-  operations = var.operations == null || length(var.operations) == 0 ? null : var.operations
-  resources  = var.resources == null || length(var.resources) == 0 ? null : var.resources
-  contexts   = var.rule_contexts == null || length(var.rule_contexts) == 0 ? null : var.rule_contexts
+  operations = var.resources == null ? [] : var.operations
+  resources  = var.resources == null ? [] : var.resources
+  contexts   = var.rule_contexts == null ? [] : var.rule_contexts
 }
 
 resource "ibm_cbr_rule" "cbr_rule" {
@@ -52,7 +52,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
   }
 
   dynamic "operations" {
-    for_each = local.operations == null ? [] : local.operations
+    for_each = local.operations
     content {
       dynamic "api_types" {
         for_each = var.operations[0].api_types == null ? null : var.operations[0].api_types

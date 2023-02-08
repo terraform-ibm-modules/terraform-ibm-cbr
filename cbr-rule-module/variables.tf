@@ -84,4 +84,5 @@ variable "operations" {
     }))
   }))
   description = "(Optional, List) The operations this rule applies to"
+  default     = []
 }
