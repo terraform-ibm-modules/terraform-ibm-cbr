@@ -72,8 +72,7 @@ variable "resources" {
       operator = optional(string)
     })))
   }))
-  description = "(Optional, List) The resources this rule apply to"
-  default     = []
+  description = "(List) The resources this rule apply to"
 
 }
 
@@ -85,4 +84,8 @@ variable "operations" {
   }))
   description = "(Optional, List) The operations this rule applies to"
   default     = []
+  validation {
+    condition     = var.operations != null
+    error_message = "operations cannot be null, an empty list is valid"
+  }
 }

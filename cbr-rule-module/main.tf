@@ -4,21 +4,15 @@
 # Creates CBR Rule
 ##############################################################################
 
-locals {
-  operations = var.operations == null ? [] : var.operations
-  resources  = var.resources == null ? [] : var.resources
-  contexts   = var.rule_contexts == null ? [] : var.rule_contexts
-}
-
 resource "ibm_cbr_rule" "cbr_rule" {
   description      = var.rule_description
   enforcement_mode = var.enforcement_mode
 
   dynamic "contexts" {
-    for_each = local.contexts
+    for_each = var.rule_contexts
     content {
       dynamic "attributes" {
-        for_each = local.contexts[0].attributes == null ? [] : local.contexts[0].attributes
+        for_each = var.rule_contexts[0].attributes == null ? [] : var.rule_contexts[0].attributes
         iterator = attribute
         content {
           name  = attribute.value.name
@@ -29,10 +23,10 @@ resource "ibm_cbr_rule" "cbr_rule" {
   }
 
   dynamic "resources" {
-    for_each = local.resources
+    for_each = var.resources
     content {
       dynamic "attributes" {
-        for_each = local.resources[0].attributes == null ? [] : local.resources[0].attributes
+        for_each = var.resources[0].attributes == null ? [] : var.resources[0].attributes
         iterator = attribute
         content {
           name     = attribute.value.name
@@ -41,7 +35,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
         }
       }
       dynamic "tags" {
-        for_each = local.resources[0].tags == null ? [] : local.resources[0].tags
+        for_each = var.resources[0].tags == null ? [] : var.resources[0].tags
         iterator = tag
         content {
           name  = tag.value.name
