@@ -46,7 +46,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
   }
 
   dynamic "operations" {
-    for_each = local.operations
+    for_each = var.operations
     content {
       dynamic "api_types" {
         for_each = var.operations[0].api_types == null ? null : var.operations[0].api_types
