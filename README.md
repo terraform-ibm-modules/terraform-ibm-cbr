@@ -1,6 +1,6 @@
 <!-- BEGIN MODULE HOOK -->
 
-<!-- Update the title to match the module name and add a description -->
+<!-- Update the title to match the module name and add a description  -->
 # Context-based restrictions module
 
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green?style=plastic)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
