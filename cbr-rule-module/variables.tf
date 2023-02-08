@@ -28,7 +28,6 @@ variable "rule_contexts" {
     })))
   }))
   description = "(List) The contexts the rule applies to"
-  default     = []
   validation {
     condition = anytrue(
       flatten(
