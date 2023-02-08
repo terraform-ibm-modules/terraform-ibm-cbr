@@ -5,7 +5,7 @@
 ##############################################################################
 
 locals {
-  operations = var.resources == null ? [] : var.operations
+  operations = var.operations == null ? [] : var.operations
   resources  = var.resources == null ? [] : var.resources
   contexts   = var.rule_contexts == null ? [] : var.rule_contexts
 }
