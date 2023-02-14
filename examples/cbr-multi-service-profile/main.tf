@@ -89,33 +89,52 @@ locals {
     }]
   }]
 
-  pg_resource = [{
-    attributes = [
-      {
-        name     = "accountId"
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-        operator = "stringEquals"
-      },
-      {
-        name     = "serviceName"
-        value    = "cloud-object-storage"
-        operator = "stringEquals"
-      }
-    ],
+  target_service_details = [{
+    account_id = data.ibm_iam_account_settings.iam_account_settings.account_id,
+    target_service_name = "cloud-object-storage",
     tags = [
-      {
-        name  = "terraform-rule"
-        value = "allow-cos"
-      }
-    ]
+        {
+          name  = "environment"
+          value = "${var.prefix}-test"
+        },
+        {
+          name: "region",
+          value: "us-south",
+          operator: "stringEquals"
+        },
+        {
+          name  = "terraform-rule"
+          value = "allow-${var.prefix}-vpc-to-${var.prefix}-cos"
+        }
+      ],
+      operations = []
+  }, {
+    account_id = data.ibm_iam_account_settings.iam_account_settings.account_id,
+    target_service_name = "codeengine",
+    tags = [
+        {
+          name  = "environment"
+          value = "${var.prefix}-test"
+        },
+        {
+          name  = "terraform-rule"
+          value = "allow-${var.prefix}-vpc-to-${var.prefix}-cos"
+        }
+      ],
+      operations = []
+  },
+  {    
+    account_id = data.ibm_iam_account_settings.iam_account_settings.account_id,
+    target_service_name = "messagehub",
+    tags = [],
+    operations = []
   }]
 }
 
-module "cbr_rule" {
-  source           = "../../cbr-rule-module"
+module "cbr_rule_multi_service_profile" {
+  source           = "../../cbr-service-profile"
   rule_description = var.rule_description
   enforcement_mode = var.enforcement_mode
   rule_contexts    = local.rule_contexts
-  resources        = local.pg_resource
-  operations       = []
+  target_service_details = local.target_service_details
 }

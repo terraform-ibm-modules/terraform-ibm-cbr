@@ -54,6 +54,7 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
+- [ CBR Multi Service Profile](examples/cbr-multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)
 <!-- END EXAMPLES HOOK -->
