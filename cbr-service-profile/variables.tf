@@ -26,18 +26,22 @@ variable "enforcement_mode" {
 
 variable "target_service_details" {
   type = list(object({
-    account_id          = string
-    target_service_name = string
-    operations = list(object({
-      api_types = list(object({
-        api_type_id = string
-      }))
+    attributes = list(object({
+      name     = string
+      value    = string
+      operator = optional(string)
     }))
     tags = optional(list(object({
       name  = string
       value = string
     })))
+    operations = list(object({
+      api_types = list(object({
+        api_type_id = string
+      }))
+    }))
+
   }))
-  description = "(String) The rule enforcement mode"
+  description = "(String) Details of the target service for which the rule has to be created"
   default     = []
 }
