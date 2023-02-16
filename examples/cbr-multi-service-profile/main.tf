@@ -98,11 +98,6 @@ locals {
           "operator" : "stringEquals"
         },
         {
-          "name" : "resource",
-          "value" : "abc",
-          "operator" : "stringEquals"
-        },
-        {
           "name" : "resourceGroupId",
           "value" : "07648f8a3643476a90f1ae877aa9df12"
           "operator" : "stringEquals"
@@ -123,7 +118,9 @@ locals {
           value = "allow-${var.prefix}-vpc-to-${var.prefix}-cos"
         }
       ],
-      operations = []
+      operations       = [],
+      enforcement_mode = "report",
+      rule_description = "Terraform report only rule for COS"
     },
     {
       attributes = [
@@ -132,13 +129,8 @@ locals {
           "value" : data.ibm_iam_account_settings.iam_account_settings.account_id,
         },
         {
-          "name" : "region",
-          "value" : "us-south",
-          "operator" : "stringEquals"
-        },
-        {
           "name" : "serviceName",
-          "value" : "codeengine",
+          "value" : "kms",
           "operator" : "stringEquals"
         }
       ],
@@ -149,10 +141,12 @@ locals {
         },
         {
           name  = "terraform-rule"
-          value = "allow-${var.prefix}-vpc-to-${var.prefix}-cos"
+          value = "allow-${var.prefix}-vpc-to-${var.prefix}-kms"
         }
       ],
-      operations = []
+      operations       = [],
+      enforcement_mode = "report",
+      rule_description = "Terraform report only rule for kms"
     },
     {
       attributes = [
@@ -166,8 +160,10 @@ locals {
           "operator" : "stringEquals"
         }
       ]
-      tags       = [],
-      operations = []
+      tags             = [],
+      operations       = [],
+      enforcement_mode = "report",
+      rule_description = "Terraform report only rule for IAM services"
     },
     {
       attributes = [
@@ -181,15 +177,15 @@ locals {
           "operator" : "stringEquals"
         }
       ]
-      tags       = [],
-      operations = []
+      tags             = [],
+      operations       = [],
+      enforcement_mode = "report",
+      rule_description = "Terraform report only rule for messagehub"
   }]
 }
 
 module "cbr_rule_multi_service_profile" {
   source                 = "../../cbr-service-profile"
-  rule_description       = var.rule_description
-  enforcement_mode       = var.enforcement_mode
   rule_contexts          = local.rule_contexts
   target_service_details = local.target_services_details
 }

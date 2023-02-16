@@ -1,13 +1,6 @@
 ##############################################################################
 # Rule Related Input Variables
 ##############################################################################
-
-variable "rule_description" {
-  type        = string
-  description = "(Optional, String) The description of the rule"
-  default     = null
-}
-
 variable "rule_contexts" {
   type = list(object({
     attributes = optional(list(object({
@@ -18,12 +11,6 @@ variable "rule_contexts" {
   description = "(List) The contexts the rule applies to"
 }
 
-variable "enforcement_mode" {
-  type        = string
-  description = "(String) The rule enforcement mode"
-  default     = "report" # As part of the best practices, mode should be in report only mode for 30 days before the rules is enabled.
-}
-
 variable "target_service_details" {
   type = list(object({
     attributes = list(object({
@@ -31,6 +18,8 @@ variable "target_service_details" {
       value    = string
       operator = optional(string)
     }))
+    rule_description = string
+    enforcement_mode = string
     tags = optional(list(object({
       name  = string
       value = string
