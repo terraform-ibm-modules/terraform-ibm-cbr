@@ -80,7 +80,7 @@ module "cbr_zone" {
 }
 
 locals {
-
+  enforcement_mode = "report"
   # Merge zone ids to pass as contexts to the rule
   rule_contexts = [{
     attributes = [{
@@ -99,7 +99,7 @@ locals {
         },
         {
           "name" : "resourceGroupId",
-          "value" : "07648f8a3643476a90f1ae877aa9df12"
+          "value" : module.resource_group.resource_group_id
           "operator" : "stringEquals"
         },
         {
@@ -110,16 +110,12 @@ locals {
       ],
       tags = [
         {
-          name  = "environment"
-          value = "${var.prefix}-test"
-        },
-        {
-          name  = "terraform-rule"
-          value = "allow-${var.prefix}-vpc-to-${var.prefix}-cos"
+          name  = "env"
+          value = "test"
         }
       ],
       operations       = [],
-      enforcement_mode = "report",
+      enforcement_mode = local.enforcement_mode,
       rule_description = "Terraform report only rule for COS"
     },
     {
@@ -136,16 +132,12 @@ locals {
       ],
       tags = [
         {
-          name  = "environment"
-          value = "${var.prefix}-test"
-        },
-        {
-          name  = "terraform-rule"
-          value = "allow-${var.prefix}-vpc-to-${var.prefix}-kms"
+          name  = "env"
+          value = "test"
         }
       ],
       operations       = [],
-      enforcement_mode = "report",
+      enforcement_mode = local.enforcement_mode,
       rule_description = "Terraform report only rule for kms"
     },
     {
@@ -162,7 +154,7 @@ locals {
       ]
       tags             = [],
       operations       = [],
-      enforcement_mode = "report",
+      enforcement_mode = local.enforcement_mode,
       rule_description = "Terraform report only rule for IAM services"
     },
     {
@@ -179,7 +171,7 @@ locals {
       ]
       tags             = [],
       operations       = [],
-      enforcement_mode = "report",
+      enforcement_mode = local.enforcement_mode,
       rule_description = "Terraform report only rule for messagehub"
   }]
 }
