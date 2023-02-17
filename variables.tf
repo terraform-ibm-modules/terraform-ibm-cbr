@@ -78,7 +78,7 @@ variable "resources" {
       value    = string
       operator = optional(string)
     }))
-    tags = optional(list(object({
+    tags = optional(list(object({ #These access tags should match to the target service access tags for the CBR rules to work
       name     = string
       value    = string
       operator = optional(string)

@@ -34,6 +34,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
           operator = attribute.value.operator
         }
       }
+      # Access tags for the target resources.  These resource tags specified in the rule should match to the tags attached to the target service access tags.
       dynamic "tags" {
         for_each = var.resources[0].tags == null ? [] : var.resources[0].tags
         iterator = tag
