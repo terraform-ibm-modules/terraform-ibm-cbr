@@ -35,6 +35,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
         }
       }
       # Access tags for the target resources.  These tags specified in the rule should match to the tags attached to the target service access tags.
+      # These tags should be valid in the account.  Refer https://test.cloud.ibm.com/docs/account?topic=account-access&interface=ui for more details
       dynamic "tags" {
         for_each = var.resources[0].tags == null ? [] : var.resources[0].tags
         iterator = tag

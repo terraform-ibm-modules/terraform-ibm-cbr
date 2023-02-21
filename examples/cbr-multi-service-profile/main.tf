@@ -63,7 +63,7 @@ locals {
         type = "serviceRef" # to bind a service reference type should be 'serviceRef'
         ref = {
           account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
-          service_name = "directlink" # secrets manager service reference.
+          service_name = "directlink" # DirectLink service reference.
         }
       }]
     }
