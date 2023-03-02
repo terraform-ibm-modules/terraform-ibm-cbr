@@ -13,11 +13,11 @@ resource "ibm_cbr_rule" "cbr_rule" {
     iterator = context
     content {
       dynamic "attributes" {
-        for_each = lookup(context.value, "attributes", [])
+        for_each = context.value["attributes"] == null ? [] : context.value["attributes"]
         iterator = attribute
         content {
-          name  = attribute.value.name
-          value = attribute.value.value
+          name  = attribute.value["name"]
+          value = attribute.value["value"]
         }
       }
     }
@@ -28,20 +28,20 @@ resource "ibm_cbr_rule" "cbr_rule" {
     iterator = resource
     content {
       dynamic "attributes" {
-        for_each = lookup(resource.value, "attributes", [])
+        for_each = resource.value["attributes"] == null ? [] : resource.value["attributes"]
         iterator = attribute
         content {
-          name     = attribute.value.name
-          value    = attribute.value.value
-          operator = attribute.value.operator
+          name     = attribute.value["name"]
+          value    = attribute.value["value"]
+          operator = attribute.value["operator"]
         }
       }
       dynamic "tags" {
-        for_each = lookup(resource.value, "tags", [])
+        for_each = resource.value["tags"] == null ? [] : resource.value["tags"]
         iterator = tag
         content {
-          name  = tag.value.name
-          value = tag.value.value
+          name  = tag.value["name"]
+          value = tag.value["value"]
         }
       }
     }
@@ -52,10 +52,10 @@ resource "ibm_cbr_rule" "cbr_rule" {
     iterator = operation
     content {
       dynamic "api_types" {
-        for_each = lookup(operation.value, "api_types", [])
-        iterator = apitype
+        for_each = operation.value["api_types"]
+        iterator = api_type
         content {
-          api_type_id = apitype.value["api_type_id"]
+          api_type_id = api_type.value["api_type_id"]
         }
       }
     }
