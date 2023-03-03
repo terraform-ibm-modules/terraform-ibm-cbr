@@ -244,25 +244,41 @@
         "rule_crn": {
           "name": "rule_crn",
           "description": "CBR rule resource instance crn",
+          "value": "ibm_cbr_rule.cbr_rule.crn",
           "pos": {
             "filename": "cbr-rule-module/outputs.tf",
-            "line": 10
-          }
+            "line": 15
+          },
+          "type": "TypeString",
+          "cloud_data_type": "crn"
+        },
+        "rule_description": {
+          "name": "rule_description",
+          "description": "CBR rule resource instance description",
+          "value": "ibm_cbr_rule.cbr_rule.description",
+          "pos": {
+            "filename": "cbr-rule-module/outputs.tf",
+            "line": 5
+          },
+          "type": "TypeString"
         },
         "rule_href": {
           "name": "rule_href",
           "description": "CBR rule resource href",
+          "value": "ibm_cbr_rule.cbr_rule.href",
           "pos": {
             "filename": "cbr-rule-module/outputs.tf",
-            "line": 15
-          }
+            "line": 20
+          },
+          "type": "TypeString"
         },
         "rule_id": {
           "name": "rule_id",
           "description": "CBR rule resource instance id",
+          "value": "ibm_cbr_rule.cbr_rule.id",
           "pos": {
             "filename": "cbr-rule-module/outputs.tf",
-            "line": 5
+            "line": 10
           }
         }
       },
@@ -304,26 +320,52 @@
         "zone_crn": {
           "name": "zone_crn",
           "description": "CBR zone resource instance crn",
+          "value": "ibm_cbr_zone.cbr_zone.crn",
+          "pos": {
+            "filename": "cbr-zone-module/outputs.tf",
+            "line": 20
+          },
+          "type": "TypeString",
+          "cloud_data_type": "crn"
+        },
+        "zone_description": {
+          "name": "zone_description",
+          "description": "(Optional, String) The description of the zone",
+          "value": "var.zone_description",
           "pos": {
             "filename": "cbr-zone-module/outputs.tf",
             "line": 10
-          }
+          },
+          "type": "string"
         },
         "zone_href": {
           "name": "zone_href",
           "description": "CBR zone resource instance link",
+          "value": "ibm_cbr_zone.cbr_zone.href",
+          "pos": {
+            "filename": "cbr-zone-module/outputs.tf",
+            "line": 25
+          },
+          "type": "TypeString"
+        },
+        "zone_id": {
+          "name": "zone_id",
+          "description": "CBR zone resource instance id",
+          "value": "ibm_cbr_zone.cbr_zone.id",
           "pos": {
             "filename": "cbr-zone-module/outputs.tf",
             "line": 15
           }
         },
-        "zone_id": {
-          "name": "zone_id",
-          "description": "CBR zone resource instance id",
+        "zone_names": {
+          "name": "zone_names",
+          "description": "CBR zone resource instance name",
+          "value": "ibm_cbr_zone.cbr_zone.name",
           "pos": {
             "filename": "cbr-zone-module/outputs.tf",
             "line": 5
-          }
+          },
+          "type": "TypeString"
         }
       },
       "pos": {
