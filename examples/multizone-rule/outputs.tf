@@ -17,6 +17,21 @@ output "zone_href" {
   description = "CBR zone resource instance href"
 }
 
+output "cos_guid" {
+  value       = ibm_resource_instance.cos_instance.guid
+  description = "COS guid (used in tests)"
+}
+
+output "account_id" {
+  value       = data.ibm_iam_account_settings.iam_account_settings.id
+  description = "Account ID (used in tests)"
+}
+
+output "resource_group_id" {
+  value       = module.resource_group.resource_group_id
+  description = "Resource group ID (used for tests)"
+}
+
 output "rule_id" {
   value       = module.cbr_rule.rule_id
   description = "CBR rule resource instance id"

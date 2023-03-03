@@ -79,43 +79,80 @@ module "cbr_zone" {
   addresses        = local.zone_list[count.index].addresses
 }
 
+# Resource to create COS instance if create_cos_instance is true
+resource "ibm_resource_instance" "cos_instance" {
+  name              = "${var.prefix}-mz-rule-example"
+  resource_group_id = module.resource_group.resource_group_id
+  service           = "cloud-object-storage"
+  plan              = "standard"
+  location          = "global"
+  tags              = var.resource_tags
+}
+
 locals {
 
   # Merge zone ids to pass as contexts to the rule
   rule_contexts = [{
     attributes = [{
       name  = "networkZoneId"
-      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
-    }]
+      value = module.cbr_zone[0].zone_id
+    }] }, {
+    attributes = [
+      {
+        name  = "networkZoneId"
+        value = module.cbr_zone[1].zone_id
+      }
+    ]
   }]
 
-  pg_resource = [{
+  rule_resources = [{
     attributes = [
       {
         name     = "accountId"
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-        operator = ""
+        operator = "stringEquals"
+      },
+      {
+        "name" : "resourceGroupId",
+        "value" : module.resource_group.resource_group_id
+      },
+      {
+        name     = "serviceInstance"
+        value    = ibm_resource_instance.cos_instance.guid
+        operator = "stringEquals"
       },
       {
         name     = "serviceName"
         value    = "cloud-object-storage"
-        operator = ""
+        operator = "stringEquals"
       }
     ],
     tags = [
+      # Note these are access tags and all iam access tags must be present on the resource for the rule to match
       {
-        name  = "terraform-rule"
-        value = "allow-cos"
+        name  = "iam_access_tag"
+        value = "allow-access"
+      },
+      {
+        name  = "sample_tag"
+        value = "secondary_example_tag"
       }
     ]
   }]
 }
 
+# Dont forget to add the access tags
+resource "ibm_resource_tag" "tags" {
+  resource_id = ibm_resource_instance.cos_instance.crn
+  tags        = ["allow-access", "secondary_example_tag"]
+  tag_type    = "access"
+}
+
 module "cbr_rule" {
   source           = "../../cbr-rule-module"
-  rule_description = var.rule_description
+  rule_description = "${var.prefix} ${var.rule_description}"
   enforcement_mode = var.enforcement_mode
   rule_contexts    = local.rule_contexts
-  resources        = local.pg_resource
+  resources        = local.rule_resources
   operations       = []
 }

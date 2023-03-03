@@ -35,7 +35,7 @@ variable "resource_tags" {
 variable "rule_description" {
   type        = string
   description = "(Optional, String) The description of the rule"
-  default     = null
+  default     = "multizone-rule"
 }
 
 variable "enforcement_mode" {
