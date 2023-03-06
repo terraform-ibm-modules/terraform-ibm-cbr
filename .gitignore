@@ -54,3 +54,6 @@ Brewfile.lock.json
 
 # Visual Studio Code
 .vscode/
+
+# ignore go workspace only used for local developlment
+go.work
