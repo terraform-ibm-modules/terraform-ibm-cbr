@@ -59,8 +59,9 @@ locals {
       name             = "${var.prefix}-cbr-zone2"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "cbr-zone2-terraform"
+      # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
       addresses = [{
-        type = "serviceRef" # to bind a service reference type should be 'serviceRef'
+        type = "serviceRef" # to bind a service reference type should be 'serviceRef'.
         ref = {
           account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
           service_name = "directlink" # DirectLink service reference.
@@ -86,93 +87,32 @@ locals {
     attributes = [{
       name  = "networkZoneId"
       value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
+      },
+      {
+        "name" : "endpointType",
+        "value" : "private"
     }]
   }]
 
   target_services_details = [
     {
-      attributes = [
-        {
-          "name" : "accountId",
-          "value" : data.ibm_iam_account_settings.iam_account_settings.account_id,
-          "operator" : "stringEquals"
-        },
-        {
-          "name" : "resourceGroupId",
-          "value" : module.resource_group.resource_group_id
-          "operator" : "stringEquals"
-        },
-        {
-          "name" : "serviceName",
-          "value" : "cloud-object-storage"
-          "operator" : "stringEquals"
-        }
-      ],
+      target_service_name = "cloud-object-storage"
       tags = [
         {
           name  = "env"
           value = "test"
         }
       ],
-      operations       = [],
       enforcement_mode = local.enforcement_mode,
-      rule_description = "Terraform report only rule for COS"
     },
     {
-      attributes = [
-        {
-          "name" : "accountId",
-          "value" : data.ibm_iam_account_settings.iam_account_settings.account_id,
-        },
-        {
-          "name" : "serviceName",
-          "value" : "kms",
-          "operator" : "stringEquals"
-        }
-      ],
-      tags = [
-        {
-          name  = "env"
-          value = "test"
-        }
-      ],
-      operations       = [],
-      enforcement_mode = local.enforcement_mode,
-      rule_description = "Terraform report only rule for kms"
+      target_service_name = "kms",
+      enforcement_mode    = local.enforcement_mode,
+
     },
     {
-      attributes = [
-        {
-          "name" : "accountId",
-          "value" : data.ibm_iam_account_settings.iam_account_settings.account_id,
-        },
-        {
-          "name" : "service_group_id",
-          "value" : "IAM",
-          "operator" : "stringEquals"
-        }
-      ]
-      tags             = [],
-      operations       = [],
-      enforcement_mode = local.enforcement_mode,
-      rule_description = "Terraform report only rule for IAM services"
-    },
-    {
-      attributes = [
-        {
-          "name" : "accountId",
-          "value" : data.ibm_iam_account_settings.iam_account_settings.account_id,
-        },
-        {
-          "name" : "serviceName",
-          "value" : "messagehub",
-          "operator" : "stringEquals"
-        }
-      ]
-      tags             = [],
-      operations       = [],
-      enforcement_mode = local.enforcement_mode,
-      rule_description = "Terraform report only rule for messagehub"
+      target_service_name = "messagehub",
+      enforcement_mode    = local.enforcement_mode
   }]
 }
 
