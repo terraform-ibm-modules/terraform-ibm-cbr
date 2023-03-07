@@ -1,3 +1,14 @@
 {
-    "scc_goals": []
+    "scc_goals": [
+        {
+            "scc_goal_id": "3000408",
+            "description": "Check whether Flow Logs for VPC are enabled",
+            "is_valid": true
+        },
+        {
+            "scc_goal_id": "3000449",
+            "description": "Check whether Virtual Private Cloud (VPC) has no public gateways attached",
+            "is_valid": true
+        }
+    ]
 }
