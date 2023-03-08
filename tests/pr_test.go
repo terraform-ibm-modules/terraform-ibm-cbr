@@ -103,8 +103,8 @@ func TestRunCompleteExample(t *testing.T) {
 			}
 			assert.ElementsMatch(t, expectedContexts, rules.Contexts, "expected contexts not found")
 
-			// TODO: Do I need to create a list of resources and check too??
 			// Check the Resource Attributes ensure multiple attributes are correctly applied
+			// Note: could not find a valid example where there were multiple attribute blocks or multiple resources
 			expectedResourceAttributes := []contextbasedrestrictionsv1.ResourceAttribute{
 				{
 					Name:     core.StringPtr("accountId"),
@@ -140,9 +140,8 @@ func TestRunCompleteExample(t *testing.T) {
 				},
 			}
 			assert.ElementsMatch(t, expectedTags, rules.Resources[0].Tags, "expected resource tags not found")
-			// TODO: Check the Operations ensure multiple Operations are correctly applied
-			// 		 Only a single operation is currently being tested.
-			//		 Need to find an example where multiple operations can be applied
+			// Note: COS has no operations that can be set
+			//       Leaving this code here as a reference for others
 			//expectedOperations := []contextbasedrestrictionsv1.OperationsList{
 			//	{APITypes: []contextbasedrestrictionsv1.APIType{{
 			//		APITypeID:   core.StringPtr(""),
@@ -155,9 +154,10 @@ func TestRunCompleteExample(t *testing.T) {
 			//	},
 			//	}},
 			//}
+			//
+			//assert.ElementsMatch(t, expectedOperations, rules.Operations)
 
-			// COS has no operations that can be set
-			// TODO: Replace COS with another service for test purposes
+			// Assert COS has no operations set as expected
 			assert.Nil(t, rules.Operations)
 
 		}
