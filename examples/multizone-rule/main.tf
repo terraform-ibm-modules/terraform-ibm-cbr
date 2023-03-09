@@ -113,8 +113,9 @@ locals {
         operator = "stringEquals"
       },
       {
-        "name" : "resourceGroupId",
-        "value" : module.resource_group.resource_group_id
+        name     = "resourceGroupId",
+        value    = module.resource_group.resource_group_id
+        operator = "stringEquals"
       },
       {
         name     = "serviceInstance"
@@ -127,24 +128,20 @@ locals {
         operator = "stringEquals"
       }
     ],
-    tags = [
-      # Note these are access tags and all iam access tags must be present on the resource for the rule to match
-      {
-        name  = "iam_access_tag"
-        value = "allow-access"
-      },
-      {
-        name  = "sample_tag"
-        value = "secondary_example_tag"
+    # Note these are access tags and all iam access tags must be present on the resource for the rule to match
+    tags = [for tag in var.existing_access_tags : {
+      name  = split(":", tag)[0]
+      value = split(":", tag)[1]
       }
     ]
   }]
 }
 
 # Dont forget to add the access tags
-resource "ibm_resource_tag" "tags" {
+resource "ibm_resource_tag" "attach_tags" {
+  count       = length(var.existing_access_tags) == 0 ? 0 : 1
   resource_id = ibm_resource_instance.cos_instance.crn
-  tags        = ["allow-access", "secondary_example_tag"]
+  tags        = var.existing_access_tags
   tag_type    = "access"
 }
 

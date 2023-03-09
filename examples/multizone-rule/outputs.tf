@@ -37,6 +37,11 @@ output "rule_id" {
   description = "CBR rule resource instance id"
 }
 
+output "rule_description" {
+  value       = module.cbr_rule.rule_description
+  description = "CBR rule description"
+}
+
 output "rule_crn" {
   value       = module.cbr_rule.rule_crn
   description = "CBR rule resource instance crn"
