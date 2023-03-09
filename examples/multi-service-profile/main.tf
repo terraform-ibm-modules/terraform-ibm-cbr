@@ -1,11 +1,4 @@
 ##############################################################################
-# Get Cloud Account ID
-##############################################################################
-
-data "ibm_iam_account_settings" "iam_account_settings" {
-}
-
-##############################################################################
 # Resource Group
 ##############################################################################
 
@@ -46,12 +39,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 locals {
-  # zone_vpc_id_list = [ibm_is_vpc.example_vpc.crn]
-  zone_vpc_id_list = []
-  # default=["crn:v1:bluemix:public:is:eu-gb:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r018-1f626c57-ab1d-473b-b3ca-870384d53d4e", "crn:v1:bluemix:public:is:jp-tok:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r022-fe2bf1ed-2397-44cc-9721-f7170700dc66", "crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-475ff8aa-e62d-4110-b76c-2e456cfc0b81"]
-}
-
-locals {
+  zone_vpc_id_list = [ibm_is_vpc.example_vpc.crn]
   enforcement_mode = "report"
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
@@ -78,7 +66,7 @@ locals {
 
 module "cbr_rule_multi_service_profile" {
   source                 = "../../cbr-service-profile"
-  zone_vpc_id_list = local.zone_vpc_id_list
-  zone_service_ref_list = var.zone_service_ref_list
+  zone_vpc_id_list       = local.zone_vpc_id_list
+  zone_service_ref_list  = var.zone_service_ref_list
   target_service_details = local.target_services_details
 }

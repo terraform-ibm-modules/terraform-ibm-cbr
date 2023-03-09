@@ -41,6 +41,3 @@ output "servicezonelength" {
   value       = length(var.zone_service_ref_list)
   description = "CBR rule href"
 }
-
-
-
