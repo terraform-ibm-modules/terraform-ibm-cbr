@@ -27,3 +27,15 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
+
+variable "zone_vpc_id_list" {
+  type        = list(string)
+  description = "(List) VPC Ids for the zones"
+  default     = []
+}
+
+variable "zone_service_ref_list" {
+  type = list(string)
+  default = ["directlink","is12"]
+  description = "(List) Service reference for the zone creation"
+}

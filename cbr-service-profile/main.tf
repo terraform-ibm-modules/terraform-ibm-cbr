@@ -9,6 +9,9 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 # CBR Rule for a list of target services
 ##############################################################################
 locals {
+  # tflint-ignore: terraform_unused_declarations
+  validate_zone_inputs = ((length(var.zone_vpc_id_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
+
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
@@ -22,15 +25,63 @@ locals {
     databases-for-redis         = local.icd_api_types,
     messages-for-rabbitmq       = local.icd_api_types
   }
+
+  vpc_zone_list = (length(var.zone_vpc_id_list) > 0) ? [{
+    name             = "${var.prefix}-cbr-zone1"
+    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+    zone_description = "cbr-zone1-terraform"
+    addresses = [
+      for zone_vpc_id in var.zone_vpc_id_list :
+      { "type" = "vpc", value = zone_vpc_id }
+    ]
+  }] : []
+
+  service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [{
+    name             = "${var.prefix}-cbr-zone2"
+    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+    zone_description = "cbr-zone2-terraform"
+    # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
+    addresses = [
+      for serviceref in var.zone_service_ref_list : {
+        type = "serviceRef"
+        ref = {
+          account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
+          service_name = serviceref
+        }
+      }
+    ]
+  }] : []
+  zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
 }
 
+module "cbr_zone" {
+  count            = length(local.zone_list)
+  source           = "../cbr-zone-module"
+  name             = local.zone_list[count.index].name
+  zone_description = local.zone_list[count.index].zone_description
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  addresses        = local.zone_list[count.index].addresses
+}
+
+locals {
+  rule_contexts = [{
+    attributes = [{
+      name  = "networkZoneId"
+      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
+      },
+      {
+        "name" : "endpointType",
+        "value" : "private"
+    }]
+  }]
+}
 
 module "cbr_rule" {
   count            = length(var.target_service_details)
   source           = "../cbr-rule-module"
-  rule_description = "${var.target_service_details[count.index].target_service_name}-terraform-rule"
+  rule_description = "${var.target_service_details[count.index].target_service_name}-serviceprofile-terraform-rule"
   enforcement_mode = var.target_service_details[count.index].enforcement_mode
-  rule_contexts    = var.rule_contexts
+  rule_contexts    = local.rule_contexts
   operations = (length(lookup(local.operations_apitype_val, var.target_service_details[count.index].target_service_name, [])) > 0) ? [{
     api_types = [
       # lookup the map for the target service name, if not present make api_type_id as empty

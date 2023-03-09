@@ -11,6 +11,7 @@ import (
 const resourceGroup = "geretain-test-cbr"
 const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
+const multiServiceExampleTerraformDir = "examples/cbr-multi-service-profile"
 
 func TestRunZoneExample(t *testing.T) {
 	t.Parallel()
@@ -34,6 +35,21 @@ func TestRunCompleteExample(t *testing.T) {
 		Testing:       t,
 		TerraformDir:  completeExampleTerraformDir,
 		Prefix:        "cbr-multizone",
+		ResourceGroup: resourceGroup,
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
+func multiServiceExample(t *testing.T) {
+	t.Parallel()
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  multiServiceExampleTerraformDir,
+		Prefix:        "cbr-multiservice-profile",
 		ResourceGroup: resourceGroup,
 	})
 

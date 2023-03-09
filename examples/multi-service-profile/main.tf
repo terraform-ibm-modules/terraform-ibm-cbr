@@ -46,54 +46,14 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 locals {
-  zone_list = [{
-    name             = "${var.prefix}-cbr-zone1"
-    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "cbr-zone1-terraform"
-    addresses = [{
-      type  = "vpc", # to bind a specific vpc to the zone
-      value = resource.ibm_is_vpc.example_vpc.crn,
-    }]
-    },
-    {
-      name             = "${var.prefix}-cbr-zone2"
-      account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-      zone_description = "cbr-zone2-terraform"
-      # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
-      addresses = [{
-        type = "serviceRef" # to bind a service reference type should be 'serviceRef'.
-        ref = {
-          account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
-          service_name = "directlink" # DirectLink service reference.
-        }
-      }]
-    }
-  ]
-}
-
-module "cbr_zone" {
-  count            = length(local.zone_list)
-  source           = "../../cbr-zone-module"
-  name             = local.zone_list[count.index].name
-  zone_description = local.zone_list[count.index].zone_description
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  addresses        = local.zone_list[count.index].addresses
+  # zone_vpc_id_list = [ibm_is_vpc.example_vpc.crn]
+  zone_vpc_id_list = []
+  # default=["crn:v1:bluemix:public:is:eu-gb:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r018-1f626c57-ab1d-473b-b3ca-870384d53d4e", "crn:v1:bluemix:public:is:jp-tok:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r022-fe2bf1ed-2397-44cc-9721-f7170700dc66", "crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-475ff8aa-e62d-4110-b76c-2e456cfc0b81"]
 }
 
 locals {
   enforcement_mode = "report"
   # Merge zone ids to pass as contexts to the rule
-  rule_contexts = [{
-    attributes = [{
-      name  = "networkZoneId"
-      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
-      },
-      {
-        "name" : "endpointType",
-        "value" : "private"
-    }]
-  }]
-
   target_services_details = [
     {
       target_service_name = "cloud-object-storage"
@@ -118,6 +78,7 @@ locals {
 
 module "cbr_rule_multi_service_profile" {
   source                 = "../../cbr-service-profile"
-  rule_contexts          = local.rule_contexts
+  zone_vpc_id_list = local.zone_vpc_id_list
+  zone_service_ref_list = var.zone_service_ref_list
   target_service_details = local.target_services_details
 }

@@ -1,14 +1,37 @@
 ##############################################################################
 # Rule Related Input Variables
 ##############################################################################
-variable "rule_contexts" {
-  type = list(object({
-    attributes = optional(list(object({
-      name  = string
-      value = string
-    })))
-  }))
-  description = "(List) The contexts the rule applies to"
+
+variable "prefix" {
+  type        = string
+  description = "Prefix to append to all resources created by this example"
+  default     = "serviceprofile"
+}
+
+variable "zone_vpc_id_list" {
+  type        = list(string)
+  default     = []
+  description = "(List) VPC Ids for the zones"
+}
+
+variable "zone_service_ref_list" {
+  type = list(string)
+  validation {
+    condition = alltrue([
+      for service_ref in var.zone_service_ref_list :
+      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management"],
+      service_ref)
+    ])
+    error_message = "Provide a valid service reference for zone creation"
+  }
+  default     = []
+  description = "(List) Service reference for the zone creation"
 }
 
 variable "target_service_details" {
@@ -21,7 +44,6 @@ variable "target_service_details" {
     })))
   }))
   description = "(String) Details of the target service for which the rule has to be created"
-  default     = []
   #Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
