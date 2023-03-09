@@ -39,8 +39,8 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 locals {
-  zone_vpc_id_list = [ibm_is_vpc.example_vpc.crn]
-  enforcement_mode = "report"
+  zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
+  enforcement_mode  = "report"
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
@@ -66,7 +66,7 @@ locals {
 
 module "cbr_rule_multi_service_profile" {
   source                 = "../../cbr-service-profile"
-  zone_vpc_id_list       = local.zone_vpc_id_list
+  zone_vpc_crn_list      = local.zone_vpc_crn_list
   zone_service_ref_list  = var.zone_service_ref_list
   target_service_details = local.target_services_details
 }

@@ -30,6 +30,6 @@ variable "resource_tags" {
 
 variable "zone_service_ref_list" {
   type        = list(string)
-  default     = ["directlink", "is12"]
+  default     = ["directlink", "is"]
   description = "(List) Service reference for the zone creation"
 }

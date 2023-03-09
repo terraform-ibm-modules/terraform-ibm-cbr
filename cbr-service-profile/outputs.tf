@@ -31,13 +31,3 @@ output "rule_href" {
   value       = join(",", module.cbr_rule[*].rule_href)
   description = "CBR rule href"
 }
-
-output "vpczonelength" {
-  value       = length([])
-  description = "CBR rule href"
-}
-
-output "servicezonelength" {
-  value       = length(var.zone_service_ref_list)
-  description = "CBR rule href"
-}

@@ -8,10 +8,10 @@ variable "prefix" {
   default     = "serviceprofile"
 }
 
-variable "zone_vpc_id_list" {
+variable "zone_vpc_crn_list" {
   type        = list(string)
   default     = []
-  description = "(List) VPC Ids for the zones"
+  description = "(List) VPC CRN for the zones"
 }
 
 variable "zone_service_ref_list" {
