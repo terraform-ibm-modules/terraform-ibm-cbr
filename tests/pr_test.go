@@ -69,7 +69,7 @@ func TestRunCompleteExample(t *testing.T) {
 
 	permanentResources, err := common.LoadMapFromYaml(permanentResourcesYaml)
 	if assert.Nilf(t, err, "Could Not load permanent resource list %s", err) {
-		// Convert the accessTags field to a comma-separated string
+		// Convert the accessTags field slice of strings
 		var accessTags []string
 		accessTagsRaw, ok := permanentResources["accessTags"].([]interface{})
 		if ok {
