@@ -195,7 +195,7 @@ func TestRunCompleteExample(t *testing.T) {
 	}
 }
 
-func MultiServiceProfileExample(t *testing.T) {
+func TestMultiServiceProfileExample(t *testing.T) {
 	t.Parallel()
 	cloudInfoSvc, err := cloudinfo.NewCloudInfoServiceFromEnv("TF_VAR_ibmcloud_api_key", cloudinfo.CloudInfoServiceOptions{})
 	assert.Nil(t, err, "Failed to create cloud info service")
