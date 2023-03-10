@@ -7,6 +7,26 @@ output "vpc_id" {
   description = "VPC id"
 }
 
+output "vpc_crn" {
+  value       = resource.ibm_is_vpc.example_vpc.crn
+  description = "VPC crn"
+}
+
+output "account_id" {
+  description = "account id"
+  value       = data.ibm_iam_account_settings.iam_account_settings.id
+}
+
+output "zone_name" {
+  value       = module.ibm_cbr_zone.zone_names
+  description = "cbr_zone resource instance name"
+}
+
+output "zone_description" {
+  value       = module.ibm_cbr_zone.zone_description
+  description = "cbr_zone resource instance description"
+}
+
 output "zone_id" {
   value       = module.ibm_cbr_zone.zone_id
   description = "cbr_zone resource instance id"

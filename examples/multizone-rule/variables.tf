@@ -28,6 +28,11 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "existing_access_tags" {
+  type        = list(string)
+  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
+  default     = []
+}
 ##############################################################
 # CBR
 ##############################################################
@@ -35,7 +40,7 @@ variable "resource_tags" {
 variable "rule_description" {
   type        = string
   description = "(Optional, String) The description of the rule"
-  default     = null
+  default     = "multizone-rule"
 }
 
 variable "enforcement_mode" {
