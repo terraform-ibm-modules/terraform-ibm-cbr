@@ -45,10 +45,10 @@ locals {
   target_services_details = [
     {
       target_service_name = "cloud-object-storage"
-      tags = [
-        {
-          name  = "env"
-          value = "test"
+      # Note these are access tags and all iam access tags must be present on the COS instance for the rule to match
+      tags = [for tag in var.existing_access_tags : {
+        name  = split(":", tag)[0]
+        value = split(":", tag)[1]
         }
       ],
       enforcement_mode = local.enforcement_mode,
@@ -66,7 +66,7 @@ locals {
 
 module "cbr_rule_multi_service_profile" {
   source                 = "../../cbr-service-profile"
+  zone_service_ref_list  = var.zone_service_ref_list  
   zone_vpc_crn_list      = local.zone_vpc_crn_list
-  zone_service_ref_list  = var.zone_service_ref_list
   target_service_details = local.target_services_details
 }

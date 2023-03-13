@@ -65,14 +65,15 @@ module "cbr_zone" {
 
 locals {
   rule_contexts = [{
-    attributes = [{
-      name  = "networkZoneId"
-      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
-      },
+    attributes = [
       {
         "name" : "endpointType",
         "value" : "private"
-    }]
+      },
+      {
+      name  = "networkZoneId"
+      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
+      }]
   }]
 }
 
@@ -92,15 +93,16 @@ module "cbr_rule" {
 
   resources = [{
     tags = var.target_service_details[count.index].tags
-    attributes = [{
-      name     = "serviceName",
-      operator = "stringEquals",
-      value    = var.target_service_details[count.index].target_service_name
-      },
+    attributes = [
       {
-        "name" : "accountId",
+        name : "accountId",
         operator = "stringEquals",
-        "value" : data.ibm_iam_account_settings.iam_account_settings.account_id
-    }, ]
+        value : data.ibm_iam_account_settings.iam_account_settings.account_id
+      }, 
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = var.target_service_details[count.index].target_service_name
+      }]
   }]
 }
