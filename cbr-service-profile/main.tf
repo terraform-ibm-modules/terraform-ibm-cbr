@@ -71,16 +71,16 @@ locals {
         "value" : "private"
       },
       {
-      name  = "networkZoneId"
-      value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
-      }]
+        name  = "networkZoneId"
+        value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
+    }]
   }]
 }
 
 module "cbr_rule" {
   count            = length(var.target_service_details)
   source           = "../cbr-rule-module"
-  rule_description = "${prefix}-${var.target_service_details[count.index].target_service_name}-serviceprofile-rule"
+  rule_description = "${var.prefix}-${var.target_service_details[count.index].target_service_name}-serviceprofile-rule"
   enforcement_mode = var.target_service_details[count.index].enforcement_mode
   rule_contexts    = local.rule_contexts
   operations = (length(lookup(local.operations_apitype_val, var.target_service_details[count.index].target_service_name, [])) > 0) ? [{
@@ -98,11 +98,11 @@ module "cbr_rule" {
         name : "accountId",
         operator = "stringEquals",
         value : data.ibm_iam_account_settings.iam_account_settings.account_id
-      }, 
+      },
       {
         name     = "serviceName",
         operator = "stringEquals",
         value    = var.target_service_details[count.index].target_service_name
-      }]
+    }]
   }]
 }

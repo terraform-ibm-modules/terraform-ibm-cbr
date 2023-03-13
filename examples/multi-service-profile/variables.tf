@@ -39,5 +39,3 @@ variable "zone_service_ref_list" {
   default     = ["directlink", "is"]
   description = "(List) Service reference for the zone creation"
 }
-
-
