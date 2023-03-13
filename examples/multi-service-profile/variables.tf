@@ -28,8 +28,16 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "existing_access_tags" {
+  type        = list(string)
+  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
+  default     = []
+}
+
 variable "zone_service_ref_list" {
   type        = list(string)
   default     = ["directlink", "is"]
   description = "(List) Service reference for the zone creation"
 }
+
+
