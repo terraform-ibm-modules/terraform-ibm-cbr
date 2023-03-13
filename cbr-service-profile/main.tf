@@ -27,9 +27,9 @@ locals {
   }
 
   vpc_zone_list = (length(var.zone_vpc_crn_list) > 0) ? [{
-    name             = "${var.prefix}-cbr-zone1"
+    name             = "${var.prefix}-cbr-vpc-zone"
     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "cbr-zone1-terraform"
+    zone_description = "cbr-vpc-zone-terraform"
     addresses = [
       for zone_vpc_crn in var.zone_vpc_crn_list :
       { "type" = "vpc", value = zone_vpc_crn }
@@ -37,9 +37,9 @@ locals {
   }] : []
 
   service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [{
-    name             = "${var.prefix}-cbr-zone2"
+    name             = "${var.prefix}-cbr-serviceref-zone"
     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "cbr-zone2-terraform"
+    zone_description = "cbr-serviceref-zone-terraform"
     # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
     addresses = [
       for serviceref in var.zone_service_ref_list : {
@@ -80,7 +80,7 @@ locals {
 module "cbr_rule" {
   count            = length(var.target_service_details)
   source           = "../cbr-rule-module"
-  rule_description = "${var.target_service_details[count.index].target_service_name}-serviceprofile-terraform-rule"
+  rule_description = "${prefix}-${var.target_service_details[count.index].target_service_name}-serviceprofile-rule"
   enforcement_mode = var.target_service_details[count.index].enforcement_mode
   rule_contexts    = local.rule_contexts
   operations = (length(lookup(local.operations_apitype_val, var.target_service_details[count.index].target_service_name, [])) > 0) ? [{
