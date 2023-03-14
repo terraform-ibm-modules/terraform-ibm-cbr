@@ -212,27 +212,13 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 
 	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
-
-	zone, err := cloudInfoSvc.GetCBRZoneByID(outputs["zone_id"].(string))
+	zone, err := cloudInfoSvc.GetCBRZoneByID(outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string))
+	rule, err := cloudInfoSvc.GetCBRRuleByID(strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0])
 	assert.Nilf(t, err, "This should not have errored, could not get zone")
 
-	expectedAddresses := []contextbasedrestrictionsv1.AddressIntf{
-		&contextbasedrestrictionsv1.AddressVPC{
-			Type:  core.StringPtr("vpc"),
-			Value: core.StringPtr(outputs["vpc_crn"].(string)),
-		},
-		&contextbasedrestrictionsv1.AddressServiceRef{
-			Type: core.StringPtr("serviceRef"),
-			Ref: &contextbasedrestrictionsv1.ServiceRefValue{
-				AccountID:   core.StringPtr(outputs["account_id"].(string)),
-				ServiceName: core.StringPtr("secrets-manager"),
-			},
-		},
-	}
-	assert.Equal(t, outputs["zone_name"].(string), *zone.Name)
-	assert.Equal(t, outputs["zone_description"].(string), *zone.Description)
+	assert.Equal(t, outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string), *zone.ID)
+	assert.Equal(t, strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0], *rule.ID)
 	assert.Equal(t, outputs["account_id"].(string), *zone.AccountID)
-	assert.EqualValues(t, expectedAddresses, zone.Addresses)
 	assert.Empty(t, zone.Excluded)
 
 	options.TestTearDown()

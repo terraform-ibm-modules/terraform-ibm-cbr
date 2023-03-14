@@ -31,3 +31,13 @@ output "rule_href" {
   value       = module.cbr_rule_multi_service_profile[*].rule_href
   description = "CBR rule resource instance href"
 }
+
+output "vpc_crn" {
+  value       = ibm_is_vpc.example_vpc.crn
+  description = "VPC CRN"
+}
+
+output "account_id" {
+  value       = data.ibm_iam_account_settings.iam_account_settings.id
+  description = "Account ID (used in tests)"
+}
