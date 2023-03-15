@@ -72,7 +72,7 @@
     },
     "resources": {
       "name": "resources",
-      "type": "list(object({\n    attributes = list(object({\n      name     = string\n      value    = string\n      operator = optional(string)\n    }))\n    tags = optional(list(object({\n      name     = string\n      value    = string\n      operator = optional(string)\n    })))\n  }))",
+      "type": "list(object({\n    attributes = list(object({\n      name     = string\n      value    = string\n      operator = optional(string)\n    }))\n    tags = optional(list(object({ #These access tags should match to the target service access tags for the CBR rules to work\n      name     = string\n      value    = string\n      operator = optional(string)\n    })))\n  }))",
       "description": "(Optional, List) The resources this rule apply to",
       "default": [],
       "source": [

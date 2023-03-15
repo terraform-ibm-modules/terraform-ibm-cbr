@@ -2,13 +2,14 @@
 package test
 
 import (
+	"strings"
+	"testing"
+
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/IBM/platform-services-go-sdk/contextbasedrestrictionsv1"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/cloudinfo"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
-	"strings"
-	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
@@ -17,6 +18,7 @@ import (
 const resourceGroup = "geretain-test-cbr"
 const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
+const multiServiceExampleTerraformDir = "examples/multi-service-profile"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 func TestRunZoneExample(t *testing.T) {
@@ -191,6 +193,35 @@ func TestRunCompleteExample(t *testing.T) {
 		}
 		options.TestTearDown()
 	}
+}
+
+func TestMultiServiceProfileExample(t *testing.T) {
+	t.Parallel()
+	cloudInfoSvc, err := cloudinfo.NewCloudInfoServiceFromEnv("TF_VAR_ibmcloud_api_key", cloudinfo.CloudInfoServiceOptions{})
+	assert.Nil(t, err, "Failed to create cloud info service")
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  multiServiceExampleTerraformDir,
+		Prefix:        "cbr-multi-service-profile",
+		ResourceGroup: resourceGroup,
+	})
+	options.SkipTestTearDown = true
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+
+	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+	zone, err := cloudInfoSvc.GetCBRZoneByID(outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string))
+	rule, err := cloudInfoSvc.GetCBRRuleByID(strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0])
+	assert.Nilf(t, err, "This should not have errored, could not get zone")
+
+	assert.Equal(t, outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string), *zone.ID)
+	assert.Equal(t, strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0], *rule.ID)
+	assert.Equal(t, outputs["account_id"].(string), *zone.AccountID)
+	assert.Empty(t, zone.Excluded)
+
+	options.TestTearDown()
 }
 
 func TestRunUpgradeExample(t *testing.T) {
