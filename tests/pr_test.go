@@ -217,6 +217,38 @@ func TestMultiServiceProfileExample(t *testing.T) {
 		expectedOutputs := []string{"rule_ids", "zone_ids", "account_id"}
 		_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 		if assert.NoErrorf(t, outputErr, "Some outputs not found or nil") {
+
+			//Service Reference verification
+			zones := outputs["zone_ids"].([]interface{})
+			if assert.Nil(t, err, "Failed to get rules") &&
+				assert.NotNil(t, zones, "No zones found") {
+				t.Run("verify service reference exist", func(t *testing.T) {
+					var serviceRefExists bool
+					var actual_references []string
+					expected_references := []string{"directlink", "is"}
+
+					zoneIds := zones[0].([]interface{})
+					for index := range zoneIds {
+						zone := zoneIds[index].(string)
+						zone_details, err := cloudInfoSvc.GetCBRZoneByID(zone)
+						if assert.Nil(t, err, "Failed to get the zone") &&
+							assert.NotNil(t, zone_details, "No zone found") {
+							for addr_index := range zone_details.Addresses {
+								switch zone_details.Addresses[addr_index].(type) {
+								case *contextbasedrestrictionsv1.AddressServiceRef:
+									serviceRefExists = true
+									serviceRef := zone_details.Addresses[addr_index].(*contextbasedrestrictionsv1.AddressServiceRef)
+									actual_references = append(actual_references, *serviceRef.Ref.ServiceName)
+								}
+							}
+						}
+					}
+					assert.True(t, serviceRefExists, "Service Ref does not exist in the zone")
+					assert.ElementsMatch(t, expected_references, actual_references, "service name referred is not as expected ")
+				})
+			}
+
+			// Rule context verification
 			rules := outputs["rule_ids"]
 			if assert.Nil(t, err, "Failed to get rules") &&
 				assert.NotNil(t, rules, "No rules found") {
@@ -247,6 +279,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 							})
 							assert.ElementsMatch(t, expectedContexts, rule.Contexts, "expected contexts not found")
 						})
+
 					}
 				}
 			}

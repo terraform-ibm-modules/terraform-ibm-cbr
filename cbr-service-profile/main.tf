@@ -93,12 +93,22 @@ module "cbr_rule" {
 
   resources = [{
     tags = var.target_service_details[count.index].tags
-    attributes = [
-      var.target_service_details[count.index].target_rg != null ? {
+    attributes = var.target_service_details[count.index].target_rg != null ? [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      {
         name     = "resourceGroupId",
         operator = "stringEquals",
         value    = var.target_service_details[count.index].target_rg
-      } : {},
+      },
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = var.target_service_details[count.index].target_service_name
+    }] : [
       {
         name     = "accountId",
         operator = "stringEquals",

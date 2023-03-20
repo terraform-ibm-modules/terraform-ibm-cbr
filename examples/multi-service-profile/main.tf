@@ -51,7 +51,6 @@ locals {
   target_services_details = [
     {
       target_service_name = "cloud-object-storage",
-      target_rg           = module.resource_group.resource_group_id
       # Note these are access tags and all iam access tags must be present on the COS instance for the rule to match
       tags = [for tag in var.existing_access_tags : {
         name  = split(":", tag)[0]
@@ -68,7 +67,7 @@ locals {
     },
     {
       target_service_name = "messagehub",
-      # target_rg = module.resource_group.resource_group_id
+      target_rg = module.resource_group.resource_group_id
       enforcement_mode = local.enforcement_mode
     }
   ]
