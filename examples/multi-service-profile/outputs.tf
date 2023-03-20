@@ -2,34 +2,34 @@
 # Outputs
 ##############################################################################
 
-output "zone_id" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_id
-  description = "CBR zone resource instance id"
+output "zone_ids" {
+  value       = module.cbr_rule_multi_service_profile[*].zone_ids
+  description = "CBR zone resource instance id(s)"
 }
 
-output "zone_crn" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_crn
-  description = "CBR zone crn"
+output "zone_crns" {
+  value       = module.cbr_rule_multi_service_profile[*].zone_crns
+  description = "CBR zones crn(s)"
 }
 
-output "zone_href" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_href
-  description = "CBR zone href"
+output "zone_hrefs" {
+  value       = module.cbr_rule_multi_service_profile[*].zone_hrefs
+  description = "CBR zones href(s)"
 }
 
-output "rule_id" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_id
-  description = "CBR rule id"
+output "rule_ids" {
+  value       = module.cbr_rule_multi_service_profile[*].rule_ids
+  description = "CBR rule id(s)"
 }
 
-output "rule_crn" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_crn
-  description = "CBR rule resource instance crn"
+output "rule_crns" {
+  value       = module.cbr_rule_multi_service_profile[*].rule_crns
+  description = "CBR rule resource instance crn(s)"
 }
 
-output "rule_href" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_href
-  description = "CBR rule resource instance href"
+output "rule_hrefs" {
+  value       = module.cbr_rule_multi_service_profile[*].rule_hrefs
+  description = "CBR rule resource instance href(s)"
 }
 
 output "vpc_crn" {
@@ -38,6 +38,6 @@ output "vpc_crn" {
 }
 
 output "account_id" {
-  value       = data.ibm_iam_account_settings.iam_account_settings.id
+  value       = data.ibm_iam_account_settings.iam_account_settings.account_id
   description = "Account ID (used in tests)"
 }

@@ -2,6 +2,7 @@
 package test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -208,19 +209,49 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	})
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
 
-	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
-	zone, err := cloudInfoSvc.GetCBRZoneByID(outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string))
-	rule, err := cloudInfoSvc.GetCBRRuleByID(strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0])
-	assert.Nilf(t, err, "This should not have errored, could not get zone")
+	if assert.Nil(t, err, "This should not have errored") &&
+		assert.NotNil(t, output, "Expected some output") {
 
-	assert.Equal(t, outputs["zone_id"].([]interface{})[0].([]interface{})[0].(string), *zone.ID)
-	assert.Equal(t, strings.Split(outputs["rule_id"].([]interface{})[0].(string), ",")[0], *rule.ID)
-	assert.Equal(t, outputs["account_id"].(string), *zone.AccountID)
-	assert.Empty(t, zone.Excluded)
+		outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+		expectedOutputs := []string{"rule_ids", "zone_ids", "account_id"}
+		_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
+		if assert.NoErrorf(t, outputErr, "Some outputs not found or nil") {
+			rules := outputs["rule_ids"]
+			if assert.Nil(t, err, "Failed to get rules") &&
+				assert.NotNil(t, rules, "No rules found") {
+				ruleIds := strings.Split(rules.([]interface{})[0].(string), ",")
+				for index := range ruleIds {
 
+					rule, err := cloudInfoSvc.GetCBRRuleByID(ruleIds[index])
+					if assert.Nil(t, err, "Failed to get the rule") &&
+						assert.NotNil(t, rule, "No rule found") {
+
+						t.Run("verify all zone ids exist", func(t *testing.T) {
+							zoneIds_output := outputs["zone_ids"]
+							var expectedContexts []contextbasedrestrictionsv1.RuleContext
+							zoneIds := strings.Join(strings.Fields(fmt.Sprint(zoneIds_output.([]interface{})[0])), ",")
+							// Check the contexts loop through zones in output there should be 1 context per zone
+							currentAttribute := []contextbasedrestrictionsv1.RuleContextAttribute{
+								{
+									Name:  core.StringPtr("endpointType"),
+									Value: core.StringPtr("private"),
+								},
+								{
+									Name:  core.StringPtr("networkZoneId"),
+									Value: core.StringPtr(zoneIds[1 : len(zoneIds)-1]),
+								},
+							}
+							expectedContexts = append(expectedContexts, contextbasedrestrictionsv1.RuleContext{
+								Attributes: currentAttribute,
+							})
+							assert.ElementsMatch(t, expectedContexts, rule.Contexts, "expected contexts not found")
+						})
+					}
+				}
+			}
+		}
+	}
 	options.TestTearDown()
 }
 

@@ -9,10 +9,9 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
-##############################################################################
-# Get Cloud Account ID
-##############################################################################
-
+# ##############################################################################
+# # Get Cloud Account ID
+# ##############################################################################
 data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
@@ -51,7 +50,8 @@ locals {
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
-      target_service_name = "cloud-object-storage"
+      target_service_name = "cloud-object-storage",
+      target_rg = module.resource_group.resource_group_id
       # Note these are access tags and all iam access tags must be present on the COS instance for the rule to match
       tags = [for tag in var.existing_access_tags : {
         name  = split(":", tag)[0]
@@ -62,13 +62,16 @@ locals {
     },
     {
       target_service_name = "kms",
+      target_rg = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode,
 
     },
     {
       target_service_name = "messagehub",
+      # target_rg = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode
-  }]
+  }
+  ]
 }
 
 module "cbr_rule_multi_service_profile" {
