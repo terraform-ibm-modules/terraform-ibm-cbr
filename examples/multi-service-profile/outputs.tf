@@ -41,3 +41,8 @@ output "account_id" {
   value       = data.ibm_iam_account_settings.iam_account_settings.account_id
   description = "Account ID (used in tests)"
 }
+
+# output "local_resources" {
+#   value       = module.cbr_rule_multi_service_profile.local_resources
+#   description = "ttt"
+# }

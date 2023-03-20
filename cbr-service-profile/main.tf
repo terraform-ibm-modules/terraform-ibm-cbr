@@ -75,8 +75,6 @@ locals {
         value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
     }]
   }]
-
-
 }
 
 module "cbr_rule" {
@@ -96,11 +94,15 @@ module "cbr_rule" {
   resources = [{
     tags = var.target_service_details[count.index].tags
     attributes = [
-      
-      {
-        name = "accountId",
+      var.target_service_details[count.index].target_rg != null ? {
+        name     = "resourceGroupId",
         operator = "stringEquals",
-        value = data.ibm_iam_account_settings.iam_account_settings.account_id
+        value    = var.target_service_details[count.index].target_rg
+      } : {},
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
       {
         name     = "serviceName",
@@ -108,11 +110,4 @@ module "cbr_rule" {
         value    = var.target_service_details[count.index].target_service_name
     }]
   }]
-
-# var.target_service_details[count.index].target_rg != null ? {
-#         name     = "resourceGroupId",
-#         operator = "stringEquals",
-#         value    = var.target_service_details[count.index].target_rg
-#       } : {},
-  # var.target_service_details[count.index].target_rg != null ? concat(var.array, ["d"]) : []
 }

@@ -31,3 +31,8 @@ output "rule_hrefs" {
   value       = join(",", module.cbr_rule[*].rule_href)
   description = "CBR rule href(s)"
 }
+
+# output "local_resources" {
+#   value       = local.local_resources
+#   description = "ttt"
+# }

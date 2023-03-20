@@ -37,7 +37,7 @@ variable "zone_service_ref_list" {
 variable "target_service_details" {
   type = list(object({
     target_service_name = string
-    target_rg = optional(string)
+    target_rg           = optional(string)
     enforcement_mode    = string
     tags = optional(list(object({
       name  = string
