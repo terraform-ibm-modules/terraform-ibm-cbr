@@ -108,7 +108,7 @@ module "cbr_rule" {
         name     = "serviceName",
         operator = "stringEquals",
         value    = var.target_service_details[count.index].target_service_name
-    }] : [
+      }] : [
       {
         name     = "accountId",
         operator = "stringEquals",

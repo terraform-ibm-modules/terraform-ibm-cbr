@@ -67,8 +67,8 @@ locals {
     },
     {
       target_service_name = "messagehub",
-      target_rg = module.resource_group.resource_group_id
-      enforcement_mode = local.enforcement_mode
+      target_rg           = module.resource_group.resource_group_id
+      enforcement_mode    = local.enforcement_mode
     }
   ]
 }
