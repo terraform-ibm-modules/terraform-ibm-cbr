@@ -52,11 +52,7 @@ locals {
     {
       target_service_name = "cloud-object-storage",
       # Note these are access tags and all iam access tags must be present on the COS instance for the rule to match
-      tags = [for tag in var.existing_access_tags : {
-        name  = split(":", tag)[0]
-        value = split(":", tag)[1]
-        }
-      ],
+      tags             = var.existing_access_tags,
       enforcement_mode = local.enforcement_mode,
     },
     {

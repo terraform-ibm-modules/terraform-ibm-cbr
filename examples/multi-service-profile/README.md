@@ -4,4 +4,9 @@ An end-to-end example that uses the module's default variable values. This examp
 
  - Create a VPC and create a CBR zone to allowlist the VPC.
  - Create a service reference based CBR zone.
- - Create a rule for CBR that uses the zone and attaches a list of service to it.
+ - Create a set of CBR rules.
+   - Based on the list of target service details provided, create rules for each of them.
+   - Target service instances access is granted based on the following parameters.
+     - Based on the account.
+     - Based on the access tags.
+     - Based on the resource group.

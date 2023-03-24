@@ -31,7 +31,8 @@ variable "resource_tags" {
 variable "existing_access_tags" {
   type        = list(string)
   description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
-  default     = []
+  # Provide the access tags with key:value format in a list
+  default = ["env:dev"]
 }
 
 variable "zone_service_ref_list" {

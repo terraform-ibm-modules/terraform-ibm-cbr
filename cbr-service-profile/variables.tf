@@ -39,10 +39,7 @@ variable "target_service_details" {
     target_service_name = string
     target_rg           = optional(string)
     enforcement_mode    = string
-    tags = optional(list(object({
-      name  = string
-      value = string
-    })))
+    tags                = optional(list(string))
   }))
   description = "(String) Details of the target service for which the rule has to be created"
   #Validation to restrict the target service name to be the list of supported targets only.

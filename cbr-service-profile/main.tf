@@ -92,7 +92,10 @@ module "cbr_rule" {
   }] : []
 
   resources = [{
-    tags = var.target_service_details[count.index].tags
+    tags = var.target_service_details[count.index].tags != null ? [for tag in var.target_service_details[count.index].tags : {
+      name  = split(":", tag)[0]
+      value = split(":", tag)[1]
+    }] : []
     attributes = var.target_service_details[count.index].target_rg != null ? [
       {
         name     = "accountId",
