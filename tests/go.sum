@@ -187,8 +187,8 @@ cloud.google.com/go/workflows v1.7.0/go.mod h1:JhSrZuVZWuiDfKEFxU0/F1PQjmpnpcoIS
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/IBM-Cloud/bluemix-go v0.0.0-20230426045943-5b1069b0d7ae h1:Bxw9iWkcbMrVKv3FtbzzPYwdWXWsODYTdOS1NxChuAE=
-github.com/IBM-Cloud/bluemix-go v0.0.0-20230426045943-5b1069b0d7ae/go.mod h1:cO5KCpiop9eP/pM/5W07TprYUkv/kHtajW1FiZgE59k=
+github.com/IBM-Cloud/bluemix-go v0.0.0-20230519111809-e0aad0085b1e h1:vvOR4hN/82nJas+0FtZB7zIsME0suFQGO1n/U7Se5sc=
+github.com/IBM-Cloud/bluemix-go v0.0.0-20230519111809-e0aad0085b1e/go.mod h1:cO5KCpiop9eP/pM/5W07TprYUkv/kHtajW1FiZgE59k=
 github.com/IBM-Cloud/power-go-client v1.2.3 h1:Scx70PyqpKv3zS/kJeMEg0qOOmsG6cM3bueiAYcCgXI=
 github.com/IBM-Cloud/power-go-client v1.2.3/go.mod h1:Qfx0fNi+9hms+xu9Z6Euhu9088ByW6C/TCMLECTRWNE=
 github.com/IBM/go-sdk-core/v5 v5.9.2/go.mod h1:YlOwV9LeuclmT/qi/LAK2AsobbAP42veV0j68/rlZsE=
@@ -721,8 +721,8 @@ github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/stretchr/testify v1.8.3 h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=
 github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.8.11 h1:z2YSMb6utRtmIFY1XBx6PpZRehbkA2D6a6ZK6/oWVrM=
-github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.8.11/go.mod h1:sIyf4PW7M0U/VHGdS06L4+RaD1tiTn79cVJOOuTt9E4=
+github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.9.2 h1:yQiT+tGhpn9SbWgY9ONOnVtaENLvlZYGo3aTL72zTE4=
+github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.9.2/go.mod h1:DjOspsAJdoRZiHGiM1rlcUWnIok/WQl9BBTbJEG7Hqc=
 github.com/tidwall/pretty v1.0.0 h1:HsD+QiTn7sK6flMKIvNmpqz1qrpP3Ps6jOKIKMooyg4=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tmccombs/hcl2json v0.3.3 h1:+DLNYqpWE0CsOQiEZu+OZm5ZBImake3wtITYxQ8uLFQ=
