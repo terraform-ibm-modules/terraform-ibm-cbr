@@ -3,7 +3,7 @@ module github.com/terraform-ibm-modules/terraform-ibm-cbr
 go 1.20
 
 require (
-	github.com/IBM/go-sdk-core/v5 v5.13.3
+	github.com/IBM/go-sdk-core/v5 v5.13.4
 	github.com/IBM/platform-services-go-sdk v0.37.4
 	github.com/gruntwork-io/terratest v0.41.25
 	github.com/stretchr/testify v1.8.3
