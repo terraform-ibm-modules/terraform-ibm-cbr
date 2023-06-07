@@ -16,7 +16,8 @@ This module can be used to provision and configure [Context Based Restrictions](
 ```hcl
 module "ibm_cbr" "zone" {
   # replace main with version
-  source = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-zone-module?ref=main"
+  source = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
+  version = "latest" # Replace "latest" with a release version to lock into a specific release
   name             = "zone_for_pg_access"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone created from terraform"
@@ -25,7 +26,8 @@ module "ibm_cbr" "zone" {
 
 module "ibm_cbr" "rule" {
   # replace main with version
-  source = "git::https://github.com/terraform-ibm-modules/terraform-ibm-cbr//cbr-rule-module?ref=main"
+  source = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
+  version = "latest" # Replace "latest" with a release version to lock into a specific release
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
   enforcement_mode = "enabled"
