@@ -28,6 +28,7 @@ locals {
 
   vpc_zone_list = (length(var.zone_vpc_crn_list) > 0) ? [{
     name             = "${var.prefix}-cbr-vpc-zone"
+    region           = var.region_vpc_zone_list
     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
     zone_description = "cbr-vpc-zone-terraform"
     addresses = [
@@ -38,6 +39,7 @@ locals {
 
   service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [{
     name             = "${var.prefix}-cbr-serviceref-zone"
+    region           = var.region_service_ref_zone_list
     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
     zone_description = "cbr-serviceref-zone-terraform"
     # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
@@ -58,6 +60,7 @@ module "cbr_zone" {
   count            = length(local.zone_list)
   source           = "../cbr-zone-module"
   name             = local.zone_list[count.index].name
+  region           = local.zone_list[count.index].region
   zone_description = local.zone_list[count.index].zone_description
   account_id       = local.zone_list[count.index].account_id
   addresses        = local.zone_list[count.index].addresses

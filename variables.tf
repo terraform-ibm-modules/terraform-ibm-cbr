@@ -14,6 +14,12 @@ variable "zone_description" {
   default     = null
 }
 
+variable "region" {
+  type        = string
+  description = "The region in which the network zone is to be created"
+  default     = "us-south"
+}
+
 variable "addresses" {
   type = list(object({
     type  = optional(string)

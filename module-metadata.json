@@ -11,7 +11,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 17
+        "line": 23
       }
     },
     "enforcement_mode": {
@@ -24,7 +24,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 68
+        "line": 74
       },
       "options": "disabled, enabled, report"
     },
@@ -38,7 +38,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 33
+        "line": 39
       }
     },
     "name": {
@@ -67,7 +67,20 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 92
+        "line": 98
+      }
+    },
+    "region": {
+      "name": "region",
+      "type": "string",
+      "description": "The region in which the network zone is to be created",
+      "default": "us-south",
+      "source": [
+        "module.cbr_zone.ibm_cbr_zone.cbr_zone.region"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 17
       }
     },
     "resources": {
@@ -80,7 +93,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 74
+        "line": 80
       }
     },
     "rule_contexts": {
@@ -102,7 +115,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 52
+        "line": 58
       }
     },
     "rule_description": {
@@ -114,7 +127,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 46
+        "line": 52
       },
       "max_length": 300,
       "matches": "^[\\x20-\\xFE]*$"
@@ -228,7 +241,8 @@
           "name": "cbr_rule",
           "attributes": {
             "description": "rule_description",
-            "enforcement_mode": "enforcement_mode"
+            "enforcement_mode": "enforcement_mode",
+            "region": "region"
           },
           "provider": {
             "name": "ibm"
@@ -284,7 +298,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 22
+        "line": 23
       }
     },
     "cbr_zone": {
@@ -294,6 +308,7 @@
         "addresses": "addresses",
         "excluded_addresses": "excluded_addresses",
         "name": "name",
+        "region": "region",
         "zone_description": "zone_description"
       },
       "managed_resources": {
@@ -304,7 +319,8 @@
           "attributes": {
             "account_id": "account_id",
             "description": "zone_description",
-            "name": "name"
+            "name": "name",
+            "region": "region"
           },
           "provider": {
             "name": "ibm"

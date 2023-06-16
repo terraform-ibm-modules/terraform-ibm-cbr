@@ -13,6 +13,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 module "cbr_zone" {
   source             = "./cbr-zone-module"
   name               = var.name
+  region             = var.region
   account_id         = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description   = var.zone_description
   addresses          = var.addresses

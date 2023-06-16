@@ -34,6 +34,18 @@ variable "zone_service_ref_list" {
   description = "(List) Service reference for the zone creation"
 }
 
+variable "region_vpc_zone_list" {
+  type        = string
+  description = "The region in which the network zone is to be created"
+  default     = "us-south"
+}
+
+variable "region_service_ref_zone_list" {
+  type        = string
+  description = "The region in which the network zone is to be created"
+  default     = "us-south"
+}
+
 variable "target_service_details" {
   type = list(object({
     target_service_name = string
