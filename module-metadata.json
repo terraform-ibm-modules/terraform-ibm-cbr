@@ -76,7 +76,7 @@
       "description": "The region in which the network zone is to be created",
       "default": "us-south",
       "source": [
-        "module.cbr_zone.ibm_cbr_zone.cbr_zone.region"
+        "module.cbr_zone"
       ],
       "pos": {
         "filename": "variables.tf",
@@ -241,8 +241,7 @@
           "name": "cbr_rule",
           "attributes": {
             "description": "rule_description",
-            "enforcement_mode": "enforcement_mode",
-            "region": "region"
+            "enforcement_mode": "enforcement_mode"
           },
           "provider": {
             "name": "ibm"
@@ -319,8 +318,7 @@
           "attributes": {
             "account_id": "account_id",
             "description": "zone_description",
-            "name": "name",
-            "region": "region"
+            "name": "name"
           },
           "provider": {
             "name": "ibm"

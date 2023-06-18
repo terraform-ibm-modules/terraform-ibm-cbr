@@ -7,7 +7,6 @@
 resource "ibm_cbr_zone" "cbr_zone" {
   account_id  = var.account_id
   name        = var.name
-  region      = var.region
   description = var.zone_description
 
   dynamic "addresses" {

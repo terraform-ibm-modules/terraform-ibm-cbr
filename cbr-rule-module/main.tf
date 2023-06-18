@@ -7,7 +7,6 @@
 resource "ibm_cbr_rule" "cbr_rule" {
   description      = var.rule_description
   enforcement_mode = var.enforcement_mode
-  region           = var.region
 
   dynamic "contexts" {
     for_each = var.rule_contexts

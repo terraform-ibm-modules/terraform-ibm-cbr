@@ -88,9 +88,3 @@ variable "operations" {
     error_message = "operations cannot be null, an empty list is valid"
   }
 }
-
-variable "region" {
-  type        = string
-  description = "The region in which the network zone is to be created"
-  default     = "us-south"
-}
