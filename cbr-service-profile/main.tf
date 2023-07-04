@@ -67,10 +67,6 @@ locals {
   rule_contexts = [{
     attributes = [
       {
-        "name" : "endpointType",
-        "value" : "private"
-      },
-      {
         name  = "networkZoneId"
         value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
     }]
