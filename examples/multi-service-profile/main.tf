@@ -53,12 +53,6 @@ locals {
     {
       target_service_name = "kms",
       target_rg           = module.resource_group.resource_group_id
-      enforcement_mode    = local.enforcement_mode,
-
-    },
-    {
-      target_service_name = "container-registry",
-      target_rg           = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode
     }
   ]
