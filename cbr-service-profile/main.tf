@@ -51,7 +51,7 @@ locals {
       }
     ]
   }] : []
-  zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
+  zone_list = flatten(concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list)))
 }
 
 module "cbr_zone" {
