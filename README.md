@@ -55,6 +55,7 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
+- [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
 - [ CBR Multi Service Profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)

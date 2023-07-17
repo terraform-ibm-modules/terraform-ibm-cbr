@@ -1,40 +1,35 @@
-##############################################################################
-# Outputs
-##############################################################################
+# ##############################################################################
+# # Outputs
+# ##############################################################################
 
 output "zone_ids" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_ids
+  value       = [module.cbr_rule_multi_service_profile_1[*].zone_ids, module.cbr_rule_multi_service_profile_2[*].zone_ids]
   description = "CBR zone resource instance id(s)"
 }
 
 output "zone_crns" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_crns
+  value       = [module.cbr_rule_multi_service_profile_1[*].zone_crns, module.cbr_rule_multi_service_profile_2[*].zone_crns]
   description = "CBR zones crn(s)"
 }
 
 output "zone_hrefs" {
-  value       = module.cbr_rule_multi_service_profile[*].zone_hrefs
+  value       = [module.cbr_rule_multi_service_profile_1[*].zone_hrefs, module.cbr_rule_multi_service_profile_2[*].zone_hrefs]
   description = "CBR zones href(s)"
 }
 
 output "rule_ids" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_ids
+  value       = [module.cbr_rule_multi_service_profile_1[*].rule_ids, module.cbr_rule_multi_service_profile_2[*].rule_ids]
   description = "CBR rule id(s)"
 }
 
 output "rule_crns" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_crns
+  value       = [module.cbr_rule_multi_service_profile_1[*].rule_crns, module.cbr_rule_multi_service_profile_2[*].rule_crns]
   description = "CBR rule resource instance crn(s)"
 }
 
 output "rule_hrefs" {
-  value       = module.cbr_rule_multi_service_profile[*].rule_hrefs
+  value       = [module.cbr_rule_multi_service_profile_1[*].rule_hrefs, module.cbr_rule_multi_service_profile_2[*].rule_hrefs]
   description = "CBR rule resource instance href(s)"
-}
-
-output "vpc_crn" {
-  value       = ibm_is_vpc.example_vpc.crn
-  description = "VPC CRN"
 }
 
 output "account_id" {

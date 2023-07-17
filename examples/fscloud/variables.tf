@@ -1,6 +1,25 @@
-variable "resource_group_id" {
+variable "ibmcloud_api_key" {
   type        = string
-  description = "The resource group ID where the instance will be created."
+  description = "The IBM Cloud API Key"
+  sensitive   = true
+}
+
+variable "prefix" {
+  type        = string
+  description = "Prefix to append to all resources created by this example"
+  default     = "fs-cbr"
+}
+
+variable "region" {
+  description = "Name of the region to deploy into"
+  type        = string
+  default     = "us-south"
+}
+
+variable "resource_group" {
+  type        = string
+  description = "An existing resource group name to use for this example, if unset a new resource group will be created"
+  default     = null
 }
 
 variable "existing_access_tags" {
@@ -10,6 +29,12 @@ variable "existing_access_tags" {
   default = ["env:dev"]
 }
 
+variable "resource_tags" {
+  type        = list(string)
+  description = "Optional list of tags to be added to created resources"
+  default     = []
+}
+
 variable "zone_vpc_crn_list" {
   type        = list(string)
   default     = []
@@ -17,8 +42,8 @@ variable "zone_vpc_crn_list" {
 }
 
 variable "enforcement_mode" {
-  type        = string
-  default     = "enabled"
+  type    = string
+  default = "enabled"
   description = "The rule enforcement mode on a rule upon creation. Allowable values are: enabled, disabled, report."
 }
 
