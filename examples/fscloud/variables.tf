@@ -35,15 +35,9 @@ variable "resource_tags" {
   default     = []
 }
 
-variable "zone_vpc_crn_list" {
-  type        = list(string)
-  default     = []
-  description = "(List) VPC CRN for the zones"
-}
-
 variable "enforcement_mode" {
-  type    = string
-  default = "enabled"
+  type        = string
+  default     = "enabled"
   description = "The rule enforcement mode on a rule upon creation. Allowable values are: enabled, disabled, report."
 }
 

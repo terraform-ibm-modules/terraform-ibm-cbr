@@ -52,7 +52,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 module "cbr_rule_multi_service_profile" {
   source                           = "../../profiles/fscloud"
   zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
-  resource_group_id                = module.resource_group.resource_group_id 
+  resource_group_id                = module.resource_group.resource_group_id
   existing_access_tags             = var.existing_access_tags
   enforcement_mode                 = var.enforcement_mode
   allow_cos_to_kms                 = var.allow_cos_to_kms
