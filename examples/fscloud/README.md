@@ -9,6 +9,7 @@ ROKS -> KMS
 VPCs -> container registry
 VPCs -> where clusters are deployed -> COS
 
+This example uses the IBM Cloud Provider to automate the following infrastructure::
  - Create a VPC and create a CBR zone to allowlist the VPC.
  - Create a service reference based CBR zone.
  - Create a following pre-wired CBR rules :

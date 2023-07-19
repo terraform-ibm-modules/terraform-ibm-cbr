@@ -295,7 +295,7 @@ func TestFSCloudExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  fsCloudTerraformDir,
-		Prefix:        "cbr-fs-profile",
+		Prefix:        "cbr-fs",
 		ResourceGroup: resourceGroup,
 	})
 	options.SkipTestTearDown = true
