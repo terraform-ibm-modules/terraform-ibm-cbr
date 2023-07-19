@@ -25,7 +25,8 @@ variable "zone_service_ref_list" {
         "databases-for-mysql", "databases-for-postgresql",
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management"],
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+        "apprapp", "compliance", "event-notifications"],
       service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
@@ -54,7 +55,7 @@ variable "target_service_details" {
         "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
         "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
         "messages-for-rabbitmq", "secrets-manager", "transit", "is",
-      "schematics"], service_detail.target_service_name)
+      "schematics", "apprapp", "event-notifications", "compliance"], service_detail.target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
