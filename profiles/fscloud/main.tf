@@ -15,6 +15,7 @@ locals {
 
 module "cbr_rule_multi_service_profile_1" {
   source = "../../cbr-service-profile"
+  prefix = var.prefix
   count  = var.allow_cos_to_kms || var.allow_block_storage_to_kms || var.allow_roks_to_kms ? 1 : 0
   zone_service_ref_list = concat(var.allow_cos_to_kms ? ["cloud-object-storage"] : [],
     var.allow_block_storage_to_kms ? ["server-protect"] : [],
@@ -28,6 +29,7 @@ module "cbr_rule_multi_service_profile_1" {
 
 module "cbr_rule_multi_service_profile_2" {
   source            = "../../cbr-service-profile"
+  prefix            = var.prefix
   count             = var.allow_vpcs_to_container_registry || var.allow_vpcs_to_cos ? 1 : 0
   zone_vpc_crn_list = var.zone_vpc_crn_list
   target_service_details = concat(var.allow_vpcs_to_container_registry ? [{
