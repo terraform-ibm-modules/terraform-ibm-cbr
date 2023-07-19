@@ -51,7 +51,7 @@ locals {
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
-      target_service_name = "kms",
+      target_service_name = "secrets-manager",
       target_rg           = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode
     }

@@ -32,10 +32,10 @@
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, deafult is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, deafult is true | `bool` | `true` | no |
 | <a name="input_enforcement_mode"></a> [enforcement\_mode](#input\_enforcement\_mode) | The rule enforcement mode on a rule upon creation. Allowable values are: enabled, disabled, report. | `string` | `"enabled"` | no |
-| <a name="input_existing_access_tags"></a> [existing\_access\_tags](#input\_existing\_access\_tags) | Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create | `list(string)` | <pre>[<br>  "env:dev"<br>]</pre> | no |
+| <a name="input_existing_access_tags"></a> [existing\_access\_tags](#input\_existing\_access\_tags) | Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create, Provide the access tags with key:value format in a list | `list(string)` | n/a | yes |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | n/a | yes |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The resource group ID where the instance will be created. | `string` | n/a | yes |
-| <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | `[]` | no |
+| <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | n/a | yes |
 
 ## Outputs
 

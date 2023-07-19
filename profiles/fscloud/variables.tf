@@ -10,14 +10,11 @@ variable "prefix" {
 
 variable "existing_access_tags" {
   type        = list(string)
-  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
-  # Provide the access tags with key:value format in a list
-  default = ["env:dev"]
+  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create, Provide the access tags with key:value format in a list"
 }
 
 variable "zone_vpc_crn_list" {
   type        = list(string)
-  default     = []
   description = "(List) VPC CRN for the zones"
 }
 

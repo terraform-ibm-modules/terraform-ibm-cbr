@@ -45,10 +45,6 @@ resource "ibm_is_subnet" "testacc_subnet" {
 # CBR zone & rule creation
 ##############################################################################
 
-# locals {
-#   validate_allow_rules = var.allow_cos_to_kms || var.allow_block_storage_to_kms || var.allow_roks_to_kms || var.allow_vpcs_to_container_registry || var.allow_vpcs_to_cos ? true : tobool("Minimum of one rule has to be set to True")
-# }
-
 module "cbr_rule_multi_service_profile" {
   source                           = "../../profiles/fscloud"
   prefix                           = var.prefix
