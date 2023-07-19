@@ -28,15 +28,8 @@ variable "resource_tags" {
   default     = []
 }
 
-variable "existing_access_tags" {
-  type        = list(string)
-  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
-  # Provide the access tags with key:value format in a list
-  default = ["env:dev"]
-}
-
 variable "zone_service_ref_list" {
   type        = list(string)
-  default     = ["directlink", "is"]
+  default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
   description = "(List) Service reference for the zone creation"
 }
