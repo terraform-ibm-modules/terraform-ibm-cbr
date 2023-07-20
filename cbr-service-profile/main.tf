@@ -58,7 +58,7 @@ locals {
 module "cbr_zone" {
   count            = length(local.zone_list)
   source           = "../cbr-zone-module"
-  name             = "${local.zone_list[count.index].name}-${count.index + 1}"
+  name             = local.zone_list[count.index].name
   zone_description = local.zone_list[count.index].zone_description
   account_id       = local.zone_list[count.index].account_id
   addresses        = local.zone_list[count.index].addresses
