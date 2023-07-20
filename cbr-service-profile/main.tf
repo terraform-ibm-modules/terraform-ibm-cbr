@@ -68,7 +68,7 @@ locals {
     attributes = [
       {
         "name" : "endpointType",
-        "value" : "public-and-private"
+        "value" : ""
       },
       {
         name  = "networkZoneId"
