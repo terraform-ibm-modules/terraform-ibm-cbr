@@ -51,19 +51,7 @@ locals {
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
-      target_service_name = "cloud-object-storage",
-      # Note these are access tags and all iam access tags must be present on the COS instance for the rule to match
-      tags             = var.existing_access_tags,
-      enforcement_mode = local.enforcement_mode,
-    },
-    {
       target_service_name = "kms",
-      target_rg           = module.resource_group.resource_group_id
-      enforcement_mode    = local.enforcement_mode,
-
-    },
-    {
-      target_service_name = "messagehub",
       target_rg           = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode
     }
