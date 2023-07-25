@@ -40,6 +40,12 @@ variable "region_service_ref_zone_list" {
   default     = "us-south"
 }
 
+variable "location" {
+  type        = string
+  description = "The region in which the reference service is located"
+  default     = "us-south"
+}
+
 variable "target_service_details" {
   type = list(object({
     target_service_name = string
