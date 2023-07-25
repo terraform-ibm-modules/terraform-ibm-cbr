@@ -22,23 +22,10 @@ variable "resource_group" {
   default     = null
 }
 
-variable "existing_access_tags" {
-  type        = list(string)
-  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
-  # Provide the access tags with key:value format in a list
-  default = ["env:dev"]
-}
-
 variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
-}
-
-variable "enforcement_mode" {
-  type        = string
-  default     = "enabled"
-  description = "The rule enforcement mode on a rule upon creation. Allowable values are: enabled, disabled, report."
 }
 
 variable "allow_cos_to_kms" {

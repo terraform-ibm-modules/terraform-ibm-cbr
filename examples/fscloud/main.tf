@@ -45,16 +45,22 @@ resource "ibm_is_subnet" "testacc_subnet" {
 # CBR zone & rule creation
 ##############################################################################
 
-module "cbr_rule_multi_service_profile" {
+# todo: rename module
+module "cbr_account_level" {
   source                           = "../../profiles/fscloud"
   prefix                           = var.prefix
   zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
-  resource_group_id                = module.resource_group.resource_group_id
-  existing_access_tags             = var.existing_access_tags
-  enforcement_mode                 = var.enforcement_mode
   allow_cos_to_kms                 = var.allow_cos_to_kms
   allow_block_storage_to_kms       = var.allow_block_storage_to_kms
   allow_roks_to_kms                = var.allow_roks_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
+  # Demonstrates how additional context to the rules created by this module
+  # Example below open up flows from icd mongodb, postgres to kms
+  custom_rule_contexts_by_service = {
+    "kms" = {
+      endpointType      = "private" # TODO: review input to allow passing different end point type for same service
+      service_ref_names = ["databases-for-mongodb", "databases-for-postgresql"]
+    }
+  }
 }
