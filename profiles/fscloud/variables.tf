@@ -18,6 +18,15 @@ variable "zone_vpc_crn_list" {
   description = "(List) VPC CRN for the zones"
 }
 
+# variable "zone_allowed_ip_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP addresses for the zones"
+# }
+
+# variable "zone_allowed_ip_range_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP range for the zones"
+# }
 variable "enforcement_mode" {
   type        = string
   default     = "enabled"

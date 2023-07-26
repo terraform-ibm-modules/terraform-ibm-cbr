@@ -9,8 +9,10 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 # CBR Rule for a list of target services
 ##############################################################################
 locals {
+
   # tflint-ignore: terraform_unused_declarations
-  validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
+  validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0) && (length(var.zone_allowed_ip_list) == 0 ||
+  length(var.zone_allowed_ip_range_list) == 0)) ? tobool("Error: Provide a valid zone vpc, service and/or IP addresses references") : true
 
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
@@ -52,7 +54,25 @@ locals {
         }
       ]
   }] : []
-  zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
+
+  allowed_ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0) ? [{
+    name             = "${var.prefix}-cbr-allowed-ip-zone"
+    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+    zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
+    addresses = concat([
+      for allowed_ip in var.zone_allowed_ip_list :
+      { "type" = "ipAddress",
+        value  = allowed_ip
+      }
+      ], [
+      for allowed_ip_range in var.zone_allowed_ip_range_list :
+      { "type" = "ipRange",
+        value  = allowed_ip_range
+      }
+    ])
+  }] : []
+
+  zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list), tolist(local.allowed_ip_zone_list))
 }
 
 module "cbr_zone" {

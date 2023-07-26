@@ -46,9 +46,11 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "cbr_rule_multi_service_profile" {
-  source                           = "../../profiles/fscloud"
-  prefix                           = var.prefix
-  zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
+  source            = "../../profiles/fscloud"
+  prefix            = var.prefix
+  zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
+  # zone_allowed_ip_list             = var.zone_allowed_ip_list
+  # zone_allowed_ip_range_list       = var.zone_allowed_ip_range_list
   resource_group_id                = module.resource_group.resource_group_id
   existing_access_tags             = var.existing_access_tags
   enforcement_mode                 = var.enforcement_mode

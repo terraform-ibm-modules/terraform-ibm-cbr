@@ -70,3 +70,15 @@ variable "allow_vpcs_to_cos" {
   description = "Set rule for VPCs to COS, deafult is true"
   default     = true
 }
+
+# variable "zone_allowed_ip_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP addresses for the zones"
+#   default     = ["1.1.1.1", "2.2.2.2"]
+# }
+
+# variable "zone_allowed_ip_range_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP range for the zones"
+#   default     = ["1.1.1.1-2.2.2.2"]
+# }

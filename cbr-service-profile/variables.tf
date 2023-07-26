@@ -60,3 +60,15 @@ variable "target_service_details" {
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
 }
+
+variable "zone_allowed_ip_list" {
+  type        = list(string)
+  description = "(List) Allowed IP addresses for the zones"
+  default     = []
+}
+
+variable "zone_allowed_ip_range_list" {
+  type        = list(string)
+  description = "(List) Allowed IP range for the zones"
+  default     = []
+}
