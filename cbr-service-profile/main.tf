@@ -74,17 +74,6 @@ locals {
         name  = "networkZoneId"
         value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
     }]
-    },
-    {
-      attributes = [
-        {
-          "name" : "endpointType",
-          "value" : "public"
-        },
-        {
-          name  = "networkZoneId"
-          value = join(",", ([for zone in module.cbr_zone : zone.zone_id]))
-      }]
   }]
 }
 
