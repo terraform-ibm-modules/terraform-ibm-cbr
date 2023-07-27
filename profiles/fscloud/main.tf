@@ -11,9 +11,9 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 locals {
   service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [
     for serviceref in var.zone_service_ref_list : {
-      name             = "${var.prefix}-${serviceref}-cbr-serviceref-zone"
+      name             = "${var.prefix}-${serviceref}-service-zone"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-      zone_description = "${serviceref}-cbr-serviceref-zone-terraform"
+      zone_description = "Single zone for service ${serviceref}."
       # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
       addresses = [
         {
@@ -48,7 +48,7 @@ module "cbr_zone" {
 module "cbr_zone_deny" {
   source           = "../../cbr-zone-module"
   name             = "${var.prefix}-deny-all"
-  zone_description = "${var.prefix}-deny-all"
+  zone_description = "Zone that may be used to force a deny-all."
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   addresses = [
     {
@@ -64,8 +64,8 @@ module "cbr_zone_deny" {
 
 module "cbr_zone_vpcs" {
   source           = "../../cbr-zone-module"
-  name             = "${var.prefix}-cbr-vpc-zone-terraform"
-  zone_description = "${var.prefix}-cbr-vpc-zone-terraform"
+  name             = "${var.prefix}-vpcs-zone"
+  zone_description = "Single zone grouping all VPCs participating in a fscloud topology."
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   addresses = [
     for zone_vpc_crn in var.zone_vpc_crn_list :
@@ -189,9 +189,9 @@ module "cbr_rule" {
   for_each = local.target_service_details_by_service_name
   #count            = length(var.target_service_details)
   source           = "../../cbr-rule-module"
-  rule_description = "${var.prefix}-${each.key}-serviceprofile-rule"
+  rule_description = "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
-  rule_contexts    = lookup(local.allow_rules_by_service, each.key, []) #local.rule_contexts
+  rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
     api_types = [
       # lookup the map for the target service name, if not present make api_type_id as empty
