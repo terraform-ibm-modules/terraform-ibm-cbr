@@ -201,9 +201,9 @@ variable "excluded_addresses" {
   default     = []
   validation {
     condition = alltrue([
-      for address in var.excluded_addresses : contains(["ipAddress", "ipRange", "subnet", "vpc", "serviceRef"], address.type)
+      for address in var.excluded_addresses : contains(["ipAddress", "ipRange", "subnet"], address.type)
     ])
-    error_message = "Valid values for address types are 'ipAddress', 'ipRange', 'subnet', 'vpc', and 'serviceRef'"
+    error_message = "Valid values for address types are 'ipAddress', 'ipRange' and 'subnet'"
   }
   validation {
     condition = alltrue([
@@ -214,122 +214,5 @@ variable "excluded_addresses" {
       ])
     ])
     error_message = "Value should be a valid as per the type"
-  }
-
-  validation {
-    condition = alltrue(
-      flatten(
-        [for address in var.excluded_addresses :
-          (address.ref != null ?
-            (
-              alltrue(
-                [for ref in address.ref : alltrue([
-                  length(address.ref.account_id) >= 1,
-                  length(address.ref.account_id) <= 128,
-                  can(regex("^[a-zA-Z0-9-]+$", address.ref.account_id))
-                ])]
-              )
-            ) : true
-          )
-        ]
-      )
-    )
-    error_message = "Value should be a valid account id"
-  }
-
-  validation {
-    condition = alltrue(
-      flatten(
-        [for address in var.excluded_addresses :
-          (address.ref != null ?
-            (
-              alltrue(
-                [for ref in address.ref : anytrue([
-                  address.ref.location == null,
-                  alltrue([
-                    can(length(address.ref.location) >= 1),
-                    can(length(address.ref.location) <= 128),
-                    can(regex("^[0-9a-z-]+$", address.ref.location))
-                  ])
-                ])]
-              )
-            ) : true
-          )
-        ]
-      )
-    )
-    error_message = "Value should be a valid location"
-  }
-
-  validation {
-    condition = alltrue(
-      flatten(
-        [for address in var.excluded_addresses :
-          (address.ref != null ?
-            (
-              alltrue(
-                [for ref in address.ref : anytrue([
-                  address.ref.service_instance == null,
-                  alltrue([
-                    can(length(address.ref.service_instance) >= 1),
-                    can(length(address.ref.service_instance) <= 128),
-                    can(regex("^[0-9a-z-/]+$", address.ref.service_instance))
-                  ])
-                ])]
-              )
-            ) : true
-          )
-        ]
-      )
-    )
-    error_message = "Value should be a valid service instance"
-  }
-
-  validation {
-    condition = alltrue(
-      flatten(
-        [for address in var.excluded_addresses :
-          (address.ref != null ?
-            (
-              alltrue(
-                [for ref in address.ref : anytrue([
-                  address.ref.service_name == null,
-                  alltrue([
-                    can(length(address.ref.service_name) >= 1),
-                    can(length(address.ref.service_name) <= 128),
-                    can(regex("^[0-9a-z-/]+$", address.ref.service_name))
-                  ])
-                ])]
-              )
-            ) : true
-          )
-        ]
-      )
-    )
-    error_message = "Value should be a valid service name"
-  }
-
-  validation {
-    condition = alltrue(
-      flatten(
-        [for address in var.excluded_addresses :
-          (address.ref != null ?
-            (
-              alltrue(
-                [for ref in address.ref : anytrue([
-                  address.ref.service_type == null,
-                  alltrue([
-                    can(length(address.ref.service_type) >= 1),
-                    can(length(address.ref.service_type) <= 128),
-                    can(regex("^[0-9a-z_]+$", address.ref.service_type))
-                  ])
-                ])]
-              )
-            ) : true
-          )
-        ]
-      )
-    )
-    error_message = "Value should be a valid service type"
   }
 }

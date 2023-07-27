@@ -32,7 +32,19 @@
 #   description = "CBR rule resource instance href(s)"
 # }
 
-output "account_id" {
-  value       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  description = "Account ID (used in tests)"
-}
+# output "account_id" {
+#   value       = data.ibm_iam_account_settings.iam_account_settings.account_id
+#   description = "Account ID (used in tests)"
+# }
+
+# output "all_services" {
+#   value = [local.allow_rules_by_service]
+# }
+
+# output "module_rule" {
+#   value = module.cbr_rule
+# }
+
+# output "ip_zone_list" {
+#   value = local.allow_rules_by_service
+# }
