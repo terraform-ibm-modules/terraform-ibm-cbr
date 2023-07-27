@@ -45,7 +45,6 @@ resource "ibm_is_subnet" "testacc_subnet" {
 # CBR zone & rule creation
 ##############################################################################
 
-# todo: rename module
 module "cbr_account_level" {
   source                           = "../../profiles/fscloud"
   prefix                           = var.prefix
