@@ -207,6 +207,9 @@ func TestMultiServiceProfileExample(t *testing.T) {
 		Prefix:        "cbr-multi-service-profile",
 		ResourceGroup: resourceGroup,
 	})
+	options.TerraformVars = map[string]interface{}{
+		"location": options.Region,
+	}
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
 
