@@ -55,7 +55,10 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
   # Demonstrates how additional context to the rules created by this module
-  # Example below open up flows from icd mongodb, postgres to kms on private endpoint, and flow from schematics on public kms endpoint
+  # Example here open up:
+  #   1. Flows from icd mongodb, postgres to kms on private endpoint
+  #   2. Flow from schematics on public kms endpoint
+  #   3. Add a block of ips to schematics public endpoints
   custom_rule_contexts_by_service = {
     "kms" = [{
       endpointType      = "private"
@@ -65,6 +68,21 @@ module "cbr_account_level" {
         endpointType      = "public"
         service_ref_names = ["schematics"]
       }
-    ]
+    ],
+    "schematics" = [{
+      endpointType = "public"
+      zone_ids     = [module.cbr_zone_operator_ips.zone_id]
+    }]
   }
+}
+
+module "cbr_zone_operator_ips" {
+  source           = "../../cbr-zone-module"
+  name             = "List of operator environment public IPs"
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  zone_description = "Zone grouping list of known public ips for operator machines"
+  addresses = [{
+    type  = "subnet"
+    value = "0.0.0.0/0" # All ip for this public example - this would be narrowed down typically to an enterprise ip block
+  }]
 }
