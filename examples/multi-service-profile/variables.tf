@@ -7,7 +7,7 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "test-terraform-multizone"
+  default     = "test-terraform-multizone-1a"
 }
 
 variable "region" {
@@ -17,15 +17,15 @@ variable "region" {
 }
 
 variable "location" {
-  description = "The region in which the reference service is located"
+  description = "The region in which the network zone is scoped"
   type        = string
-  default     = "ca-tor"
+  default     = "us-south"
 }
 
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
-  default     = null
+  default     = "MultiServiceProfile-testRG"
 }
 
 variable "resource_tags" {

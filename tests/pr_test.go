@@ -204,12 +204,9 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  multiServiceExampleTerraformDir,
-		Prefix:        "cbr-multi-service-profile",
+		Prefix:        "cbr-multi-service-profile-1a",
 		ResourceGroup: resourceGroup,
 	})
-	options.TerraformVars = map[string]interface{}{
-		"location": options.Region,
-	}
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
 

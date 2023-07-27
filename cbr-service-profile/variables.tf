@@ -43,7 +43,7 @@ variable "region_service_ref_zone_list" {
 
 variable "location" {
   type        = string
-  description = "The region in which the reference service is located"
+  description = "The region in which the network zone is scoped"
   default     = "us-south"
 }
 
