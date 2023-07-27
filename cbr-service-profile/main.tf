@@ -36,28 +36,30 @@ locals {
     ]
   }] : []
 
-  service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [{
-    name             = "${var.prefix}-cbr-serviceref-zone"
-    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "cbr-serviceref-zone-terraform"
-    # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
-    addresses = [
-      for serviceref in var.zone_service_ref_list : {
-        type = "serviceRef"
-        ref = {
-          account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
-          service_name = serviceref
+  service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [
+    for serviceref in var.zone_service_ref_list : {
+      name             = "${var.prefix}-${serviceref}-cbr-serviceref-zone"
+      account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+      zone_description = "${serviceref}-cbr-serviceref-zone-terraform"
+      # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
+      addresses = [
+        {
+          type = "serviceRef"
+          ref = {
+            account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
+            service_name = serviceref
+          }
         }
-      }
-    ]
+      ]
   }] : []
+
   zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
 }
 
 module "cbr_zone" {
   count            = length(local.zone_list)
   source           = "../cbr-zone-module"
-  name             = "${local.zone_list[count.index].name}-${count.index + 2}"
+  name             = local.zone_list[count.index].name
   zone_description = local.zone_list[count.index].zone_description
   account_id       = local.zone_list[count.index].account_id
   addresses        = local.zone_list[count.index].addresses
@@ -68,7 +70,7 @@ locals {
     attributes = [
       {
         "name" : "endpointType",
-        "value" : var.endpoint_type
+        "value" : join(",", ([for endpoint in var.endpoints : endpoint]))
       },
       {
         name  = "networkZoneId"

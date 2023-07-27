@@ -22,12 +22,6 @@ variable "resource_group" {
   default     = null
 }
 
-variable "endpoint_type" {
-  type        = string
-  default     = "public,private"
-  description = "The endpoint type from where the request is sent"
-}
-
 variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
@@ -38,4 +32,16 @@ variable "zone_service_ref_list" {
   type        = list(string)
   default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
   description = "(List) Service reference for the zone creation"
+}
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
+  }
 }

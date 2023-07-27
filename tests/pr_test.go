@@ -267,7 +267,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 							currentAttribute := []contextbasedrestrictionsv1.RuleContextAttribute{
 								{
 									Name:  core.StringPtr("endpointType"),
-									Value: core.StringPtr("public,private"),
+									Value: core.StringPtr("private"),
 								},
 								{
 									Name:  core.StringPtr("networkZoneId"),
