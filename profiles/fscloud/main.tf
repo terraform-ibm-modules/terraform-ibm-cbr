@@ -27,6 +27,39 @@ locals {
   }] : []
 
   service_ref_zone_map = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
+
+  ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0) ? [{
+    name             = "${var.prefix}-cbr-ip-zone"
+    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+    zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
+    addresses = concat([
+      for allowed_ip in var.zone_allowed_ip_list :
+      { "type" = "ipAddress",
+        value  = allowed_ip
+      }
+      ], [
+      for allowed_ip_range in var.zone_allowed_ip_range_list :
+      { "type" = "ipRange",
+        value  = allowed_ip_range
+      }
+    ])
+    excluded_addresses = concat([
+      for excluded_ip in var.zone_exluded_ip_list :
+      { "type" = "ipAddress",
+        value  = excluded_ip
+      }],
+      [
+        for allowed_ip_range in var.zone_excluded_ip_range_list :
+        { "type" = "ipRange",
+          value  = allowed_ip_range
+      }],
+      [
+        for excluded_subnet in var.zone_excluded_subnet_list :
+        { "type" = "ipRange",
+          value  = excluded_subnet
+      }]
+    )
+  }] : []
 }
 
 module "cbr_zone" {
@@ -73,6 +106,20 @@ module "cbr_zone_vpcs" {
   ]
 }
 
+###############################################################################
+# Pre-create zones for IP address
+###############################################################################
+
+module "cbr_zone_ip" {
+  count              = length(local.ip_zone_list)
+  source             = "../../cbr-zone-module"
+  name               = local.ip_zone_list[count.index].name
+  zone_description   = local.ip_zone_list[count.index].zone_description
+  account_id         = local.ip_zone_list[count.index].account_id
+  addresses          = local.ip_zone_list[count.index].addresses
+  excluded_addresses = local.ip_zone_list[count.index].excluded_addresses
+}
+
 
 ##############################################################################
 # Create CBR zones for each service
@@ -81,7 +128,6 @@ module "cbr_zone_vpcs" {
 locals {
   # tflint-ignore: terraform_unused_declarations
   validate_allow_rules = var.allow_cos_to_kms || var.allow_block_storage_to_kms || var.allow_roks_to_kms || var.allow_vpcs_to_container_registry || var.allow_vpcs_to_cos ? true : tobool("Minimum of one rule has to be set to True")
-
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
   cos_cbr_zone_id = module.cbr_zone["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
@@ -116,6 +162,10 @@ locals {
     # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
   }
 
+  prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
+  key => value if length(value.networkZoneIds) > 0 }
+
+
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in var.target_service_details[*].target_service_name :
     target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
@@ -131,9 +181,9 @@ locals {
 
 
   # Merge map values (array of context) under the same service-name key
-  all_target_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service, local.custom_rule_contexts_by_service))
-  allow_rules_by_service_intermediary = { for target_service_name in local.all_target_services :
-    target_service_name => flatten([lookup(local.deny_rule_context_by_service, target_service_name, []), lookup(local.prewired_rule_contexts_by_service, target_service_name, []), lookup(local.custom_rule_contexts_by_service, target_service_name, [])])
+  all_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
+  allow_rules_by_service_intermediary = { for service_name in local.all_services :
+    service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
   }
 
   # Convert data structure

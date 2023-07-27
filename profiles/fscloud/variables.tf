@@ -137,3 +137,32 @@ variable "target_service_details" {
     { "target_service_name" : "compliance", "enforcement_mode" : "report" }
   ]
 }
+
+variable "zone_allowed_ip_list" {
+  type        = list(string)
+  description = "(List) Allowed IP addresses for the zones"
+  default     = []
+}
+
+variable "zone_allowed_ip_range_list" {
+  type        = list(string)
+  description = "(List) Allowed IP range for the zones"
+  default     = []
+}
+variable "zone_exluded_ip_list" {
+  type        = list(string)
+  description = "(List) Excluded IP address for the zones"
+  default     = []
+}
+
+variable "zone_excluded_ip_range_list" {
+  type        = list(string)
+  description = "(List) Excluded IP range for the zones"
+  default     = []
+}
+
+variable "zone_excluded_subnet_list" {
+  type        = list(string)
+  description = "(List) Excluded subnet list for the zones"
+  default     = []
+}
