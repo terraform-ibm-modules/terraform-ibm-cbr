@@ -117,23 +117,23 @@ locals {
   }
 
   ## define default 'deny' rule context
-  deny_rule_context_by_service = { for service_name in var.target_service_details[*].target_service_name :
-    service_name => { endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }
+  deny_rule_context_by_service = { for target_service_name in var.target_service_details[*].target_service_name :
+    target_service_name => { endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }
   }
 
   ## define context for any custom rules
-  custom_rule_contexts_by_service = { for k, v in var.custom_rule_contexts_by_service :
-    k => {
-      endpointType = v.endpointType
-      networkZoneIds : flatten(concat([for service_name in v.service_ref_names : module.cbr_zone[service_name].zone_id], v.zone_ids))
+  custom_rule_contexts_by_service = { for target_service_name, custom_rule_context in var.custom_rule_contexts_by_service :
+    target_service_name => {
+      endpointType = custom_rule_context.endpointType
+      networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : module.cbr_zone[service_name].zone_id], custom_rule_context.zone_ids))
     }
   }
 
 
   # Merge map values (array of context) under the same service-name key
-  all_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service, local.custom_rule_contexts_by_service))
-  allow_rules_by_service_intermediary = { for service_name in local.all_services :
-    service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
+  all_target_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service, local.custom_rule_contexts_by_service))
+  allow_rules_by_service_intermediary = { for target_service_name in local.all_target_services :
+    target_service_name => flatten([lookup(local.deny_rule_context_by_service, target_service_name, []), lookup(local.prewired_rule_contexts_by_service, target_service_name, []), lookup(local.custom_rule_contexts_by_service, target_service_name, [])])
   }
 
   # Convert data structure
@@ -147,8 +147,8 @@ locals {
   #     name  = "networkZoneIds"
   #     value = join(",", networkZoneIds)
   # }]
-  allow_rules_by_service = { for service_name, contexts in local.allow_rules_by_service_intermediary :
-    service_name => [for context in contexts : { attributes = [
+  allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
+    target_service_name => [for context in contexts : { attributes = [
       {
         "name" : "endpointType",
         "value" : context.endpointType
