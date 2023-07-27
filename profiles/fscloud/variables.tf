@@ -69,22 +69,16 @@ variable "zone_service_ref_list" {
 variable "custom_rule_contexts_by_service" {
   # servicename -> [cbr rule context]
   # append to rule context created by profile
-  type = map(object(
+  type = map(list(object(
     {
       endpointType = string # "private, public or direct"
 
       # Service-name (module lookup for existing network zone) and/or CBR zone id
       service_ref_names = optional(list(string), [])
       zone_ids          = optional(list(string), [])
-  }))
+  })))
   description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key."
   default     = {}
-  # Example:
-  # "kms" = {
-  #   endpointType      = "public" # TODO: review input to allow passing different end point type for same service
-  #   service_ref_names = ["cloud-object-storage", "schematics"]
-  # }
-  #}
 }
 
 

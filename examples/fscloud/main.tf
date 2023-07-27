@@ -56,11 +56,16 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
   # Demonstrates how additional context to the rules created by this module
-  # Example below open up flows from icd mongodb, postgres to kms
+  # Example below open up flows from icd mongodb, postgres to kms on private endpoint, and flow from schematics on public kms endpoint
   custom_rule_contexts_by_service = {
-    "kms" = {
-      endpointType      = "private" # TODO: review input to allow passing different end point type for same service
+    "kms" = [{
+      endpointType      = "private"
       service_ref_names = ["databases-for-mongodb", "databases-for-postgresql"]
-    }
+      },
+      {
+        endpointType      = "public"
+        service_ref_names = ["schematics"]
+      }
+    ]
   }
 }

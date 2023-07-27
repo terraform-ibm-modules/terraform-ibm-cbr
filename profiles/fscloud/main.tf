@@ -91,42 +91,42 @@ locals {
 
   prewired_rule_contexts_by_service = {
     # COS -> KMS, Block storage -> KMS, ROKS -> KMS
-    "kms" : {
+    "kms" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
         var.allow_block_storage_to_kms ? [local.server-protect_cbr_zone_id] : [],
         var.allow_roks_to_kms ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
-    },
+    }],
     # Fs VPCs -> COS
-    "cloud-object-storage" : {
+    "cloud-object-storage" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_cos ? [module.cbr_zone_vpcs.zone_id] : []
       ])
-    },
+    }],
     # VPCs -> container registry
-    "container-registry" : {
+    "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [module.cbr_zone_vpcs.zone_id] : []
       ])
-    },
+    }],
     # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
   }
 
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in var.target_service_details[*].target_service_name :
-    target_service_name => { endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }
+    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
   }
 
   ## define context for any custom rules
-  custom_rule_contexts_by_service = { for target_service_name, custom_rule_context in var.custom_rule_contexts_by_service :
-    target_service_name => {
+  custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
+    target_service_name => [for custom_rule_context in custom_rule_contexts : {
       endpointType = custom_rule_context.endpointType
       networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : module.cbr_zone[service_name].zone_id], custom_rule_context.zone_ids))
-    }
+    }]
   }
 
 
