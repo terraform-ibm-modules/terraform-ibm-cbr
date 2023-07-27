@@ -63,4 +63,5 @@ module "cbr_rule_multi_service_profile" {
   zone_service_ref_list  = var.zone_service_ref_list
   zone_vpc_crn_list      = local.zone_vpc_crn_list
   target_service_details = local.target_services_details
+  endpoint_type          = var.endpoint_type
 }

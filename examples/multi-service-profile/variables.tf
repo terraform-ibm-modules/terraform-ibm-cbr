@@ -22,6 +22,12 @@ variable "resource_group" {
   default     = null
 }
 
+variable "endpoint_type" {
+  type        = string
+  default     = "public,private"
+  description = "The endpoint type from where the request is sent"
+}
+
 variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
