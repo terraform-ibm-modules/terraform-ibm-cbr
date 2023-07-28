@@ -28,45 +28,48 @@ locals {
 
   service_ref_zone_map = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
 
-  ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0 || length(var.zone_allowed_subnet_list) > 0 ||
-    length(var.zone_exluded_ip_list) > 0 || length(var.zone_excluded_ip_range_list) > 0 || length(var.zone_excluded_subnet_list) > 0) ? [{
-      name             = "${var.prefix}-cbr-ip-zone"
-      account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-      zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
-      addresses = concat([
-        for allowed_ip in var.zone_allowed_ip_list :
-        { "type" = "ipAddress",
-          value  = allowed_ip
-        }
-        ], [
-        for allowed_ip_range in var.zone_allowed_ip_range_list :
-        { "type" = "ipRange",
-          value  = allowed_ip_range
-        }
-        ], [
-        for allowed_subnet in var.zone_allowed_subnet_list :
-        { "type" = "subnet",
-          value  = allowed_subnet
-        }
-      ])
-      excluded_addresses = concat([
-        for excluded_ip in var.zone_exluded_ip_list :
-        { "type" = "ipAddress",
-          value  = excluded_ip
-        }],
-        [
-          for allowed_ip_range in var.zone_excluded_ip_range_list :
-          { "type" = "ipRange",
-            value  = allowed_ip_range
-        }],
-        [
-          for excluded_subnet in var.zone_excluded_subnet_list :
-          { "type" = "subnet",
-            value  = excluded_subnet
-        }]
-      )
-  }] : []
+
+  # ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0 || length(var.zone_allowed_subnet_list) > 0 ||
+  #   length(var.zone_exluded_ip_list) > 0 || length(var.zone_excluded_ip_range_list) > 0 || length(var.zone_excluded_subnet_list) > 0) ? [{
+  #     name             = "${var.prefix}-cbr-ip-zone"
+  #     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  #     zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
+  #     addresses = concat([
+  #       for allowed_ip in var.zone_allowed_ip_list :
+  #       { "type" = "ipAddress",
+  #         value  = allowed_ip
+  #       }
+  #       ], [
+  #       for allowed_ip_range in var.zone_allowed_ip_range_list :
+  #       { "type" = "ipRange",
+  #         value  = allowed_ip_range
+  #       }
+  #       ], [
+  #       for allowed_subnet in var.zone_allowed_subnet_list :
+  #       { "type" = "subnet",
+  #         value  = allowed_subnet
+  #       }
+  #     ])
+  #     excluded_addresses = concat([
+  #       for excluded_ip in var.zone_exluded_ip_list :
+  #       { "type" = "ipAddress",
+  #         value  = excluded_ip
+  #       }],
+  #       [
+  #         for allowed_ip_range in var.zone_excluded_ip_range_list :
+  #         { "type" = "ipRange",
+  #           value  = allowed_ip_range
+  #       }],
+  #       [
+  #         for excluded_subnet in var.zone_excluded_subnet_list :
+  #         { "type" = "subnet",
+  #           value  = excluded_subnet
+  #       }]
+  #     )
+  # }] : []
 }
+
+
 
 module "cbr_zone" {
   for_each         = local.service_ref_zone_map
@@ -117,13 +120,31 @@ module "cbr_zone_vpcs" {
 ###############################################################################
 
 module "cbr_zone_ip" {
-  count              = length(local.ip_zone_list)
-  source             = "../../cbr-zone-module"
-  name               = local.ip_zone_list[count.index].name
-  zone_description   = local.ip_zone_list[count.index].zone_description
-  account_id         = local.ip_zone_list[count.index].account_id
-  addresses          = local.ip_zone_list[count.index].addresses
-  excluded_addresses = local.ip_zone_list[count.index].excluded_addresses
+  count            = (length(var.ip_addresses) > 0 || length(var.ip_excluded_addresses) > 0) ? 1 : 0
+  name             = "${var.prefix}-cbr-ip-zone"
+  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
+  source           = "../../cbr-zone-module"
+  addresses = concat([
+    for ipAddress in var.ip_addresses.ipAddress :
+    { "type" = "ipAddress", value = ipAddress }
+    ], [
+    for ipRange in var.ip_addresses.ipRange :
+    { "type" = "ipRange", value = ipRange }
+    ], [
+    for subnet in var.ip_addresses.subnet :
+    { "type" = "subnet", value = subnet }
+  ])
+  excluded_addresses = concat([
+    for ipAddress in var.ip_excluded_addresses.ipAddress :
+    { "type" = "ipAddress", value = ipAddress }
+    ], [
+    for ipRange in var.ip_excluded_addresses.ipRange :
+    { "type" = "ipRange", value = ipRange }
+    ], [
+    for subnet in var.ip_excluded_addresses.subnet :
+    { "type" = "subnet", value = subnet }
+  ])
 }
 
 
