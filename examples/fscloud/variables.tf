@@ -59,38 +59,66 @@ variable "allow_vpcs_to_cos" {
 }
 
 
-variable "zone_allowed_ip_list" {
-  type        = list(string)
-  description = "(List) Allowed IP addresses for the zones"
-  default     = ["169.23.56.234"]
+# variable "zone_allowed_ip_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP addresses for the zones"
+#   default     = ["169.23.56.234"]
+# }
+
+# variable "zone_allowed_ip_range_list" {
+#   type        = list(string)
+#   description = "(List) Allowed IP range for the zones"
+#   default     = ["169.23.22.0-169.23.22.255"]
+# }
+
+# variable "zone_allowed_subnet_list" {
+#   type        = list(string)
+#   description = "(List) Allowed subnet list for the zones"
+#   default     = ["0.0.0.0/0"]
+# }
+
+# variable "zone_exluded_ip_list" {
+#   type        = list(string)
+#   description = "(List) Excluded IP address for the zones"
+#   default     = ["169.23.22.10", "169.23.22.11"]
+# }
+
+# variable "zone_excluded_ip_range_list" {
+#   type        = list(string)
+#   description = "(List) Excluded IP range for the zones"
+#   default     = []
+# }
+
+# variable "zone_excluded_subnet_list" {
+#   type        = list(string)
+#   description = "(List) Excluded subnet list for the zones"
+#   default     = []
+# }
+
+variable "ip_addresses" {
+  type = object({
+    ipAddress = optional(list(string))
+    ipRange   = optional(list(string))
+    subnet    = optional(list(string))
+  })
+  description = "List of all addresses."
+  default = {
+    ipAddress = ["169.23.56.234"],
+    ipRange   = ["169.23.22.0-169.23.22.255"],
+    subnet    = ["0.0.0.0/0"]
+  }
 }
 
-variable "zone_allowed_ip_range_list" {
-  type        = list(string)
-  description = "(List) Allowed IP range for the zones"
-  default     = ["169.23.22.0-169.23.22.255"]
-}
-
-variable "zone_allowed_subnet_list" {
-  type        = list(string)
-  description = "(List) Allowed subnet list for the zones"
-  default     = ["0.0.0.0/0"]
-}
-
-variable "zone_exluded_ip_list" {
-  type        = list(string)
-  description = "(List) Excluded IP address for the zones"
-  default     = ["169.23.22.10", "169.23.22.11"]
-}
-
-variable "zone_excluded_ip_range_list" {
-  type        = list(string)
-  description = "(List) Excluded IP range for the zones"
-  default     = []
-}
-
-variable "zone_excluded_subnet_list" {
-  type        = list(string)
-  description = "(List) Excluded subnet list for the zones"
-  default     = []
+variable "ip_excluded_addresses" {
+  type = object({
+    ipAddress = optional(list(string))
+    ipRange   = optional(list(string))
+    subnet    = optional(list(string))
+  })
+  description = "List of all excluded addresses."
+  default = {
+    "ipAddress" = ["169.23.22.10", "169.23.22.11"],
+    "ipRange"   = [],
+    "subnet"    = []
+  }
 }

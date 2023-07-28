@@ -54,12 +54,8 @@ module "cbr_account_level" {
   allow_roks_to_kms                = var.allow_roks_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
-  zone_allowed_ip_list             = var.zone_allowed_ip_list
-  zone_allowed_ip_range_list       = var.zone_allowed_ip_range_list
-  zone_allowed_subnet_list         = var.zone_allowed_subnet_list
-  zone_excluded_ip_range_list      = var.zone_excluded_ip_range_list
-  zone_exluded_ip_list             = var.zone_exluded_ip_list
-  zone_excluded_subnet_list        = var.zone_excluded_subnet_list
+  ip_addresses                     = var.ip_addresses
+  ip_excluded_addresses            = var.ip_excluded_addresses
 
   # Demonstrates how additional context to the rules created by this module can be added.
   # This example open up:
