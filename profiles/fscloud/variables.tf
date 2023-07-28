@@ -113,7 +113,6 @@ variable "target_service_details" {
     tags             = optional(list(string))
   }))
   description = "Details of the target service for which a rule is created. The key is the service name."
-  #Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
       for target_service_name, _ in var.target_service_details :
@@ -138,7 +137,6 @@ variable "target_service_details" {
   }
   default = {}
 }
-
 
 variable "existing_serviceref_zone" {
   type = map(object(

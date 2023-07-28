@@ -298,7 +298,6 @@ func TestFSCloudExample(t *testing.T) {
 		Prefix:        "cbr-fs",
 		ResourceGroup: resourceGroup,
 	})
-	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")

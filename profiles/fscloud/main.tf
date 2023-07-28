@@ -256,17 +256,6 @@ locals {
     service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
   }
 
-  # Convert data structure
-  # From { endpointType : "private", networkZoneIds : [] } to
-  # attributes = [
-  #   {
-  #     "name" : "endpointType",
-  #     "value" : "private"
-  #   },
-  #   {
-  #     name  = "networkZoneIds"
-  #     value = join(",", networkZoneIds)
-  # }]
   allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
     target_service_name => [for context in contexts : { attributes = [
       {
