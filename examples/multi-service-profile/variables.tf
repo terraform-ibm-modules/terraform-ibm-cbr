@@ -36,7 +36,7 @@ variable "zone_service_ref_list" {
 
 variable "endpoints" {
   type        = list(string)
-  description = "List specific endpoint types"
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
   default     = ["private"]
   validation {
     condition = alltrue([

@@ -63,7 +63,7 @@ variable "target_service_details" {
 
 variable "endpoints" {
   type        = list(string)
-  description = "List specific endpoint types"
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
   default     = []
   validation {
     condition = alltrue([
