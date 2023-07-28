@@ -70,6 +70,13 @@ variable "zone_allowed_ip_range_list" {
   description = "(List) Allowed IP range for the zones"
   default     = ["169.23.22.0-169.23.22.255"]
 }
+
+variable "zone_allowed_subnet_list" {
+  type        = list(string)
+  description = "(List) Allowed subnet list for the zones"
+  default     = ["0.0.0.0/0"]
+}
+
 variable "zone_exluded_ip_list" {
   type        = list(string)
   description = "(List) Excluded IP address for the zones"

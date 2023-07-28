@@ -28,37 +28,43 @@ locals {
 
   service_ref_zone_map = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
 
-  ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0) ? [{
-    name             = "${var.prefix}-cbr-ip-zone"
-    account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
-    addresses = concat([
-      for allowed_ip in var.zone_allowed_ip_list :
-      { "type" = "ipAddress",
-        value  = allowed_ip
-      }
-      ], [
-      for allowed_ip_range in var.zone_allowed_ip_range_list :
-      { "type" = "ipRange",
-        value  = allowed_ip_range
-      }
-    ])
-    excluded_addresses = concat([
-      for excluded_ip in var.zone_exluded_ip_list :
-      { "type" = "ipAddress",
-        value  = excluded_ip
-      }],
-      [
-        for allowed_ip_range in var.zone_excluded_ip_range_list :
+  ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0 || length(var.zone_allowed_subnet_list) > 0 ||
+    length(var.zone_exluded_ip_list) > 0 || length(var.zone_excluded_ip_range_list) > 0 || length(var.zone_excluded_subnet_list) > 0) ? [{
+      name             = "${var.prefix}-cbr-ip-zone"
+      account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+      zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
+      addresses = concat([
+        for allowed_ip in var.zone_allowed_ip_list :
+        { "type" = "ipAddress",
+          value  = allowed_ip
+        }
+        ], [
+        for allowed_ip_range in var.zone_allowed_ip_range_list :
         { "type" = "ipRange",
           value  = allowed_ip_range
-      }],
-      [
-        for excluded_subnet in var.zone_excluded_subnet_list :
-        { "type" = "ipRange",
-          value  = excluded_subnet
-      }]
-    )
+        }
+        ], [
+        for allowed_subnet in var.zone_allowed_subnet_list :
+        { "type" = "subnet",
+          value  = allowed_subnet
+        }
+      ])
+      excluded_addresses = concat([
+        for excluded_ip in var.zone_exluded_ip_list :
+        { "type" = "ipAddress",
+          value  = excluded_ip
+        }],
+        [
+          for allowed_ip_range in var.zone_excluded_ip_range_list :
+          { "type" = "ipRange",
+            value  = allowed_ip_range
+        }],
+        [
+          for excluded_subnet in var.zone_excluded_subnet_list :
+          { "type" = "subnet",
+            value  = excluded_subnet
+        }]
+      )
   }] : []
 }
 
@@ -162,8 +168,16 @@ locals {
     # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
   }
 
-  prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
-  key => value if length(value.networkZoneIds) > 0 }
+  prewired_rule_contexts_by_service_pre_check = { for key, value in local.prewired_rule_contexts_by_service :
+    key => [
+      for rule in value :
+      rule if length(rule.networkZoneIds) > 0
+    ]
+  }
+
+  prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service_pre_check :
+    key => value if length(value) > 0
+  }
 
 
   ## define default 'deny' rule context

@@ -77,10 +77,35 @@ variable "custom_rule_contexts_by_service" {
       service_ref_names = optional(list(string), [])
       zone_ids          = optional(list(string), [])
   })))
+  validation {
+    condition = alltrue(flatten([
+      for key, val in var.custom_rule_contexts_by_service :
+      [for rule in val : [
+        for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+          "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+          "databases-for-etcd", "databases-for-mongodb",
+          "databases-for-mysql", "databases-for-postgresql",
+          "databases-for-redis", "directlink",
+          "iam-groups", "is", "messagehub",
+          "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+          "apprapp", "compliance", "event-notifications"],
+      ref)]]
+
+    ]))
+    error_message = "Provide a valid service reference for zone creation"
+  }
+  validation {
+
+    condition = alltrue(flatten([
+      for key, val in var.custom_rule_contexts_by_service :
+      [for rule in val : [
+      for zone_id in rule.zone_ids : can(regex("^[0-9a-fA-F]{32}$", zone_id))]]
+    ]))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
   description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key."
   default     = {}
 }
-
 
 variable "target_service_details" {
   type = list(object({
@@ -138,6 +163,9 @@ variable "target_service_details" {
   ]
 }
 
+
+## TODO validation for all below variables to be added
+
 variable "zone_allowed_ip_list" {
   type        = list(string)
   description = "(List) Allowed IP addresses for the zones"
@@ -147,6 +175,12 @@ variable "zone_allowed_ip_list" {
 variable "zone_allowed_ip_range_list" {
   type        = list(string)
   description = "(List) Allowed IP range for the zones"
+  default     = []
+}
+
+variable "zone_allowed_subnet_list" {
+  type        = list(string)
+  description = "(List) Allowed subnet list for the zones"
   default     = []
 }
 variable "zone_exluded_ip_list" {

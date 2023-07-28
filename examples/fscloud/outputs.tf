@@ -43,5 +43,9 @@ output "account_id" {
 }
 
 # output "all_services" {
-#   value = module.cbr_account_level
+#   value = module.cbr_account_level.somevalue
+# }
+
+# output "pre_services" {
+#   value = module.cbr_account_level.prewired_rule_contexts_by_service
 # }
