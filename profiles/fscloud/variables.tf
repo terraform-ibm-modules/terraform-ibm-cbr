@@ -170,7 +170,7 @@ variable "target_service_details" {
     enforcement_mode = string
     tags             = optional(list(string))
   }))
-  description = "Details of the target service for which a rule is created"
+  description = "Details of the target service for which a rule is created. The key is the service name."
   #Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
