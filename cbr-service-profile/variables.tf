@@ -14,16 +14,6 @@ variable "zone_vpc_crn_list" {
   description = "(List) VPC CRN for the zones"
 }
 
-variable "endpoint_type" {
-  type        = string
-  default     = "public,private"
-  description = "The endpoint type from where the request is sent"
-  validation {
-    condition     = contains(["public", "private", "public,private"], var.endpoint_type)
-    error_message = "Endpoint type can be 'public', 'private' or 'public,private'"
-  }
-}
-
 variable "zone_service_ref_list" {
   type = list(string)
   validation {
