@@ -49,14 +49,9 @@
 #   value = local.allow_rules_by_service
 # }
 
-# output "somevalue" {
-#   value = [
-#     for key, val in var.custom_rule_contexts_by_service :
-#     [for rule in val : [
-#     for ref in rule.service_ref_names : ref]]
-
-#   ]
-# }
+output "somevalue" {
+  value = local.cbr_zone_ip
+}
 
 # output "prewired_rule_contexts_by_service" {
 #   value = local.prewired_rule_contexts_by_service

@@ -119,50 +119,18 @@ locals {
       ]
   }] : []
 
-  service_ref_zone_map = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
+  service_ref_zone_map_pre_check = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
 
+  service_ref_zone_map_check = merge(local.service_ref_zone_map_pre_check, var.existing_serviceref_zone)
 
-  # ip_zone_list = (length(var.zone_allowed_ip_list) > 0 || length(var.zone_allowed_ip_range_list) > 0 || length(var.zone_allowed_subnet_list) > 0 ||
-  #   length(var.zone_exluded_ip_list) > 0 || length(var.zone_excluded_ip_range_list) > 0 || length(var.zone_excluded_subnet_list) > 0) ? [{
-  #     name             = "${var.prefix}-cbr-ip-zone"
-  #     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  #     zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
-  #     addresses = concat([
-  #       for allowed_ip in var.zone_allowed_ip_list :
-  #       { "type" = "ipAddress",
-  #         value  = allowed_ip
-  #       }
-  #       ], [
-  #       for allowed_ip_range in var.zone_allowed_ip_range_list :
-  #       { "type" = "ipRange",
-  #         value  = allowed_ip_range
-  #       }
-  #       ], [
-  #       for allowed_subnet in var.zone_allowed_subnet_list :
-  #       { "type" = "subnet",
-  #         value  = allowed_subnet
-  #       }
-  #     ])
-  #     excluded_addresses = concat([
-  #       for excluded_ip in var.zone_exluded_ip_list :
-  #       { "type" = "ipAddress",
-  #         value  = excluded_ip
-  #       }],
-  #       [
-  #         for allowed_ip_range in var.zone_excluded_ip_range_list :
-  #         { "type" = "ipRange",
-  #           value  = allowed_ip_range
-  #       }],
-  #       [
-  #         for excluded_subnet in var.zone_excluded_subnet_list :
-  #         { "type" = "subnet",
-  #           value  = excluded_subnet
-  #       }]
-  #     )
-  # }] : []
+  service_ref_zone_map = { for k, v in local.service_ref_zone_map_check : k => v if !contains(keys(v), "zone_id") }
+
+  cbr_zones = merge(module.cbr_zone, var.existing_serviceref_zone)
+
+  cbr_zone_vpcs = var.existing_cbr_zone_vpcs == null ? module.cbr_zone_vpcs[0] : var.existing_cbr_zone_vpcs
+
+  cbr_zone_ip = var.existing_cbr_zone_ip == null ? module.cbr_zone_ip[0] : var.existing_cbr_zone_ip
 }
-
-
 
 module "cbr_zone" {
   for_each         = local.service_ref_zone_map
@@ -198,6 +166,7 @@ module "cbr_zone_deny" {
 ###############################################################################
 
 module "cbr_zone_vpcs" {
+  count            = var.existing_cbr_zone_vpcs != null ? 0 : 1
   source           = "../../cbr-zone-module"
   name             = "${var.prefix}-vpcs-zone"
   zone_description = "Single zone grouping all VPCs participating in a fscloud topology."
@@ -213,7 +182,7 @@ module "cbr_zone_vpcs" {
 ###############################################################################
 
 module "cbr_zone_ip" {
-  count            = (length(var.ip_addresses) > 0 || length(var.ip_excluded_addresses) > 0) ? 1 : 0
+  count            = (length(var.ip_addresses) > 0 || length(var.ip_excluded_addresses) > 0) && (var.existing_cbr_zone_ip == null) ? 1 : 0
   name             = "${var.prefix}-cbr-ip-zone"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
@@ -249,11 +218,11 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_allow_rules = var.allow_cos_to_kms || var.allow_block_storage_to_kms || var.allow_roks_to_kms || var.allow_vpcs_to_container_registry || var.allow_vpcs_to_cos ? true : tobool("Minimum of one rule has to be set to True")
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
-  cos_cbr_zone_id = module.cbr_zone["cloud-object-storage"].zone_id
+  cos_cbr_zone_id = local.cbr_zones["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
-  server-protect_cbr_zone_id = module.cbr_zone["server-protect"].zone_id # block storage
+  server-protect_cbr_zone_id = local.cbr_zones["server-protect"].zone_id # block storage
   # tflint-ignore: terraform_naming_convention
-  containers-kubernetes_cbr_zone_id = module.cbr_zone["containers-kubernetes"].zone_id
+  containers-kubernetes_cbr_zone_id = local.cbr_zones["containers-kubernetes"].zone_id
 
   prewired_rule_contexts_by_service = {
     # COS -> KMS, Block storage -> KMS, ROKS -> KMS
@@ -269,14 +238,14 @@ locals {
     "cloud-object-storage" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_cos ? [module.cbr_zone_vpcs.zone_id] : []
+        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
     # VPCs -> container registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_container_registry ? [module.cbr_zone_vpcs.zone_id] : []
+        var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
     # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
@@ -305,12 +274,12 @@ locals {
       custom_rule_context.add_managed_vpc_zone == true ?
       {
         endpointType = custom_rule_context.endpointType
-        networkZoneIds : [module.cbr_zone_vpcs.zone_id]
+        networkZoneIds : [local.cbr_zone_vpcs.zone_id]
       }
       :
       {
         endpointType = custom_rule_context.endpointType
-        networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : module.cbr_zone[service_name].zone_id], custom_rule_context.zone_ids))
+        networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : local.cbr_zones[service_name].zone_id], custom_rule_context.zone_ids))
       }
     ]
   }

@@ -199,43 +199,32 @@ variable "target_service_details" {
 }
 
 
-## TODO validation for all below variables to be added
+variable "existing_serviceref_zone" {
+  type = map(object(
+    {
+      zone_id = string
+  }))
 
-# variable "zone_allowed_ip_list" {
-#   type        = list(string)
-#   description = "(List) Allowed IP addresses for the zones"
-#   default     = []
-# }
+  default = {}
+}
 
-# variable "zone_allowed_ip_range_list" {
-#   type        = list(string)
-#   description = "(List) Allowed IP range for the zones"
-#   default     = []
-# }
+variable "existing_cbr_zone_vpcs" {
+  type = object(
+    {
+      zone_id = string
+  })
+  default = null
 
-# variable "zone_allowed_subnet_list" {
-#   type        = list(string)
-#   description = "(List) Allowed subnet list for the zones"
-#   default     = []
-# }
-# variable "zone_exluded_ip_list" {
-#   type        = list(string)
-#   description = "(List) Excluded IP address for the zones"
-#   default     = []
-# }
+}
 
-# variable "zone_excluded_ip_range_list" {
-#   type        = list(string)
-#   description = "(List) Excluded IP range for the zones"
-#   default     = []
-# }
+variable "existing_cbr_zone_ip" {
+  type = object(
+    {
+      zone_id = string
+  })
+  default = null
 
-# variable "zone_excluded_subnet_list" {
-#   type        = list(string)
-#   description = "(List) Excluded subnet list for the zones"
-#   default     = []
-# }
-
+}
 
 variable "ip_addresses" {
   type = object({
