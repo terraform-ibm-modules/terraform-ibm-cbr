@@ -1,24 +1,15 @@
 # Pre-wired CBR configuration for FS Cloud example
 
-- An end-to-end example that uses the fscloud profile to create pre-wired CBR configuration.
+This example demonstrates how to use the [fscloud profile](../../profiles/fscloud/) module to lay out a complete "secure by default" coarse-grained CBR topology in a given account.
 
-- Creates a following pre-defined CBR rules based on the boolean value set to the variables:
-COS -> KMS
-Block storage -> KMS
-ROKS -> KMS
-VPCs -> container registry
-VPCs -> where clusters are deployed -> COS
+This examples is designed to show case some of the key customization options for the module. In addition to the pre-wired CBR rules documented at [fscloud profile](../../profiles/fscloud/), this examples show how to customize the module to:
+1. Open up network traffic flow from ICD mongodb, ICD Postgresql to the Key Protect private endpoints
+2. Open up network traffic flow from Schematics to Key Protect public endpoints
+3. Open up network traffic flow from a block of IPs to the Schematics public endpoint
+4. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints
 
-This example uses the IBM Cloud Provider to automate the following infrastructure::
- - Create a VPC and create a CBR zone to allowlist the VPC.
- - Create a service reference based CBR zone.
- - Create a following pre-wired CBR rules :
-   - COS -> KMS
-   - Block storage -> KMS
-   - ROKS -> KMS
-   - VPCs -> container registry
-   - VPCs -> where clusters are deployed -> COS
-- Target service instances access is granted based on the following parameters :
-    - Based on the account.
-    - Based on the access tags.
-    - Based on the resource group.
+Context: this examples covers a "pseudo" real-world scenario where:
+1. ICD Mongodb, and Postgresql instances are encrypted using keys storage in Key Protect.
+2. Schematics is used to execute terraform that create Key Protect keys and key ring over its public endpoint
+3. Operators used machines with a set list of public IPs to interact with Schematics
+4. Applications are running the VPC and need access to PostgreSQL via the private endpoint - eg: a VPE.

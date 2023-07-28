@@ -1,5 +1,19 @@
 # Pre-wired CBR configuration for FS Cloud
 
+This module creates default coarse-grained CBR rules in a given account following a "secure by default" approach - that is: deny all flows by default, except known documented communication in the [Financial Services Cloud Reference Architecture](https://cloud.ibm.com/docs/framework-financial-services?topic=framework-financial-services-vpc-architecture-about):
+- COS -> KMS
+- Block storage -> KMS
+- ROKS -> KMS
+- Activity Tracker route -> COS (pending addition of AT as zone)
+- VPCs -> container registry
+- VPCs where clusters are deployed -> COS
+
+This module is designed to allow the consumer to add additional custom rules to open up additional flows necessarity for their usage. See the `custom_rule_contexts_by_service` input variable, and an [usage example](../../examples/fscloud/) demonstrating how to open up more flows.
+
+The module also pre-create CBR zone for each service in the account as a best practice. CBR rules associated with these CBR zone can be set by using the `custom_rule_contexts_by_service` variable.
+
+Important: In order to avoid unexpected breakage in the account against which this module is executed, the CBR rule enforcement mode is set to 'report' (or 'disabled' for services not supporting 'report' mode) by default. It is recommended to test out this module first with these default, and then use the `target_service_details` variable to set the enforcement mode to "enabled" gradually by service. The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the key protect ("kms") service.
+
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
