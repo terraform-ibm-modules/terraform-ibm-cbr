@@ -2,50 +2,22 @@
 # Outputs
 ##############################################################################
 
-# output "zone_ids" {
-#   value       = module.cbr_rule_multi_service_profile[*].zone_ids
-#   description = "CBR zone resource instance id(s)"
-# }
-
-# output "zone_crns" {
-#   value       = module.cbr_rule_multi_service_profile[*].zone_crns
-#   description = "CBR zones crn(s)"
-# }
-
-# output "zone_hrefs" {
-#   value       = module.cbr_rule_multi_service_profile[*].zone_hrefs
-#   description = "CBR zones href(s)"
-# }
-
-# output "rule_ids" {
-#   value       = module.cbr_rule_multi_service_profile[*].rule_ids
-#   description = "CBR rule id(s)"
-# }
-
-# output "rule_crns" {
-#   value       = module.cbr_rule_multi_service_profile[*].rule_crns
-#   description = "CBR rule resource instance crn(s)"
-# }
-
-# output "rule_hrefs" {
-#   value       = module.cbr_rule_multi_service_profile[*].rule_hrefs
-#   description = "CBR rule resource instance href(s)"
-# }
-
-# output "vpc_crn" {
-#   value       = ibm_is_vpc.example_vpc.crn
-#   description = "VPC CRN"
-# }
-
 output "account_id" {
   value       = data.ibm_iam_account_settings.iam_account_settings.account_id
   description = "Account ID (used in tests)"
 }
 
-# output "all_services" {
-#   value = module.cbr_account_level.somevalue
-# }
+output "map_service_ref_name_zoneid" {
+  value       = module.cbr_account_level.map_service_ref_name_zoneid
+  description = "Map of service reference and zone ids"
+}
 
-# output "pre_services" {
-#   value = module.cbr_account_level.prewired_rule_contexts_by_service
-# }
+output "map_vpc_zoneid" {
+  value       = module.cbr_account_level.map_vpc_zoneid
+  description = "Map of VPC and zone ids"
+}
+
+output "map_target_service_rule_ids" {
+  value       = module.cbr_account_level.map_target_service_rule_ids
+  description = "Map of target service and rule ids"
+}

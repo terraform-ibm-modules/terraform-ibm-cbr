@@ -54,8 +54,6 @@ module "cbr_account_level" {
   allow_roks_to_kms                = var.allow_roks_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
-  ip_addresses                     = var.ip_addresses
-  ip_excluded_addresses            = var.ip_excluded_addresses
 
   target_service_details = {
     "kms" = {

@@ -93,7 +93,6 @@ locals {
     }
   }
 
-
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
 }
 
@@ -128,8 +127,6 @@ locals {
   cbr_zones = merge(module.cbr_zone, var.existing_serviceref_zone)
 
   cbr_zone_vpcs = var.existing_cbr_zone_vpcs == null ? module.cbr_zone_vpcs[0] : var.existing_cbr_zone_vpcs
-
-  cbr_zone_ip = var.existing_cbr_zone_ip == null ? module.cbr_zone_ip[0] : var.existing_cbr_zone_ip
 }
 
 module "cbr_zone" {
@@ -175,38 +172,6 @@ module "cbr_zone_vpcs" {
     for zone_vpc_crn in var.zone_vpc_crn_list :
     { "type" = "vpc", value = zone_vpc_crn }
   ]
-}
-
-###############################################################################
-# Pre-create zones for IP address
-###############################################################################
-
-module "cbr_zone_ip" {
-  count            = (length(var.ip_addresses) > 0 || length(var.ip_excluded_addresses) > 0) && (var.existing_cbr_zone_ip == null) ? 1 : 0
-  name             = "${var.prefix}-cbr-ip-zone"
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  zone_description = "${var.prefix}-cbr-allowed-ip-terraform"
-  source           = "../../cbr-zone-module"
-  addresses = concat([
-    for ipAddress in var.ip_addresses.ipAddress :
-    { "type" = "ipAddress", value = ipAddress }
-    ], [
-    for ipRange in var.ip_addresses.ipRange :
-    { "type" = "ipRange", value = ipRange }
-    ], [
-    for subnet in var.ip_addresses.subnet :
-    { "type" = "subnet", value = subnet }
-  ])
-  excluded_addresses = concat([
-    for ipAddress in var.ip_excluded_addresses.ipAddress :
-    { "type" = "ipAddress", value = ipAddress }
-    ], [
-    for ipRange in var.ip_excluded_addresses.ipRange :
-    { "type" = "ipRange", value = ipRange }
-    ], [
-    for subnet in var.ip_excluded_addresses.subnet :
-    { "type" = "subnet", value = subnet }
-  ])
 }
 
 

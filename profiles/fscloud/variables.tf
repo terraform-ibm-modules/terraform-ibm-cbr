@@ -96,7 +96,6 @@ variable "custom_rule_contexts_by_service" {
     error_message = "Provide a valid service reference for zone creation"
   }
   validation {
-
     condition = alltrue(flatten([
       for key, val in var.custom_rule_contexts_by_service :
       [for rule in val : [
@@ -107,63 +106,6 @@ variable "custom_rule_contexts_by_service" {
   description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service_ref_names or add_managed_vpc_zone are passed in."
   default     = {}
 }
-
-# variable "target_service_details" {
-#   type = list(object({
-#     target_service_name = string
-#     target_rg           = optional(string)
-#     enforcement_mode    = string
-#     tags                = optional(list(string))
-#   }))
-#   description = "(String) Details of the target service for which the rule has to be created"
-#   #Validation to restrict the target service name to be the list of supported targets only.
-#   validation {
-#     condition = alltrue([
-#       for service_detail in var.target_service_details :
-#       contains(["iam-groups", "iam-access-management", "iam-identity",
-#         "user-management", "cloud-object-storage", "codeengine",
-#         "container-registry", "databases-for-cassandra",
-#         "databases-for-enterprisedb", "databases-for-elasticsearch",
-#         "databases-for-etcd", "databases-for-mongodb",
-#         "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
-#         "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
-#         "messages-for-rabbitmq", "secrets-manager", "transit", "is",
-#       "schematics", "apprapp", "event-notifications", "compliance"], service_detail.target_service_name)
-#     ])
-#     error_message = "Provide a valid target service name that is supported by context-based restrictions"
-#   }
-#   default = [
-#     { "target_service_name" : "iam-groups", "enforcement_mode" : "report" },
-#     { "target_service_name" : "iam-access-management", "enforcement_mode" : "report" },
-#     { "target_service_name" : "iam-identity", "enforcement_mode" : "report" },
-#     { "target_service_name" : "user-management", "enforcement_mode" : "report" },
-#     { "target_service_name" : "cloud-object-storage", "enforcement_mode" : "report" },
-#     { "target_service_name" : "codeengine", "enforcement_mode" : "report" },
-#     { "target_service_name" : "container-registry", "enforcement_mode" : "report" },
-#     { "target_service_name" : "databases-for-cassandra", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-enterprisedb", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-elasticsearch", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-etcd", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-mongodb", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-mysql", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-postgresql", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "databases-for-redis", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "directlink", "enforcement_mode" : "report" },
-#     { "target_service_name" : "dns-svcs", "enforcement_mode" : "report" },
-#     { "target_service_name" : "messagehub", "enforcement_mode" : "report" },
-#     { "target_service_name" : "kms", "enforcement_mode" : "report" },
-#     { "target_service_name" : "containers-kubernetes", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "messages-for-rabbitmq", "enforcement_mode" : "disabled" },
-#     { "target_service_name" : "secrets-manager", "enforcement_mode" : "report" },
-#     { "target_service_name" : "transit", "enforcement_mode" : "report" },
-#     { "target_service_name" : "is", "enforcement_mode" : "report" },
-#     { "target_service_name" : "schematics", "enforcement_mode" : "report" },
-#     { "target_service_name" : "apprapp", "enforcement_mode" : "report" },
-#     { "target_service_name" : "event-notifications", "enforcement_mode" : "report" },
-#     { "target_service_name" : "compliance", "enforcement_mode" : "report" }
-#   ]
-# }
-
 variable "target_service_details" {
   type = map(object({
     target_rg        = optional(string)
@@ -194,7 +136,6 @@ variable "target_service_details" {
     ])
     error_message = "Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'"
   }
-
   default = {}
 }
 
@@ -204,8 +145,8 @@ variable "existing_serviceref_zone" {
     {
       zone_id = string
   }))
-
-  default = {}
+  description = "Provide a valid service reference and existing zone id"
+  default     = {}
 }
 
 variable "existing_cbr_zone_vpcs" {
@@ -213,35 +154,6 @@ variable "existing_cbr_zone_vpcs" {
     {
       zone_id = string
   })
-  default = null
-
-}
-
-variable "existing_cbr_zone_ip" {
-  type = object(
-    {
-      zone_id = string
-  })
-  default = null
-
-}
-
-variable "ip_addresses" {
-  type = object({
-    ipAddress = optional(list(string))
-    ipRange   = optional(list(string))
-    subnet    = optional(list(string))
-  })
-  description = "List of all addresses."
-  default     = null
-}
-
-variable "ip_excluded_addresses" {
-  type = object({
-    ipAddress = optional(list(string))
-    ipRange   = optional(list(string))
-    subnet    = optional(list(string))
-  })
-  description = "List of all excluded addresses."
+  description = "Provide a existing zone id for VPC"
   default     = null
 }
