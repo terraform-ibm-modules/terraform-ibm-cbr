@@ -74,8 +74,9 @@ variable "custom_rule_contexts_by_service" {
       endpointType = string # "private, public or direct"
 
       # Service-name (module lookup for existing network zone) and/or CBR zone id
-      service_ref_names = optional(list(string), [])
-      zone_ids          = optional(list(string), [])
+      service_ref_names    = optional(list(string), [])
+      add_managed_vpc_zone = optional(bool, false)
+      zone_ids             = optional(list(string), [])
   })))
   validation {
     condition = alltrue(flatten([
@@ -103,7 +104,7 @@ variable "custom_rule_contexts_by_service" {
     ]))
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
-  description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key."
+  description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service_ref_names or add_managed_vpc_zone are passed in."
   default     = {}
 }
 

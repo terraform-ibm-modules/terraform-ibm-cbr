@@ -187,10 +187,18 @@ locals {
 
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
-    target_service_name => [for custom_rule_context in custom_rule_contexts : {
-      endpointType = custom_rule_context.endpointType
-      networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : module.cbr_zone[service_name].zone_id], custom_rule_context.zone_ids))
-    }]
+    target_service_name => [for custom_rule_context in custom_rule_contexts :
+      custom_rule_context.add_managed_vpc_zone == true ?
+      {
+        endpointType = custom_rule_context.endpointType
+        networkZoneIds : [module.cbr_zone_vpcs.zone_id]
+      }
+      :
+      {
+        endpointType = custom_rule_context.endpointType
+        networkZoneIds : flatten(concat([for service_name in custom_rule_context.service_ref_names : module.cbr_zone[service_name].zone_id], custom_rule_context.zone_ids))
+      }
+    ]
   }
 
 

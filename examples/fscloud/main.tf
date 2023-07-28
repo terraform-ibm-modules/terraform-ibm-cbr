@@ -61,11 +61,12 @@ module "cbr_account_level" {
   zone_exluded_ip_list             = var.zone_exluded_ip_list
   zone_excluded_subnet_list        = var.zone_excluded_subnet_list
 
-  # Demonstrates how additional context to the rules created by this module
-  # Example here open up:
-  #   1. Flows from icd mongodb, postgres to kms on private endpoint
+  # Demonstrates how additional context to the rules created by this module can be added.
+  # This example open up:
+  #   1. Flows from icd mongodb, postgresql to kms on private endpoint
   #   2. Flow from schematics on public kms endpoint
-  #   3. Add a block of ips to schematics public endpoints
+  #   3. Add a block of ips to schematics public endpoint
+  #   4. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
   custom_rule_contexts_by_service = {
     "kms" = [{
       endpointType      = "private"
@@ -79,6 +80,10 @@ module "cbr_account_level" {
     "schematics" = [{
       endpointType = "public"
       zone_ids     = [module.cbr_zone_operator_ips.zone_id]
+    }],
+    "databases-for-postgresql" = [{
+      endpointType         = "private"
+      add_managed_vpc_zone = true
     }]
   }
 }
