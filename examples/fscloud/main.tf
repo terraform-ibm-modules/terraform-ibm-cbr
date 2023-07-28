@@ -57,6 +57,12 @@ module "cbr_account_level" {
   ip_addresses                     = var.ip_addresses
   ip_excluded_addresses            = var.ip_excluded_addresses
 
+  target_service_details = {
+    "kms" = {
+      "enforcement_mode" = "enabled"
+    }
+  }
+
   # Demonstrates how additional context to the rules created by this module can be added.
   # This example open up:
   #   1. Flows from icd mongodb, postgresql to kms on private endpoint

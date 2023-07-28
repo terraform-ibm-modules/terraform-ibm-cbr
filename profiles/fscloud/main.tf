@@ -4,6 +4,99 @@
 data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
+locals {
+
+  target_service_details_default = {
+    "iam-groups" : {
+      "enforcement_mode" : "report"
+    },
+    "iam-access-management" : {
+      "enforcement_mode" : "report"
+    },
+    "iam-identity" : {
+      "enforcement_mode" : "report"
+    },
+    "user-management" : {
+      "enforcement_mode" : "report"
+    },
+    "cloud-object-storage" : {
+      "enforcement_mode" : "report"
+    },
+    "codeengine" : {
+      "enforcement_mode" : "report"
+    },
+    "container-registry" : {
+      "enforcement_mode" : "report"
+    },
+    "databases-for-cassandra" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-enterprisedb" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-elasticsearch" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-etcd" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-mongodb" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-mysql" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-postgresql" : {
+      "enforcement_mode" : "disabled"
+    },
+    "databases-for-redis" : {
+      "enforcement_mode" : "disabled"
+    },
+    "directlink" : {
+      "enforcement_mode" : "report"
+    },
+    "dns-svcs" : {
+      "enforcement_mode" : "report"
+    },
+    "messagehub" : {
+      "enforcement_mode" : "report"
+    },
+    "kms" : {
+      "enforcement_mode" : "report"
+    },
+    "containers-kubernetes" : {
+      "enforcement_mode" : "disabled"
+    },
+    "messages-for-rabbitmq" : {
+      "enforcement_mode" : "disabled"
+    },
+    "secrets-manager" : {
+      "enforcement_mode" : "report"
+    },
+    "transit" : {
+      "enforcement_mode" : "report"
+    },
+    "is" : {
+      "enforcement_mode" : "report"
+    },
+    "schematics" : {
+      "enforcement_mode" : "report"
+    },
+    "apprapp" : {
+      "enforcement_mode" : "report"
+    },
+    "event-notifications" : {
+      "enforcement_mode" : "report"
+    },
+    "compliance" : {
+      "enforcement_mode" : "report"
+    }
+  }
+
+
+  target_service_details = merge(local.target_service_details_default, var.target_service_details)
+}
+
 ###############################################################################
 # Pre-create coarse grained CBR zones for each service
 ###############################################################################
@@ -202,7 +295,7 @@ locals {
 
 
   ## define default 'deny' rule context
-  deny_rule_context_by_service = { for target_service_name in var.target_service_details[*].target_service_name :
+  deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
     target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
   }
 
@@ -271,16 +364,8 @@ locals {
 }
 
 # Create a rule for all services by default
-
-locals {
-  target_service_details_by_service_name = { for service in var.target_service_details :
-    service.target_service_name => service
-  }
-}
-
 module "cbr_rule" {
-  for_each = local.target_service_details_by_service_name
-  #count            = length(var.target_service_details)
+  for_each         = local.target_service_details
   source           = "../../cbr-rule-module"
   rule_description = "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
@@ -294,11 +379,11 @@ module "cbr_rule" {
   }] : []
 
   resources = [{
-    tags = each.value.tags != null ? [for tag in each.value.tags : {
+    tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
       name  = split(":", tag)[0]
       value = split(":", tag)[1]
     }] : []
-    attributes = each.value.target_rg != null ? [
+    attributes = try(each.value.target_rg, null) != null ? [
       {
         name     = "accountId",
         operator = "stringEquals",
