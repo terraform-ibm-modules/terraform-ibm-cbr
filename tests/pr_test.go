@@ -204,7 +204,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:       t,
 		TerraformDir:  multiServiceExampleTerraformDir,
-		Prefix:        "cbr-multi-service-profile-1a",
+		Prefix:        "cbr-multi-service-profile",
 		ResourceGroup: resourceGroup,
 	})
 	options.SkipTestTearDown = true
