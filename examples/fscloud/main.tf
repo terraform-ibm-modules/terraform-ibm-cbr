@@ -54,6 +54,7 @@ module "cbr_account_level" {
   allow_roks_to_kms                = var.allow_roks_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
+  location                         = var.location
 
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)

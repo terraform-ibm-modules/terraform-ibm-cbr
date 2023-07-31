@@ -155,3 +155,9 @@ variable "existing_cbr_zone_vpcs" {
   description = "Provide a existing zone id for VPC"
   default     = null
 }
+
+variable "location" {
+  type        = string
+  description = "The region in which the network zone is scoped"
+  default     = "us-south"
+}

@@ -5,7 +5,8 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
 locals {
-
+  # tflint-ignore: terraform_unused_declarations
+  validate_location_and_service_name = ((contains(["compliance", "directlink", "iam-groups", "containers-kubernetes", "user-management"], var.zone_service_ref_list)) && var.location != null) ? tobool("Error: The services 'compliance','directlink','iam-groups','containers-kubernetes','user-management' does not support location") : true
   target_service_details_default = {
     "iam-groups" : {
       "enforcement_mode" : "report"
@@ -113,6 +114,7 @@ locals {
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
             service_name = serviceref
+            location     = (serviceref == "compliance" || serviceref == "directlink" || serviceref == "iam-groups" || serviceref == "containers-kubernetes" || serviceref == "user-management") ? null : var.location
           }
         }
       ]
