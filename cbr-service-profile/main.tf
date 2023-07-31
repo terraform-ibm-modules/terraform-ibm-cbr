@@ -52,6 +52,7 @@ locals {
         }
       ]
   }] : []
+
   zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
 }
 
@@ -69,7 +70,7 @@ locals {
     attributes = [
       {
         "name" : "endpointType",
-        "value" : "private"
+        "value" : join(",", ([for endpoint in var.endpoints : endpoint]))
       },
       {
         name  = "networkZoneId"

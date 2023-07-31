@@ -60,3 +60,15 @@ variable "target_service_details" {
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
 }
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
+  }
+}
