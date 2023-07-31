@@ -51,7 +51,7 @@ locals {
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
-      target_service_name = "kms",
+      target_service_name = "secrets-manager",
       target_rg           = module.resource_group.resource_group_id
       enforcement_mode    = local.enforcement_mode
     }
@@ -63,4 +63,5 @@ module "cbr_rule_multi_service_profile" {
   zone_service_ref_list  = var.zone_service_ref_list
   zone_vpc_crn_list      = local.zone_vpc_crn_list
   target_service_details = local.target_services_details
+  endpoints              = var.endpoints
 }

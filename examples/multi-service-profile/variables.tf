@@ -33,3 +33,15 @@ variable "zone_service_ref_list" {
   default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
   description = "(List) Service reference for the zone creation"
 }
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
+  }
+}
