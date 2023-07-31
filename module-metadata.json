@@ -11,7 +11,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 23
+        "line": 17
       }
     },
     "enforcement_mode": {
@@ -24,7 +24,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 74
+        "line": 68
       },
       "options": "disabled, enabled, report"
     },
@@ -38,7 +38,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 39
+        "line": 33
       }
     },
     "name": {
@@ -67,20 +67,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 98
-      }
-    },
-    "region": {
-      "name": "region",
-      "type": "string",
-      "description": "The region in which the network zone is to be created",
-      "default": "us-south",
-      "source": [
-        "module.cbr_zone"
-      ],
-      "pos": {
-        "filename": "variables.tf",
-        "line": 17
+        "line": 92
       }
     },
     "resources": {
@@ -93,7 +80,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 80
+        "line": 74
       }
     },
     "rule_contexts": {
@@ -115,7 +102,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 58
+        "line": 52
       }
     },
     "rule_description": {
@@ -127,7 +114,7 @@
       ],
       "pos": {
         "filename": "variables.tf",
-        "line": 52
+        "line": 46
       },
       "max_length": 300,
       "matches": "^[\\x20-\\xFE]*$"
@@ -297,7 +284,7 @@
       },
       "pos": {
         "filename": "main.tf",
-        "line": 23
+        "line": 22
       }
     },
     "cbr_zone": {
@@ -307,7 +294,6 @@
         "addresses": "addresses",
         "excluded_addresses": "excluded_addresses",
         "name": "name",
-        "region": "region",
         "zone_description": "zone_description"
       },
       "managed_resources": {

@@ -39,7 +39,6 @@ locals {
   service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [
     for serviceref in var.zone_service_ref_list : {
       name             = "${var.prefix}-${serviceref}-cbr-serviceref-zone"
-      region           = var.region_service_ref_zone_list
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "${serviceref}-cbr-serviceref-zone-terraform"
       # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
