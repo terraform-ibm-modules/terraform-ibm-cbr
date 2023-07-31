@@ -55,6 +55,8 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
 
+  ## Enable enforcement for key protect as an example
+  ## The other services not referenced here, are either report, or disabled (when not support report)
   target_service_details = {
     "kms" = {
       "enforcement_mode" = "enabled"
@@ -82,12 +84,15 @@ module "cbr_account_level" {
       zone_ids     = [module.cbr_zone_operator_ips.zone_id]
     }],
     "databases-for-postgresql" = [{
-      endpointType         = "private"
+      endpointType = "private"
+      ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
     }]
   }
 }
 
+## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
+## A zone used to group operator machine ips.
 module "cbr_zone_operator_ips" {
   source           = "../../cbr-zone-module"
   name             = "List of operator environment public IPs"
@@ -97,4 +102,15 @@ module "cbr_zone_operator_ips" {
     type  = "subnet"
     value = "0.0.0.0/0" # All ip for this public example - this would be narrowed down typically to an enterprise ip block
   }]
+}
+
+## Examples of data lookup on objects (zone, rule) created by the fscoud profile module
+## Get rule targetting "event-notification"
+data "ibm_cbr_rule" "event_notification_rule" {
+  rule_id = module.cbr_account_level.map_target_service_rule_ids["event-notifications"].rule_id
+}
+
+## Get zone having "event-notification" as single source
+data "ibm_cbr_zone" "event_notifications_zone" {
+  zone_id = module.cbr_account_level.map_service_ref_name_zoneid["event-notifications"].zone_id
 }
