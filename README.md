@@ -11,6 +11,8 @@
 
 This module can be used to provision and configure [Context Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
 
+See in particular the [fscloud profile](./profiles/fscloud/) module that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
+
 ## Usage
 
 ```hcl
@@ -55,6 +57,7 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
+- [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
 - [ CBR Multi Service Profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)

@@ -29,7 +29,7 @@ locals {
   vpc_zone_list = (length(var.zone_vpc_crn_list) > 0) ? [{
     name             = "${var.prefix}-cbr-vpc-zone"
     account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-    zone_description = "cbr-vpc-zone-terraform"
+    zone_description = "${var.prefix}-cbr-vpc-zone-terraform"
     addresses = [
       for zone_vpc_crn in var.zone_vpc_crn_list :
       { "type" = "vpc", value = zone_vpc_crn }
