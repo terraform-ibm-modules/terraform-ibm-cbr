@@ -114,7 +114,7 @@ locals {
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
             service_name = serviceref
-            location     = (serviceref == "compliance" || serviceref == "directlink" || serviceref == "iam-groups" || serviceref == "containers-kubernetes" || serviceref == "user-management") ? null : var.location
+            location     = var.location
           }
         }
       ]
