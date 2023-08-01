@@ -13,3 +13,6 @@ Context: this examples covers a "pseudo" real-world scenario where:
 2. Schematics is used to execute terraform that create Key Protect keys and key ring over its public endpoint
 3. Operators used machines with a set list of public IPs to interact with Schematics
 4. Applications are running the VPC and need access to PostgreSQL via the private endpoint - eg: a VPE.
+
+## Note
+The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' does not support restriction per location.
