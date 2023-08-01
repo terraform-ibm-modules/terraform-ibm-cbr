@@ -11,6 +11,8 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 locals {
   # tflint-ignore: terraform_unused_declarations
   validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_location_and_service_name = ((contains(["compliance", "directlink", "iam-groups", "containers-kubernetes", "user-management"], var.zone_service_ref_list)) && var.location != null) ? tobool("Error: The services 'compliance','directlink','iam-groups','containers-kubernetes','user-management' does not support location") : true
 
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
@@ -48,6 +50,7 @@ locals {
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
             service_name = serviceref
+            location     = var.location
           }
         }
       ]
