@@ -59,6 +59,7 @@ locals {
 }
 
 module "cbr_rule_multi_service_profile" {
+  prefix                 = var.prefix
   source                 = "../../cbr-service-profile"
   zone_service_ref_list  = var.zone_service_ref_list
   zone_vpc_crn_list      = local.zone_vpc_crn_list
