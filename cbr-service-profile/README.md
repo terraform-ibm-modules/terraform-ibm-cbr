@@ -14,8 +14,8 @@ Accepts a list of VPC crns / service references to create CBR zones and a list o
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./cbr-rule-module | n/a |
-| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./cbr-zone-module | n/a |
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ../cbr-rule-module | n/a |
+| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ../cbr-zone-module | n/a |
 
 ### Resources
 
@@ -27,24 +27,21 @@ Accepts a list of VPC crns / service references to create CBR zones and a list o
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_addresses"></a> [addresses](#input\_addresses) | (List) The list of addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>    ref = optional(object({<br>      account_id       = string<br>      location         = optional(string)<br>      service_instance = optional(string)<br>      service_name     = optional(string)<br>      service_type     = optional(string)<br>    }))<br>  }))</pre> | `[]` | no |
-| <a name="input_enforcement_mode"></a> [enforcement\_mode](#input\_enforcement\_mode) | (String) The rule enforcement mode | `string` | `"report"` | no |
-| <a name="input_excluded_addresses"></a> [excluded\_addresses](#input\_excluded\_addresses) | (Optional, List) The list of excluded addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>  }))</pre> | `[]` | no |
-| <a name="input_name"></a> [name](#input\_name) | (Optional, String) The name of the zone | `string` | `null` | no |
-| <a name="input_operations"></a> [operations](#input\_operations) | (Optional, List) The operations this rule applies to | <pre>list(object({<br>    api_types = list(object({<br>      api_type_id = string<br>    }))<br>  }))</pre> | `[]` | no |
-| <a name="input_resources"></a> [resources](#input\_resources) | (Optional, List) The resources this rule apply to | <pre>list(object({<br>    attributes = list(object({<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    }))<br>    tags = optional(list(object({ #These access tags should match to the target service access tags for the CBR rules to work<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    })))<br>  }))</pre> | `[]` | no |
-| <a name="input_rule_contexts"></a> [rule\_contexts](#input\_rule\_contexts) | (List) The contexts the rule applies to | <pre>list(object({<br>    attributes = list(object({<br>      name  = string<br>      value = string<br>    }))<br>  }))</pre> | <pre>[<br>  {<br>    "attributes": [<br>      {<br>        "name": "va",<br>        "value": "va"<br>      }<br>    ]<br>  }<br>]</pre> | no |
-| <a name="input_rule_description"></a> [rule\_description](#input\_rule\_description) | (Optional, String) The description of the rule | `string` | `null` | no |
-| <a name="input_zone_description"></a> [zone\_description](#input\_zone\_description) | (Optional, String) The description of the zone | `string` | `null` | no |
+| <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct' | `list(string)` | <pre>[<br>  "private"<br>]</pre> | no |
+| <a name="input_location"></a> [location](#input\_location) | The region in which the network zone is scoped | `string` | `"us-south"` | no |
+| <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | `"serviceprofile"` | no |
+| <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | (String) Details of the target service for which the rule has to be created | <pre>list(object({<br>    target_service_name = string<br>    target_rg           = optional(string)<br>    enforcement_mode    = string<br>    tags                = optional(list(string))<br>  }))</pre> | n/a | yes |
+| <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | (List) Service reference for the zone creation | `list(string)` | `[]` | no |
+| <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | `[]` | no |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule resource instance crn |
-| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule resource href |
-| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule resource instance id |
-| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | cbr\_zone resource instance crn |
-| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone resource instance link |
-| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone resource instance id |
+| <a name="output_rule_crns"></a> [rule\_crns](#output\_rule\_crns) | CBR rule crn(s) |
+| <a name="output_rule_hrefs"></a> [rule\_hrefs](#output\_rule\_hrefs) | CBR rule href(s) |
+| <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | CBR rule id(s) |
+| <a name="output_zone_crns"></a> [zone\_crns](#output\_zone\_crns) | CBR zone crn(s) |
+| <a name="output_zone_hrefs"></a> [zone\_hrefs](#output\_zone\_hrefs) | CBR zone href(s) |
+| <a name="output_zone_ids"></a> [zone\_ids](#output\_zone\_ids) | CBR zone resource instance id(s) |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
