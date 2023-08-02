@@ -94,6 +94,10 @@ locals {
   }
 
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
+
+  zone_final_service_ref_list = [
+    for service in var.zone_service_ref_list : service if !contains(var.skip_specific_services_for_zone_creation, service)
+  ]
 }
 
 ###############################################################################
@@ -101,8 +105,8 @@ locals {
 ###############################################################################
 
 locals {
-  service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [
-    for serviceref in var.zone_service_ref_list : {
+  service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? [
+    for serviceref in local.zone_final_service_ref_list : {
       name             = "${var.prefix}-${serviceref}-service-zone"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "Single zone for service ${serviceref}."
@@ -118,7 +122,7 @@ locals {
       ]
   }] : []
 
-  service_ref_zone_map_pre_check = zipmap(var.zone_service_ref_list, local.service_ref_zone_list)
+  service_ref_zone_map_pre_check = zipmap(local.zone_final_service_ref_list, local.service_ref_zone_list)
 
   service_ref_zone_map_check = merge(local.service_ref_zone_map_pre_check, var.existing_serviceref_zone)
 
