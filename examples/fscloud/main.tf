@@ -55,6 +55,9 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
 
+  # Zone creation will be skipped for these two service references ["user-management", "iam-groups"]
+  skip_specific_services_for_zone_creation = var.skip_specific_services_for_zone_creation
+
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
   target_service_details = {
@@ -105,7 +108,7 @@ module "cbr_zone_operator_ips" {
 }
 
 ## Examples of data lookup on objects (zone, rule) created by the fscoud profile module
-## Get rule targetting "event-notification"
+# ## Get rule targetting "event-notification"
 data "ibm_cbr_rule" "event_notification_rule" {
   rule_id = module.cbr_account_level.map_target_service_rule_ids["event-notifications"].rule_id
 }

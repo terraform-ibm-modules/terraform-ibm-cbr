@@ -57,3 +57,9 @@ variable "allow_vpcs_to_cos" {
   description = "Set rule for VPCs to COS, deafult is true"
   default     = true
 }
+
+variable "skip_specific_services_for_zone_creation" {
+  type        = list(string)
+  description = "Provide a list of service references for which zone creation is not required"
+  default     = ["user-management", "iam-groups"]
+}
