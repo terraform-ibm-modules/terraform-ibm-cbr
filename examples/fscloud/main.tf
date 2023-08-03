@@ -46,7 +46,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "cbr_account_level" {
-  source                           = "../../profiles/fscloud"
+  source                           = "../../modules/fscloud"
   prefix                           = var.prefix
   zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
   allow_cos_to_kms                 = var.allow_cos_to_kms

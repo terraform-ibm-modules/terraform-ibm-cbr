@@ -20,6 +20,7 @@ See in particular the [fscloud profile](./profiles/fscloud/) module that enables
     * [cbr-rule-module](./modules/cbr-rule-module)
     * [cbr-service-profile](./modules/cbr-service-profile)
     * [cbr-zone-module](./modules/cbr-zone-module)
+    * [fscloud](./modules/fscloud)
 * [Examples](./examples)
     * [CBR Multi Service Profile](./examples/multi-service-profile)
     * [Multi-zone example](./examples/multizone-rule)
