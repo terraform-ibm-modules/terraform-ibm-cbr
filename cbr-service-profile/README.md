@@ -1,6 +1,6 @@
 # CBR service profile
 
-This profile creates a list of CBR zones and rules. Accepts a list of VPC CRNs / service references to create CBR zones and a list of target services to create the rule matching these profiles. It supports to target the service using name, account id, tags, resource group.
+The CBR service profile creates a list of zones and rules for context-based restrictions. You pass a list of VPC CRNs or service references to create the CBR zones. You also pass a list of target services to create the rules that match these profiles. You can identify the services by name, account ID, tags, or resource groups.
 ## Usage
 <!--
 Add an example of the use of the module in the following code block.
