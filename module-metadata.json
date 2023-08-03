@@ -213,7 +213,7 @@
   "module_calls": {
     "cbr_rule": {
       "name": "cbr_rule",
-      "source": "./cbr-rule-module",
+      "source": "./modules/cbr-rule-module",
       "attributes": {
         "enforcement_mode": "enforcement_mode",
         "operations": "operations",
@@ -234,7 +234,7 @@
             "name": "ibm"
           },
           "pos": {
-            "filename": "cbr-rule-module/main.tf",
+            "filename": "modules/cbr-rule-module/main.tf",
             "line": 7
           }
         }
@@ -246,7 +246,7 @@
           "description": "CBR rule resource instance crn",
           "value": "ibm_cbr_rule.cbr_rule.crn",
           "pos": {
-            "filename": "cbr-rule-module/outputs.tf",
+            "filename": "modules/cbr-rule-module/outputs.tf",
             "line": 15
           },
           "type": "TypeString",
@@ -257,7 +257,7 @@
           "description": "CBR rule resource instance description",
           "value": "ibm_cbr_rule.cbr_rule.description",
           "pos": {
-            "filename": "cbr-rule-module/outputs.tf",
+            "filename": "modules/cbr-rule-module/outputs.tf",
             "line": 5
           },
           "type": "TypeString"
@@ -267,7 +267,7 @@
           "description": "CBR rule resource href",
           "value": "ibm_cbr_rule.cbr_rule.href",
           "pos": {
-            "filename": "cbr-rule-module/outputs.tf",
+            "filename": "modules/cbr-rule-module/outputs.tf",
             "line": 20
           },
           "type": "TypeString"
@@ -277,7 +277,7 @@
           "description": "CBR rule resource instance id",
           "value": "ibm_cbr_rule.cbr_rule.id",
           "pos": {
-            "filename": "cbr-rule-module/outputs.tf",
+            "filename": "modules/cbr-rule-module/outputs.tf",
             "line": 10
           }
         }
@@ -289,7 +289,7 @@
     },
     "cbr_zone": {
       "name": "cbr_zone",
-      "source": "./cbr-zone-module",
+      "source": "./modules/cbr-zone-module",
       "attributes": {
         "addresses": "addresses",
         "excluded_addresses": "excluded_addresses",
@@ -310,7 +310,7 @@
             "name": "ibm"
           },
           "pos": {
-            "filename": "cbr-zone-module/main.tf",
+            "filename": "modules/cbr-zone-module/main.tf",
             "line": 7
           }
         }
@@ -322,7 +322,7 @@
           "description": "CBR zone resource instance crn",
           "value": "ibm_cbr_zone.cbr_zone.crn",
           "pos": {
-            "filename": "cbr-zone-module/outputs.tf",
+            "filename": "modules/cbr-zone-module/outputs.tf",
             "line": 20
           },
           "type": "TypeString",
@@ -333,7 +333,7 @@
           "description": "(Optional, String) The description of the zone",
           "value": "var.zone_description",
           "pos": {
-            "filename": "cbr-zone-module/outputs.tf",
+            "filename": "modules/cbr-zone-module/outputs.tf",
             "line": 10
           },
           "type": "string"
@@ -343,7 +343,7 @@
           "description": "CBR zone resource instance link",
           "value": "ibm_cbr_zone.cbr_zone.href",
           "pos": {
-            "filename": "cbr-zone-module/outputs.tf",
+            "filename": "modules/cbr-zone-module/outputs.tf",
             "line": 25
           },
           "type": "TypeString"
@@ -353,7 +353,7 @@
           "description": "CBR zone resource instance id",
           "value": "ibm_cbr_zone.cbr_zone.id",
           "pos": {
-            "filename": "cbr-zone-module/outputs.tf",
+            "filename": "modules/cbr-zone-module/outputs.tf",
             "line": 15
           }
         },
@@ -362,7 +362,7 @@
           "description": "CBR zone resource instance name",
           "value": "ibm_cbr_zone.cbr_zone.name",
           "pos": {
-            "filename": "cbr-zone-module/outputs.tf",
+            "filename": "modules/cbr-zone-module/outputs.tf",
             "line": 5
           },
           "type": "TypeString"
