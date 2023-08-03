@@ -22,7 +22,7 @@ See in particular the [fscloud profile](./profiles/fscloud/) module that enables
     * [cbr-zone-module](./modules/cbr-zone-module)
     * [fscloud](./modules/fscloud)
 * [Examples](./examples)
-    * [CBR Multi Service Profile](./examples/multi-service-profile)
+    * [CBR multi service profile](./examples/multi-service-profile)
     * [Multi-zone example](./examples/multizone-rule)
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
     * [Zone example](./examples/zone)
@@ -76,7 +76,7 @@ You need the following permissions to run this module.
 ## Examples
 
 - [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
-- [ CBR Multi Service Profile](examples/multi-service-profile)
+- [ CBR multi service profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)
 <!-- END EXAMPLES HOOK -->
