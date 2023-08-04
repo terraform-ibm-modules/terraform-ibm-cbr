@@ -16,6 +16,12 @@ variable "region" {
   default     = "us-south"
 }
 
+variable "location" {
+  description = "The region in which the network zone is scoped"
+  type        = string
+  default     = "us-south"
+}
+
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
@@ -32,4 +38,16 @@ variable "zone_service_ref_list" {
   type        = list(string)
   default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
   description = "(List) Service reference for the zone creation"
+}
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
+  }
 }
