@@ -15,4 +15,5 @@ Context: this examples covers a "pseudo" real-world scenario where:
 4. Applications are running the VPC and need access to PostgreSQL via the private endpoint - eg: a VPE.
 
 ## Note
-The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' does not support restriction per location.
+- The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' do not support restriction per location for zone creation.
+- This example scope the zones to `us-south` region`.

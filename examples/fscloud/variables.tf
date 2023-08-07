@@ -57,9 +57,3 @@ variable "allow_vpcs_to_cos" {
   description = "Set rule for VPCs to COS, deafult is true"
   default     = true
 }
-
-variable "location" {
-  type        = string
-  description = "The region in which the network zone is scoped"
-  default     = "us-south"
-}
