@@ -60,7 +60,7 @@ locals {
 }
 
 module "ibm_cbr_zone" {
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = "${var.prefix}-cbr-zone"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = var.zone_description

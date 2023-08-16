@@ -65,7 +65,7 @@ locals {
 
 module "cbr_zone" {
   count            = length(local.zone_list)
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = local.zone_list[count.index].name
   zone_description = local.zone_list[count.index].zone_description
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -139,7 +139,7 @@ resource "ibm_resource_tag" "attach_tags" {
 }
 
 module "cbr_rule" {
-  source           = "../../cbr-rule-module"
+  source           = "../../modules/cbr-rule-module"
   rule_description = "${var.prefix} ${var.rule_description}"
   enforcement_mode = var.enforcement_mode
   rule_contexts    = local.rule_contexts
