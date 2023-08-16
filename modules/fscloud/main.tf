@@ -131,7 +131,7 @@ locals {
 
 module "cbr_zone" {
   for_each         = local.service_ref_zone_map
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = each.value.name
   zone_description = each.value.zone_description
   account_id       = each.value.account_id
@@ -146,7 +146,7 @@ module "cbr_zone" {
 ###############################################################################
 
 module "cbr_zone_deny" {
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = "${var.prefix}-deny-all"
   zone_description = "Zone that may be used to force a deny-all."
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -164,7 +164,7 @@ module "cbr_zone_deny" {
 
 module "cbr_zone_vpcs" {
   count            = var.existing_cbr_zone_vpcs != null ? 0 : 1
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = "${var.prefix}-vpcs-zone"
   zone_description = "Single zone grouping all VPCs participating in a fscloud topology."
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -289,7 +289,7 @@ locals {
 # Create a rule for all services by default
 module "cbr_rule" {
   for_each         = local.target_service_details
-  source           = "../../cbr-rule-module"
+  source           = "../../modules/cbr-rule-module"
   rule_description = "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])

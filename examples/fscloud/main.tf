@@ -46,7 +46,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "cbr_account_level" {
-  source                           = "../../profiles/fscloud"
+  source                           = "../../modules/fscloud"
   prefix                           = var.prefix
   zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
   allow_cos_to_kms                 = var.allow_cos_to_kms
@@ -97,7 +97,7 @@ module "cbr_account_level" {
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
 ## A zone used to group operator machine ips.
 module "cbr_zone_operator_ips" {
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = "List of operator environment public IPs"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone grouping list of known public ips for operator machines"

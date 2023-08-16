@@ -13,6 +13,24 @@ This module can be used to provision and configure [Context Based Restrictions](
 
 See in particular the [fscloud profile](./profiles/fscloud/) module that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
 
+<!-- BEGIN OVERVIEW HOOK -->
+## Overview
+* [terraform-ibm-cbr](#terraform-ibm-cbr)
+* [Submodules](./modules)
+    * [cbr-rule-module](./modules/cbr-rule-module)
+    * [cbr-service-profile](./modules/cbr-service-profile)
+    * [cbr-zone-module](./modules/cbr-zone-module)
+    * [fscloud](./modules/fscloud)
+* [Examples](./examples)
+    * [CBR multi service profile](./examples/multi-service-profile)
+    * [Multi-zone example](./examples/multizone-rule)
+    * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
+    * [Zone example](./examples/zone)
+* [Contributing](#contributing)
+
+## terraform-ibm-cbr
+<!-- END OVERVIEW HOOK -->
+
 ## Usage
 
 ```hcl
@@ -58,10 +76,11 @@ You need the following permissions to run this module.
 ## Examples
 
 - [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
-- [ CBR Multi Service Profile](examples/multi-service-profile)
+- [ CBR multi service profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)
 <!-- END EXAMPLES HOOK -->
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
@@ -74,8 +93,8 @@ You need the following permissions to run this module.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./cbr-rule-module | n/a |
-| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./cbr-zone-module | n/a |
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./modules/cbr-rule-module | n/a |
+| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./modules/cbr-zone-module | n/a |
 
 ### Resources
 
