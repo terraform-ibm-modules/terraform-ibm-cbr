@@ -55,6 +55,9 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
 
+  # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
+  skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
+
   # This example scope the zones to us-south region.
   location = "us-south"
 
