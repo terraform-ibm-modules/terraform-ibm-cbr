@@ -46,7 +46,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 ##############################################################################
 
 module "cbr_account_level" {
-  source                           = "../../profiles/fscloud"
+  source                           = "../../modules/fscloud"
   prefix                           = var.prefix
   zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
   allow_cos_to_kms                 = var.allow_cos_to_kms
@@ -54,6 +54,9 @@ module "cbr_account_level" {
   allow_roks_to_kms                = var.allow_roks_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
+
+  # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
+  skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
 
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
@@ -94,7 +97,7 @@ module "cbr_account_level" {
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
 ## A zone used to group operator machine ips.
 module "cbr_zone_operator_ips" {
-  source           = "../../cbr-zone-module"
+  source           = "../../modules/cbr-zone-module"
   name             = "List of operator environment public IPs"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone grouping list of known public ips for operator machines"

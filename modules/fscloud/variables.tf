@@ -155,3 +155,24 @@ variable "existing_cbr_zone_vpcs" {
   description = "Provide a existing zone id for VPC"
   default     = null
 }
+
+variable "skip_specific_services_for_zone_creation" {
+  type = list(string)
+  validation {
+    condition = alltrue([
+      for service_ref in var.skip_specific_services_for_zone_creation :
+      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+        "apprapp", "compliance", "event-notifications"],
+      service_ref)
+    ])
+    error_message = "Provide a valid service reference for zone creation"
+  }
+  description = "Provide a list of service references for which zone creation is not required"
+  default     = []
+}

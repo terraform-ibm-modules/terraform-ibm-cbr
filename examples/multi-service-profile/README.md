@@ -1,4 +1,4 @@
-# CBR Multi Service Profile
+# CBR multi service profile
 
 An end-to-end example that uses the submodule cbr-service-profile. This example uses the IBM Cloud Provider to automate the following infrastructure::
 
