@@ -63,6 +63,7 @@ module "cbr_account_level" {
   target_service_details = {
     "kms" = {
       "enforcement_mode" = "enabled"
+      "target_rg"        = module.resource_group.resource_group_id
     }
   }
 
