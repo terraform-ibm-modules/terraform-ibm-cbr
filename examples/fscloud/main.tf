@@ -10,6 +10,18 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
+##############################################################################
+# Key Protect Instance
+##############################################################################
+
+module "key_protect_module" {
+  source            = "terraform-ibm-modules/key-protect/ibm"
+  version           = "2.2.1"
+  key_protect_name  = "${var.prefix}-key-protect-instance"
+  resource_group_id = module.resource_group.resource_group_id
+  region            = "us-south"
+}
+
 # ##############################################################################
 # # Get Cloud Account ID
 # ##############################################################################
@@ -63,7 +75,7 @@ module "cbr_account_level" {
   target_service_details = {
     "kms" = {
       "enforcement_mode" = "enabled"
-      "target_rg"        = module.resource_group.resource_group_id
+      "instance_id"      = module.key_protect_module.key_protect_guid
     }
   }
 
@@ -99,7 +111,7 @@ module "cbr_account_level" {
 ## A zone used to group operator machine ips.
 module "cbr_zone_operator_ips" {
   source           = "../../modules/cbr-zone-module"
-  name             = "List of operator environment public IPs"
+  name             = "${var.prefix}-List of operator environment public IPs"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone grouping list of known public ips for operator machines"
   addresses = [{

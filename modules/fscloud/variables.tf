@@ -109,6 +109,7 @@ variable "custom_rule_contexts_by_service" {
 variable "target_service_details" {
   type = map(object({
     target_rg        = optional(string)
+    instance_id      = optional(string)
     enforcement_mode = string
     tags             = optional(list(string))
   }))
