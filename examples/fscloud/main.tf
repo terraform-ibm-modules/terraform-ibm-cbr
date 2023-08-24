@@ -19,7 +19,7 @@ resource "ibm_resource_instance" "key_protect_instance" {
   service           = "kms"
   plan              = "tiered-pricing"
   location          = "us-south"
-  service_endpoints = "public-and-private"
+  service_endpoints = "private"
 }
 
 # ##############################################################################
