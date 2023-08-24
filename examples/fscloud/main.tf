@@ -18,7 +18,7 @@ resource "ibm_resource_instance" "key_protect_instance" {
   resource_group_id = module.resource_group.resource_group_id
   service           = "kms"
   plan              = "tiered-pricing"
-  location          = "us-south"
+  location          = var.region
   service_endpoints = "private"
 }
 
