@@ -325,6 +325,21 @@ module "cbr_rule" {
         name     = "serviceName",
         operator = "stringEquals",
         value    = each.key
+      }] : try(each.value.instance_id, null) != null ? [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      {
+        name     = "serviceInstance",
+        operator = "stringEquals",
+        value    = each.value.instance_id
+      },
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = each.key
       }] : [
       {
         name     = "accountId",
