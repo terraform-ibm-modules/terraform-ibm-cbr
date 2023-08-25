@@ -11,7 +11,7 @@
 
 This module can be used to provision and configure [Context Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
 
-See in particular the [fscloud profile](./profiles/fscloud/) module that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
+See in particular the [fscloud module](./modules/fscloud/) that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
 
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
@@ -87,7 +87,7 @@ You need the following permissions to run this module.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.49.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.56.1 |
 
 ### Modules
 

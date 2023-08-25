@@ -10,6 +10,18 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
+##############################################################################
+# Key Protect Instance
+##############################################################################
+resource "ibm_resource_instance" "key_protect_instance" {
+  name              = "${var.prefix}-key-protect-instance"
+  resource_group_id = module.resource_group.resource_group_id
+  service           = "kms"
+  plan              = "tiered-pricing"
+  location          = var.region
+  service_endpoints = "private"
+}
+
 # ##############################################################################
 # # Get Cloud Account ID
 # ##############################################################################
@@ -63,6 +75,7 @@ module "cbr_account_level" {
   target_service_details = {
     "kms" = {
       "enforcement_mode" = "enabled"
+      "instance_id"      = ibm_resource_instance.key_protect_instance.guid
     }
   }
 
@@ -98,7 +111,7 @@ module "cbr_account_level" {
 ## A zone used to group operator machine ips.
 module "cbr_zone_operator_ips" {
   source           = "../../modules/cbr-zone-module"
-  name             = "List of operator environment public IPs"
+  name             = "${var.prefix}-List of operator environment public IPs"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone grouping list of known public ips for operator machines"
   addresses = [{
@@ -107,7 +120,7 @@ module "cbr_zone_operator_ips" {
   }]
 }
 
-## Examples of data lookup on objects (zone, rule) created by the fscoud profile module
+## Examples of data lookup on objects (zone, rule) created by the fscloud profile module
 ## Get rule targetting "event-notification"
 data "ibm_cbr_rule" "event_notification_rule" {
   rule_id = module.cbr_account_level.map_target_service_rule_ids["event-notifications"].rule_id
