@@ -17,4 +17,3 @@ Context: this examples covers a "pseudo" real-world scenario where:
 
 ## Note
 - The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' do not support restriction per location for zone creation.
-- This example scope the zones to `us-south` region`.
