@@ -181,5 +181,5 @@ variable "skip_specific_services_for_zone_creation" {
 variable "location" {
   type        = string
   description = "The region in which the network zone is scoped"
-  default     = "us-south"
+  default     = null
 }
