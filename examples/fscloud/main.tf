@@ -70,9 +70,6 @@ module "cbr_account_level" {
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
 
-  # This example scope the zones to us-south region.
-  location = "us-south"
-
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
   target_service_details = {
