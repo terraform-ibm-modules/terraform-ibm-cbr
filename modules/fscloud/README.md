@@ -14,6 +14,9 @@ The module also pre-create CBR zone for each service in the account as a best pr
 
 Important: In order to avoid unexpected breakage in the account against which this module is executed, the CBR rule enforcement mode is set to 'report' (or 'disabled' for services not supporting 'report' mode) by default. It is recommended to test out this module first with these default, and then use the `target_service_details` variable to set the enforcement mode to "enabled" gradually by service. The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the key protect ("kms") service.
 
+## Note
+The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' does not support restriction per location.
+
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -50,6 +53,7 @@ Important: In order to avoid unexpected breakage in the account against which th
 | <a name="input_custom_rule_contexts_by_service"></a> [custom\_rule\_contexts\_by\_service](#input\_custom\_rule\_contexts\_by\_service) | Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service\_ref\_names or add\_managed\_vpc\_zone are passed in. | <pre>map(list(object(<br>    {<br>      endpointType = string # "private, public or direct"<br><br>      # Service-name (module lookup for existing network zone) and/or CBR zone id<br>      service_ref_names    = optional(list(string), [])<br>      add_managed_vpc_zone = optional(bool, false)<br>      zone_ids             = optional(list(string), [])<br>  })))</pre> | `{}` | no |
 | <a name="input_existing_cbr_zone_vpcs"></a> [existing\_cbr\_zone\_vpcs](#input\_existing\_cbr\_zone\_vpcs) | Provide a existing zone id for VPC | <pre>object(<br>    {<br>      zone_id = string<br>  })</pre> | `null` | no |
 | <a name="input_existing_serviceref_zone"></a> [existing\_serviceref\_zone](#input\_existing\_serviceref\_zone) | Provide a valid service reference and existing zone id | <pre>map(object(<br>    {<br>      zone_id = string<br>  }))</pre> | `{}` | no |
+| <a name="input_location"></a> [location](#input\_location) | The region in which the network zone is scoped | `string` | `null` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | n/a | yes |
 | <a name="input_skip_specific_services_for_zone_creation"></a> [skip\_specific\_services\_for\_zone\_creation](#input\_skip\_specific\_services\_for\_zone\_creation) | Provide a list of service references for which zone creation is not required | `list(string)` | `[]` | no |
 | <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | Details of the target service for which a rule is created. The key is the service name. | <pre>map(object({<br>    target_rg        = optional(string)<br>    instance_id      = optional(string)<br>    enforcement_mode = string<br>    tags             = optional(list(string))<br>  }))</pre> | `{}` | no |

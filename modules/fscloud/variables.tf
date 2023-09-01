@@ -177,3 +177,9 @@ variable "skip_specific_services_for_zone_creation" {
   description = "Provide a list of service references for which zone creation is not required"
   default     = []
 }
+
+variable "location" {
+  type        = string
+  description = "The region in which the network zone is scoped"
+  default     = null
+}

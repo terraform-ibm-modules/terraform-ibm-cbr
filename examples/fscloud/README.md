@@ -14,3 +14,6 @@ Context: this examples covers a "pseudo" real-world scenario where:
 3. Operators use machines with a set list of public IPs to interact with Schematics.
 4. Applications are running the VPC and need access to PostgreSQL via the private endpoint - eg: a VPE.
 5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
+
+## Note
+- The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' do not support restriction per location for zone creation.
