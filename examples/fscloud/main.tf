@@ -13,13 +13,14 @@ module "resource_group" {
 ##############################################################################
 # Key Protect Instance
 ##############################################################################
-resource "ibm_resource_instance" "key_protect_instance" {
-  name              = "${var.prefix}-key-protect-instance"
+module "key_protect_module" {
+  source            = "terraform-ibm-modules/key-protect/ibm"
+  version           = "v2.3.0"
+  key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
-  service           = "kms"
-  plan              = "tiered-pricing"
-  location          = var.region
+  region            = var.region
   service_endpoints = "private"
+  plan              = "tiered-pricing"
 }
 
 # ##############################################################################
@@ -75,7 +76,7 @@ module "cbr_account_level" {
   target_service_details = {
     "kms" = {
       "enforcement_mode" = "enabled"
-      "instance_id"      = ibm_resource_instance.key_protect_instance.guid
+      "instance_id"      = module.key_protect_module.key_protect_guid
     }
   }
 
@@ -93,7 +94,10 @@ module "cbr_account_level" {
       {
         endpointType      = "public"
         service_ref_names = ["schematics"]
-      }
+      },
+      {
+        endpointType = "public"
+      zone_ids = [module.cbr_zone_operator_ips.zone_id] }
     ],
     "schematics" = [{
       endpointType = "public"
