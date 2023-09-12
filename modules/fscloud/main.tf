@@ -180,7 +180,7 @@ module "cbr_zone_vpcs" {
 
 
 ##############################################################################
-# Create CBR zones for each service
+# Create CBR rules for each service
 ##############################################################################
 
 locals {
