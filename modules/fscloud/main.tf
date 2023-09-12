@@ -205,7 +205,7 @@ locals {
     }],
     # Fs VPCs -> COS
     "cloud-object-storage" : [{
-      endpointType : "private",
+      endpointType : "direct",
       networkZoneIds : flatten([
         var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
       ])
