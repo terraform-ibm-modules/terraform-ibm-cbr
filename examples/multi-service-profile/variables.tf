@@ -16,6 +16,12 @@ variable "region" {
   default     = "us-south"
 }
 
+variable "location" {
+  description = "The region in which the network zone is scoped"
+  type        = string
+  default     = "us-south"
+}
+
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
@@ -28,15 +34,20 @@ variable "resource_tags" {
   default     = []
 }
 
-variable "existing_access_tags" {
-  type        = list(string)
-  description = "Optional list of existing access tags to be added https://cloud.ibm.com/docs/account?topic=account-tag&interface=ui#create"
-  # Provide the access tags with key:value format in a list
-  default = ["env:dev"]
-}
-
 variable "zone_service_ref_list" {
   type        = list(string)
-  default     = ["directlink", "is"]
+  default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
   description = "(List) Service reference for the zone creation"
+}
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
+  }
 }

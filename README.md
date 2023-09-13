@@ -11,6 +11,26 @@
 
 This module can be used to provision and configure [Context Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
 
+See in particular the [fscloud module](./modules/fscloud/) that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
+
+<!-- BEGIN OVERVIEW HOOK -->
+## Overview
+* [terraform-ibm-cbr](#terraform-ibm-cbr)
+* [Submodules](./modules)
+    * [cbr-rule-module](./modules/cbr-rule-module)
+    * [cbr-service-profile](./modules/cbr-service-profile)
+    * [cbr-zone-module](./modules/cbr-zone-module)
+    * [fscloud](./modules/fscloud)
+* [Examples](./examples)
+    * [CBR multi service profile](./examples/multi-service-profile)
+    * [Multi-zone example](./examples/multizone-rule)
+    * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
+    * [Zone example](./examples/zone)
+* [Contributing](#contributing)
+
+## terraform-ibm-cbr
+<!-- END OVERVIEW HOOK -->
+
 ## Usage
 
 ```hcl
@@ -55,24 +75,26 @@ You need the following permissions to run this module.
 <!-- BEGIN EXAMPLES HOOK -->
 ## Examples
 
-- [ CBR Multi Service Profile](examples/multi-service-profile)
+- [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
+- [ CBR multi service profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)
 <!-- END EXAMPLES HOOK -->
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.49.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.56.1 |
 
 ### Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./cbr-rule-module | n/a |
-| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./cbr-zone-module | n/a |
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./modules/cbr-rule-module | n/a |
+| <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./modules/cbr-zone-module | n/a |
 
 ### Resources
 

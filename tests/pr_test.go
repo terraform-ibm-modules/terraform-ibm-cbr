@@ -20,6 +20,7 @@ const resourceGroup = "geretain-test-cbr"
 const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
 const multiServiceExampleTerraformDir = "examples/multi-service-profile"
+const fsCloudTerraformDir = "examples/fscloud"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 func TestRunZoneExample(t *testing.T) {
@@ -225,7 +226,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 				t.Run("verify service reference exist", func(t *testing.T) {
 					var serviceRefExists bool
 					var actual_references []string
-					expected_references := []string{"directlink", "is"}
+					expected_references := []string{"cloud-object-storage", "containers-kubernetes", "server-protect"}
 
 					zoneIds := zones[0].([]interface{})
 					for index := range zoneIds {
@@ -286,6 +287,20 @@ func TestMultiServiceProfileExample(t *testing.T) {
 		}
 	}
 	options.TestTearDown()
+}
+
+func TestFSCloudExample(t *testing.T) {
+	t.Parallel()
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:       t,
+		TerraformDir:  fsCloudTerraformDir,
+		Prefix:        "cbr-fs",
+		ResourceGroup: resourceGroup,
+	})
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
 
 func TestRunUpgradeExample(t *testing.T) {

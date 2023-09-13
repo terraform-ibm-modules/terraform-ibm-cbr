@@ -4,7 +4,7 @@
 
 variable "prefix" {
   type        = string
-  description = "Prefix to append to all resources created by this example"
+  description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
   default     = "serviceprofile"
 }
 
@@ -35,6 +35,12 @@ variable "zone_service_ref_list" {
   description = "(List) Service reference for the zone creation"
 }
 
+variable "location" {
+  type        = string
+  description = "The region in which the network zone is scoped"
+  default     = "us-south"
+}
+
 variable "target_service_details" {
   type = list(object({
     target_service_name = string
@@ -58,5 +64,17 @@ variable "target_service_details" {
       "schematics", "apprapp", "event-notifications", "compliance"], service_detail.target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
+  }
+}
+
+variable "endpoints" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["private"]
+  validation {
+    condition = alltrue([
+      for endpoint in var.endpoints : can(regex("^(public|private|direct)$", endpoint))
+    ])
+    error_message = "Valid values for endpoints are 'public', 'private' or 'direct'"
   }
 }
