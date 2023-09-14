@@ -36,7 +36,7 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
 ```hcl
 module "ibm_cbr" "zone" {
   # replace main with version
-  source = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
+  source = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
   version = "latest" # Replace "latest" with a release version to lock into a specific release
   name             = "zone_for_pg_access"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -46,7 +46,7 @@ module "ibm_cbr" "zone" {
 
 module "ibm_cbr" "rule" {
   # replace main with version
-  source = "terraform-ibm-modules/cbr/ibm//cbr-zone-module"
+  source = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
   version = "latest" # Replace "latest" with a release version to lock into a specific release
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
