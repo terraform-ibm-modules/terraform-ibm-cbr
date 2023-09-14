@@ -180,7 +180,7 @@ module "cbr_zone_vpcs" {
 
 
 ##############################################################################
-# Create CBR zones for each service
+# Create CBR rules for each service
 ##############################################################################
 
 locals {
@@ -205,7 +205,7 @@ locals {
     }],
     # Fs VPCs -> COS
     "cloud-object-storage" : [{
-      endpointType : "private",
+      endpointType : "direct",
       networkZoneIds : flatten([
         var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
       ])
