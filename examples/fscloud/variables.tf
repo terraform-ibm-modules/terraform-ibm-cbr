@@ -37,12 +37,18 @@ variable "allow_cos_to_kms" {
 variable "allow_block_storage_to_kms" {
   type        = bool
   description = "Set rule for block storage to KMS, deafult is true"
-  default     = true
+  default     = false
 }
 
 variable "allow_roks_to_kms" {
   type        = bool
   description = "Set rule for ROKS to KMS, deafult is true"
+  default     = true
+}
+
+variable "allow_icd_to_kms" {
+  type        = bool
+  description = "Set rule for ICD to KMS, deafult is true"
   default     = true
 }
 
