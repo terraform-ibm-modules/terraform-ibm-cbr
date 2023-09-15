@@ -50,7 +50,7 @@ variable "zone_service_ref_list" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications"],
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
@@ -62,7 +62,7 @@ variable "zone_service_ref_list" {
     "databases-for-redis", "directlink",
     "iam-groups", "is", "messagehub",
     "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-  "apprapp", "compliance", "event-notifications"]
+  "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"]
   description = "(List) Service reference for the zone creation"
 }
 
