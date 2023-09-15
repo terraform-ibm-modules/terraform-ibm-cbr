@@ -45,6 +45,7 @@ The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_allow_at_to_cos"></a> [allow\_at\_to\_cos](#input\_allow\_at\_to\_cos) | Set rule for Activity Tracker to COS, deafult is true | `bool` | `true` | no |
 | <a name="input_allow_block_storage_to_kms"></a> [allow\_block\_storage\_to\_kms](#input\_allow\_block\_storage\_to\_kms) | Set rule for block storage to KMS, deafult is true | `bool` | `true` | no |
 | <a name="input_allow_cos_to_kms"></a> [allow\_cos\_to\_kms](#input\_allow\_cos\_to\_kms) | Set rule for COS to KMS, deafult is true | `bool` | `true` | no |
 | <a name="input_allow_roks_to_kms"></a> [allow\_roks\_to\_kms](#input\_allow\_roks\_to\_kms) | Set rule for ROKS to KMS, deafult is true | `bool` | `true` | no |

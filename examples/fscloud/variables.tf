@@ -57,3 +57,9 @@ variable "allow_vpcs_to_cos" {
   description = "Set rule for VPCs to COS, deafult is true"
   default     = true
 }
+
+variable "allow_at_to_cos" {
+  type        = bool
+  description = "Set rule for Activity Tracker to COS, deafult is true"
+  default     = true
+}
