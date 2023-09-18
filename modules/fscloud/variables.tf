@@ -10,31 +10,37 @@ variable "zone_vpc_crn_list" {
 
 variable "allow_cos_to_kms" {
   type        = bool
-  description = "Set rule for COS to KMS, deafult is true"
+  description = "Set rule for COS to KMS, default is true"
   default     = true
 }
 
 variable "allow_block_storage_to_kms" {
   type        = bool
-  description = "Set rule for block storage to KMS, deafult is true"
+  description = "Set rule for block storage to KMS, default is true"
   default     = true
 }
 
 variable "allow_roks_to_kms" {
   type        = bool
-  description = "Set rule for ROKS to KMS, deafult is true"
+  description = "Set rule for ROKS to KMS, default is true"
   default     = true
 }
 
 variable "allow_vpcs_to_container_registry" {
   type        = bool
-  description = "Set rule for VPCs to container registry, deafult is true"
+  description = "Set rule for VPCs to container registry, default is true"
   default     = true
 }
 
 variable "allow_vpcs_to_cos" {
   type        = bool
-  description = "Set rule for VPCs to COS, deafult is true"
+  description = "Set rule for VPCs to COS, default is true"
+  default     = true
+}
+
+variable "allow_at_to_cos" {
+  type        = bool
+  description = "Set rule for Activity Tracker to COS, default is true"
   default     = true
 }
 

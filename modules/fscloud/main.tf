@@ -192,6 +192,8 @@ locals {
   server-protect_cbr_zone_id = local.cbr_zones["server-protect"].zone_id # block storage
   # tflint-ignore: terraform_naming_convention
   containers-kubernetes_cbr_zone_id = local.cbr_zones["containers-kubernetes"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
 
   prewired_rule_contexts_by_service = {
     # COS -> KMS, Block storage -> KMS, ROKS -> KMS
@@ -203,11 +205,12 @@ locals {
         var.allow_roks_to_kms ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
     }],
-    # Fs VPCs -> COS
+    # Fs VPCs -> COS, AT -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
+        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : []
       ])
     }],
     # VPCs -> container registry
@@ -217,7 +220,6 @@ locals {
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
-    # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
   }
 
   prewired_rule_contexts_by_service_pre_check = { for key, value in local.prewired_rule_contexts_by_service :
