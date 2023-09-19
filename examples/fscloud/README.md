@@ -9,7 +9,7 @@ This examples is designed to show case some of the key customization options for
 4. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
 
 Context: this examples covers a "pseudo" real-world scenario where:
-1. ICD Mongodb, and Postgresql instances are encrypted using keys storage in Key Protect.
+1. ICD Mongodb and Postgresql instances are encrypted using keys storage in Key Protect.
 2. Schematics is used to execute terraform that create Key Protect keys and key ring over its public endpoint.
 3. Operators use machines with a set list of public IPs to interact with Schematics.
 4. Applications are running the VPC and need access to PostgreSQL via the private endpoint - eg: a VPE.
