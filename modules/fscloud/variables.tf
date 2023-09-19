@@ -95,7 +95,7 @@ variable "custom_rule_contexts_by_service" {
           "databases-for-redis", "directlink",
           "iam-groups", "is", "messagehub",
           "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications"],
+          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       ref)]]
 
     ]))
@@ -175,7 +175,7 @@ variable "skip_specific_services_for_zone_creation" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications"],
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
