@@ -65,6 +65,7 @@ module "cbr_account_level" {
   allow_cos_to_kms                 = var.allow_cos_to_kms
   allow_block_storage_to_kms       = var.allow_block_storage_to_kms
   allow_roks_to_kms                = var.allow_roks_to_kms
+  allow_icd_to_kms                 = var.allow_icd_to_kms
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
   allow_at_to_cos                  = var.allow_at_to_cos
