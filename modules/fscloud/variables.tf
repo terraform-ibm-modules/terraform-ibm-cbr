@@ -26,6 +26,12 @@ variable "allow_roks_to_kms" {
   default     = true
 }
 
+variable "allow_icd_to_kms" {
+  type        = bool
+  description = "Set rule for ICD to KMS, deafult is true"
+  default     = true
+}
+
 variable "allow_vpcs_to_container_registry" {
   type        = bool
   description = "Set rule for VPCs to container registry, default is true"
