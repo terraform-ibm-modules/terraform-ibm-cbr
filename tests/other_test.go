@@ -14,9 +14,9 @@ func TestFSCloudExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  fsCloudTerraformDir,
-		Prefix:        "cbr-fs",
+		Testing:      t,
+		TerraformDir: fsCloudTerraformDir,
+		Prefix:       "cbr-fs",
 	})
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
