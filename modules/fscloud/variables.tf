@@ -50,6 +50,12 @@ variable "allow_at_to_cos" {
   default     = true
 }
 
+variable "allow_is_to_cos" {
+  type        = bool
+  description = "Set rule for IS to COS, default is true"
+  default     = true
+}
+
 variable "zone_service_ref_list" {
   type = list(string)
   validation {

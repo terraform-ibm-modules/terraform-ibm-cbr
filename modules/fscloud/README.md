@@ -50,6 +50,7 @@ The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 
 | <a name="input_allow_block_storage_to_kms"></a> [allow\_block\_storage\_to\_kms](#input\_allow\_block\_storage\_to\_kms) | Set rule for block storage to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_cos_to_kms"></a> [allow\_cos\_to\_kms](#input\_allow\_cos\_to\_kms) | Set rule for COS to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_icd_to_kms"></a> [allow\_icd\_to\_kms](#input\_allow\_icd\_to\_kms) | Set rule for ICD to KMS, deafult is true | `bool` | `true` | no |
+| <a name="input_allow_is_to_cos"></a> [allow\_is\_to\_cos](#input\_allow\_is\_to\_cos) | Set rule for IS to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_roks_to_kms"></a> [allow\_roks\_to\_kms](#input\_allow\_roks\_to\_kms) | Set rule for ROKS to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |
