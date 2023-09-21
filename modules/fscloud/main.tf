@@ -208,7 +208,7 @@ locals {
   # tflint-ignore: terraform_naming_convention
   logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
   # tflint-ignore: terraform_naming_convention
-  is_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
+  is_cbr_zone_id = local.cbr_zones["is"].zone_id
 
   prewired_rule_contexts_by_service = {
     # COS -> KMS, Block storage -> KMS, ROKS -> KMS, ICD -> KMS
