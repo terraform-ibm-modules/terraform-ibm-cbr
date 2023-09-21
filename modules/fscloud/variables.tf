@@ -156,8 +156,12 @@ variable "existing_serviceref_zone" {
     {
       zone_id = string
   }))
+  validation {
+    condition     = var.existing_serviceref_zone == null || can(regex("^[0-9a-fA-F]{32}$", var.existing_serviceref_zone.zone_id))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
   description = "Provide a valid service reference and existing zone id"
-  default     = {}
+  default     = null
 }
 
 variable "existing_cbr_zone_vpcs" {
@@ -165,6 +169,10 @@ variable "existing_cbr_zone_vpcs" {
     {
       zone_id = string
   })
+  validation {
+    condition     = var.existing_cbr_zone_vpcs == null || (can(regex("^[0-9a-fA-F]{32}$", var.existing_cbr_zone_vpcs.zone_id)))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
   description = "Provide a existing zone id for VPC"
   default     = null
 }
