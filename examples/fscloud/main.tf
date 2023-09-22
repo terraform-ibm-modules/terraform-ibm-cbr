@@ -69,6 +69,7 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
   allow_at_to_cos                  = var.allow_at_to_cos
+  allow_iks_to_is                  = var.allow_iks_to_is
 
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]

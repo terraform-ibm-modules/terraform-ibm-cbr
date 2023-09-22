@@ -236,6 +236,13 @@ locals {
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
+    # IKS -> IS
+    "is" : [{
+      endpointType : "private",
+      networkZoneIds : flatten([
+        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
+      ])
+    }],
   }
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
