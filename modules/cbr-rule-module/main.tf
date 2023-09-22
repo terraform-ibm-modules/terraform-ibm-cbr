@@ -50,7 +50,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
   }
 
   dynamic "operations" {
-    for_each = var.operations
+    for_each = var.operations != null ? var.operations : []
     iterator = operation
     content {
       dynamic "api_types" {
