@@ -16,7 +16,6 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
-const resourceGroup = "geretain-test-cbr"
 const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
 const multiServiceExampleTerraformDir = "examples/multi-service-profile"
@@ -29,10 +28,9 @@ func TestRunZoneExample(t *testing.T) {
 	assert.Nil(t, err, "Failed to create cloud info service")
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  zoneExampleTerraformDir,
-		Prefix:        "cbr-zone",
-		ResourceGroup: resourceGroup,
+		Testing:      t,
+		TerraformDir: zoneExampleTerraformDir,
+		Prefix:       "cbr-zone",
 	})
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
@@ -83,10 +81,9 @@ func TestRunCompleteExample(t *testing.T) {
 		}
 
 		options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-			Testing:       t,
-			TerraformDir:  completeExampleTerraformDir,
-			Prefix:        "cbr-multizone",
-			ResourceGroup: resourceGroup,
+			Testing:      t,
+			TerraformDir: completeExampleTerraformDir,
+			Prefix:       "cbr-multizone",
 			TerraformVars: map[string]interface{}{
 				"existing_access_tags": accessTags,
 			},
@@ -203,10 +200,9 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	assert.Nil(t, err, "Failed to create cloud info service")
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  multiServiceExampleTerraformDir,
-		Prefix:        "cbr-multi-service-profile",
-		ResourceGroup: resourceGroup,
+		Testing:      t,
+		TerraformDir: multiServiceExampleTerraformDir,
+		Prefix:       "cbr-multi-service-profile",
 	})
 	options.SkipTestTearDown = true
 	output, err := options.RunTestConsistency()
@@ -293,10 +289,9 @@ func TestFSCloudExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  fsCloudTerraformDir,
-		Prefix:        "cbr-fs",
-		ResourceGroup: resourceGroup,
+		Testing:      t,
+		TerraformDir: fsCloudTerraformDir,
+		Prefix:       "cbr-fs",
 	})
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
@@ -307,10 +302,9 @@ func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
 
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  zoneExampleTerraformDir,
-		Prefix:        "cbr-upg",
-		ResourceGroup: resourceGroup,
+		Testing:      t,
+		TerraformDir: zoneExampleTerraformDir,
+		Prefix:       "cbr-upg",
 	})
 
 	output, err := options.RunTestUpgrade()
