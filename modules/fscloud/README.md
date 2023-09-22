@@ -8,6 +8,7 @@ This module creates default coarse-grained CBR rules in a given account followin
 - VPCs where clusters are deployed -> COS
 - VPCs -> container registry
 - All ICD -> KMS
+- IKS -> IS
 
 This module is designed to allow the consumer to add additional custom rules to open up additional flows necessarity for their usage. See the `custom_rule_contexts_by_service` input variable, and an [usage example](../../examples/fscloud/) demonstrating how to open up more flows.
 
