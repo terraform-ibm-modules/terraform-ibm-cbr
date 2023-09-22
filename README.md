@@ -17,6 +17,7 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
 ## Overview
 * [terraform-ibm-cbr](#terraform-ibm-cbr)
 * [Submodules](./modules)
+    * [cbr-mutli-rule-module](./modules/cbr-mutli-rule-module)
     * [cbr-rule-module](./modules/cbr-rule-module)
     * [cbr-service-profile](./modules/cbr-service-profile)
     * [cbr-zone-module](./modules/cbr-zone-module)
