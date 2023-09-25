@@ -81,10 +81,14 @@ variable "operations" {
       api_type_id = string
     }))
   }))
-  description = "(Optional, List) The operations this rule applies to"
-  default     = []
+  description = "(Optional, List) The operations this rule applies to, by default it will protect all of the service and platform APIs the target service supports."
+  default = [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
   validation {
-    condition     = var.operations != null
-    error_message = "operations cannot be null, an empty list is valid"
+    condition     = length(var.operations) > 0
+    error_message = "Operations cannot be null or an empty list"
   }
 }
