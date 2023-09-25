@@ -96,5 +96,9 @@ variable "operations" {
     }))
   }))
   description = "(Optional, List) The operations this rule applies to"
-  default     = []
+  default = [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
 }
