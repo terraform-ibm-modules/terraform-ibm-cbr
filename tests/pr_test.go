@@ -167,26 +167,15 @@ func TestRunCompleteExample(t *testing.T) {
 
 						assert.ElementsMatch(t, expectedTags, rules.Resources[0].Tags, "expected resource tags not found")
 					})
-					t.Run("verify no operation set", func(t *testing.T) {
-						// Note: COS has no operations that can be set
-						//       Leaving this code here as a reference for others
-						//expectedOperations := []contextbasedrestrictionsv1.OperationsList{
-						//	{APITypes: []contextbasedrestrictionsv1.APIType{{
-						//		APITypeID:   core.StringPtr(""),
-						//		DisplayName: core.StringPtr(""),
-						//		Description: core.StringPtr(""),
-						//		Actions: []contextbasedrestrictionsv1.Action{{
-						//			ActionID:    core.StringPtr(""),
-						//			Description: core.StringPtr(""),
-						//		}},
-						//	},
-						//	}},
-						//}
-						//
-						//assert.ElementsMatch(t, expectedOperations, rules.Operations)
-
-						// Assert COS has no operations set as expected
-						assert.Nil(t, rules.Operations)
+					t.Run("verify rule operation set", func(t *testing.T) {
+						expectedOperations := &contextbasedrestrictionsv1.NewRuleOperations{
+							APITypes: []contextbasedrestrictionsv1.NewRuleOperationsAPITypesItem{
+								{
+									APITypeID: core.StringPtr("crn:v1:bluemix:public:context-based-restrictions::::api-type:"),
+								},
+							},
+						}
+						assert.Equal(t, expectedOperations, rules.Operations, "expected operations not found")
 					})
 
 				}
