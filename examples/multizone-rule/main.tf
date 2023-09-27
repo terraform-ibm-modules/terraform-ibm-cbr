@@ -144,5 +144,4 @@ module "cbr_rule" {
   enforcement_mode = var.enforcement_mode
   rule_contexts    = local.rule_contexts
   resources        = local.rule_resources
-  operations       = []
 }

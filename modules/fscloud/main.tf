@@ -311,11 +311,15 @@ module "cbr_rule" {
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
     api_types = [
-      # lookup the map for the target service name, if not present make api_type_id as empty
+      # lookup the map for the target service name, if empty then pass default value
       for apitype in lookup(local.operations_apitype_val, each.key, []) : {
         api_type_id = apitype
     }]
-  }] : []
+    }] : [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
 
   resources = [{
     tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
