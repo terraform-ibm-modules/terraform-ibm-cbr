@@ -4,12 +4,12 @@
 # Creates CBR Rules
 ##############################################################################
 module "cbr_rules" {
-  count            = length(var.cbr_rule_list)
-  source           = "../cbr-rule-module"
-  rule_description = var.cbr_rule_list[count.index].description
-  enforcement_mode = var.cbr_rule_list[count.index].enforcement_mode
-  rule_contexts    = var.cbr_rule_list[count.index].rule_contexts
-  resources        = var.cbr_rule_list[count.index].resources
-  tags             = var.cbr_rule_list[count.index].tags
-  operations       = var.cbr_rule_list[count.index].operations == null ? [] : var.cbr_rule_list[count.index].operations
+  count            = length(var.rule_list)
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
+  version          = "1.9.0"
+  rule_description = var.rule_descriptions[count.index] != null ? var.rule_descriptions[count.index] : "sample rule"
+  enforcement_mode = var.rule_list[count.index].enforcement_mode
+  rule_contexts    = var.rule_list[count.index].rule_contexts
+  resources        = var.rule_resources != null ? var.rule_resources : []
+  operations       = var.rule_list[count.index].operations == null ? [] : var.rule_list[count.index].operations
 }
