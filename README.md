@@ -64,6 +64,16 @@ You need the following permissions to run this module.
 - VPC Infrastructure Services
     - `Editor` role access
 
+<!-- END MODULE HOOK -->
+<!-- BEGIN EXAMPLES HOOK -->
+## Examples
+
+- [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
+- [ Multi-rule example](examples/multi-rule)
+- [ CBR multi service profile](examples/multi-service-profile)
+- [ Multi-zone example](examples/multizone-rule)
+- [ Zone example](examples/zone)
+<!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
