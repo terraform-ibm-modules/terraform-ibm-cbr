@@ -83,7 +83,7 @@ module "cbr_rules" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rules"></a> [cbr\_rules](#module\_cbr\_rules) | ../cbr-rule-module | n/a |
+| <a name="module_cbr_rules"></a> [cbr\_rules](#module\_cbr\_rules) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.9.0 |
 
 ### Resources
 
@@ -93,7 +93,9 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_cbr_rule_list"></a> [cbr\_rule\_list](#input\_cbr\_rule\_list) | List of CBR Rules to be created | <pre>list(object({<br>    description = string<br>    resources = list(object({<br>      attributes = optional(list(object({<br>        name     = string<br>        value    = string<br>        operator = optional(string)<br>      })))<br>      tags = optional(list(object({<br>        name     = string<br>        value    = string<br>        operator = optional(string)<br>      })))<br>    }))<br>    service_instance = optional(string)<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>    tags = optional(list(object({<br>      name  = string<br>      value = string<br>    })), [])<br>    operations = optional(list(object({<br>      api_types = list(object({<br>        api_type_id = string<br>      }))<br>    })))<br>  }))</pre> | n/a | yes |
+| <a name="input_rule_descriptions"></a> [rule\_descriptions](#input\_rule\_descriptions) | List of CBR Rule Descriptions to be created | `list(string)` | `[]` | no |
+| <a name="input_rule_list"></a> [rule\_list](#input\_rule\_list) | List of CBR Rules to be created | <pre>list(object({<br>    service_instance = optional(string)<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>    operations = optional(list(object({<br>      api_types = list(object({<br>        api_type_id = string<br>      }))<br>    })))<br>  }))</pre> | n/a | yes |
+| <a name="input_rule_resources"></a> [rule\_resources](#input\_rule\_resources) | List of CBR Rule Resources to be created | <pre>list(object({<br>    attributes = optional(list(object({<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    })))<br>    tags = optional(list(object({<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    })))<br>  }))</pre> | `[]` | no |
 
 ### Outputs
 
