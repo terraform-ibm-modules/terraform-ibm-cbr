@@ -4,7 +4,6 @@
 locals {
   bucket_cbr_rules = [
     {
-      description      = "sample rule for buckets"
       enforcement_mode = "enabled"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       rule_contexts = [{

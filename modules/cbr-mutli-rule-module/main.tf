@@ -5,8 +5,7 @@
 ##############################################################################
 module "cbr_rules" {
   count            = length(var.rule_list)
-  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
-  version          = "1.9.0"
+  source           = "../cbr-rule-module"
   rule_description = var.rule_descriptions[count.index] != null ? var.rule_descriptions[count.index] : "sample rule"
   enforcement_mode = var.rule_list[count.index].enforcement_mode
   rule_contexts    = var.rule_list[count.index].rule_contexts

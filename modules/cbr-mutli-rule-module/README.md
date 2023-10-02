@@ -6,68 +6,91 @@ Creates multiple rules for Context Based Restrictions
 
 ```hcl
 module "cbr_rules" {
-  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
-  version          = "1.9.0"
-  cbr_rule_list = [{
-      description = "rule_description_1"
-      rule_contexts = [
-      {
-        name     = "accountId"
-        value    = "1234"
-        operator = "stringEquals"
-      },
+  source    = "terraform-ibm-modules/cbr/ibm//modules/cbr-multi-rule-module"
+  version   = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  rule_list = [
+    {
+      enforcement_mode = "enabled"
+      account_id       = "1234"
+      rule_contexts    = [
         {
-        name     = "serviceInstance"
-        value    = "service_instance_id"
-        operator = "stringEquals"
-        },
+          attributes = [
+            {
+              "name" : "endpointType",
+              "value" : "private"
+            },
+            {
+              name  = "networkZoneId"
+              value = "zone id here"
+            }
+          ]
+        }
+      ]
+      operations = [
         {
-        name     = "serviceName"
-        value    = "service_name_1"
-        operator = "stringEquals"
-        },]
-      enforcement_mode = "report"
-      tags = [{
-            name  = "tag_name_1"
-            value = "tag_value_1"
-            },]
-      operations = [{
-          api_types = [{
+          api_types = [
+            {
               api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
-            },]
-        },]
+            }
+          ]
+        }
+      ]
     },
     {
-      description = "rule_description_2"
-      account_id  = "123456"
-      rule_contexts = [
+      enforcement_mode = "enabled"
+      account_id       = "1234"
+      rule_contexts    = [
         {
-          name     = "accountId"
-          value    = "1234"
-          operator = "stringEquals"
-        },
+          attributes = [
+            {
+              "name" : "endpointType",
+              "value" : "private"
+            },
+            {
+              name  = "networkZoneId"
+              value = "zone id here"
+            }
+          ]
+        }
+      ]
+      operations = [
         {
-          name     = "serviceInstance"
-          value    = "service_instance_id"
-          operator = "stringEquals"
-        },
-        {
-          name     = "serviceName"
-          value    = "service_name_2"
-          operator = "stringEquals"
-        },]
-      enforcement_mode = "report"
-      tags = [{
-        name  = "tag_name_2"
-        value = "tag_value_2"
-      },]
-      operations = [{
-        api_types = [{
-          api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
-        },]
-      },]
+          api_types = [
+            {
+              api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+            }
+          ]
+        }
+      ]
     }
   ]
+  rule_descriptions = ["rule_description_1", "rule_description_2"]
+  rule_resources    = [{
+    attributes = [
+      {
+        name     = "accountId"
+        value    = local.instance_cbr_rules[count.index].account_id
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceInstance"
+        value    = module.cos_instance.cos_instance_guid
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceName"
+        value    = "cloud-object-storage"
+        operator = "stringEquals"
+      }
+    ],
+    # IAM Resource tags, must exist on the resource
+    tags = [{
+      name     = "tag1"
+      value    = "tag1"
+      operator = "stringEquals"
+    }]
+  }]
+
 }
 
 ```
@@ -83,7 +106,7 @@ module "cbr_rules" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cbr_rules"></a> [cbr\_rules](#module\_cbr\_rules) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.9.0 |
+| <a name="module_cbr_rules"></a> [cbr\_rules](#module\_cbr\_rules) | ../cbr-rule-module | n/a |
 
 ### Resources
 
