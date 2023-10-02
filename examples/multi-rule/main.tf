@@ -138,7 +138,8 @@ module "cos_buckets" {
 }
 
 locals {
-  # Filter out empty tags
+  # Filter out empty iam resource access tags access tags for buckets
+  # With out this each bucket gets a tag with an empty value if no tags are specified
   filtered_bucket_tags = {
     for bucket in module.cos_buckets.buckets : bucket.bucket_name => [
       for cbr_rule in local.bucket_cbr_rules : {
