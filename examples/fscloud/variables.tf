@@ -69,3 +69,15 @@ variable "allow_at_to_cos" {
   description = "Set rule for Activity Tracker to COS, default is true"
   default     = true
 }
+
+variable "kms" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["kms", "hs-crypto"]
+  validation {
+    condition = alltrue([
+      for kms in var.kms : can(regex("^(kms|hs-crypto)$", kms))
+    ])
+    error_message = "Valid values for kms are 'kms' for Key Protect and 'hs-crypto' for HPCS"
+  }
+}

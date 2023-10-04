@@ -137,7 +137,7 @@ variable "target_service_details" {
         "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
         "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
         "messages-for-rabbitmq", "secrets-manager", "transit", "is",
-      "schematics", "apprapp", "event-notifications", "compliance"], target_service_name)
+      "schematics", "apprapp", "event-notifications", "compliance", "hs-crypto"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
@@ -194,4 +194,16 @@ variable "location" {
   type        = string
   description = "The region in which the network zone is scoped"
   default     = null
+}
+
+variable "kms" {
+  type        = list(string)
+  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
+  default     = ["kms", "hs-crypto"]
+  validation {
+    condition = alltrue([
+      for kms in var.kms : can(regex("^(kms|hs-crypto)$", kms))
+    ])
+    error_message = "Valid values for kms are 'kms' for Key Protect and 'hs-crypto' for HPCS"
+  }
 }

@@ -84,12 +84,12 @@ module "cbr_account_level" {
 
   # Demonstrates how additional context to the rules created by this module can be added.
   # This example open up:
-  #   1. Flows from icd mongodb, postgresql to kms on private endpoint
+  #   1. Flows from icd mongodb, postgresql to KMS and HPCS on private endpoint
   #   2. Flow from schematics on public kms endpoint
   #   3. Add a block of ips to schematics public endpoint
   #   4. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
-  custom_rule_contexts_by_service = {
-    "kms" = [{
+  custom_rule_contexts_by_service = merge({
+    for key in var.kms : key => [{
       endpointType      = "private"
       service_ref_names = ["databases-for-mongodb", "databases-for-postgresql"]
       },
@@ -100,7 +100,7 @@ module "cbr_account_level" {
       {
         endpointType = "public"
       zone_ids = [module.cbr_zone_operator_ips.zone_id] }
-    ],
+    ] }, {
     "schematics" = [{
       endpointType = "public"
       zone_ids     = [module.cbr_zone_operator_ips.zone_id]
@@ -110,7 +110,7 @@ module "cbr_account_level" {
       ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
     }]
-  }
+  })
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.

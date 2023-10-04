@@ -63,6 +63,9 @@ locals {
     "kms" : {
       "enforcement_mode" : "report"
     },
+    "hs-crypto" : {
+      "enforcement_mode" : "report"
+    },
     "containers-kubernetes" : {
       "enforcement_mode" : "disabled"
     },
@@ -208,9 +211,9 @@ locals {
   # tflint-ignore: terraform_naming_convention
   logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
 
-  prewired_rule_contexts_by_service = {
-    # COS -> KMS, Block storage -> KMS, ROKS -> KMS, ICD -> KMS
-    "kms" : [{
+  prewired_rule_contexts_by_service = merge({
+    # COS -> (KMS and HPCS), Block storage -> (KMS and HPCS), ROKS -> (KMS and HPCS), ICD -> (KMS and HPCS)
+    for key in var.kms : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
@@ -220,7 +223,7 @@ locals {
           local.databases-for-etcd_cbr_zone_id, local.databases-for-mongodb_cbr_zone_id, local.databases-for-mysql_cbr_zone_id, local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # Fs VPCs -> COS, AT -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
@@ -235,8 +238,8 @@ locals {
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
-    }],
-  }
+    }]
+  })
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
