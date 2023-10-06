@@ -106,7 +106,7 @@ locals {
 locals {
   service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? [
     for serviceref in local.zone_final_service_ref_list : {
-      name             = "${var.prefix}-${serviceref}-service-zone"
+      name             = var.name != null ? "${var.name}-${serviceref}" : "${var.prefix}-${serviceref}-service-zone"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "Single zone for service ${serviceref}."
       # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
@@ -169,7 +169,7 @@ module "cbr_zone_deny" {
 module "cbr_zone_vpcs" {
   count            = var.existing_cbr_zone_vpcs != null ? 0 : 1
   source           = "../../modules/cbr-zone-module"
-  name             = "${var.prefix}-vpcs-zone"
+  name             = var.name != null ? var.name : "${var.prefix}-vpcs-zone"
   zone_description = "Single zone grouping all VPCs participating in a fscloud topology."
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   addresses = [
@@ -306,7 +306,7 @@ locals {
 module "cbr_rule" {
   for_each         = local.target_service_details
   source           = "../../modules/cbr-rule-module"
-  rule_description = "${var.prefix}-${each.key}-rule"
+  rule_description = var.name != null ? var.name : "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{

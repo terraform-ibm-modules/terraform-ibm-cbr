@@ -3,6 +3,12 @@ variable "prefix" {
   description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
 }
 
+variable "name" {
+  type        = string
+  description = "Optional name for resources"
+  default     = null
+}
+
 variable "zone_vpc_crn_list" {
   type        = list(string)
   description = "(List) VPC CRN for the zones"
@@ -157,7 +163,7 @@ variable "existing_serviceref_zone" {
       zone_id = string
   }))
   validation {
-    condition     = var.existing_serviceref_zone == null || (alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))]))
+    condition     = alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))])
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
   validation {
