@@ -6,6 +6,7 @@ This examples is designed to show case some of the key customization options for
 1. Open up network traffic flow from Schematics to HPCS public endpoints.
 2. Open up network traffic flow from a block of IPs to the Schematics public endpoint.
 3. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
+4. Open up network traffic flow from RabbitMQ to the Key Protect private endpoints.
 
 Context: this examples covers a "pseudo" real-world scenario where:
 1. Schematics is used to execute terraform that create HPCS keys and key ring over its public endpoint.

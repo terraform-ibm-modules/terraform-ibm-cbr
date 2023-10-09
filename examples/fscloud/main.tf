@@ -106,7 +106,15 @@ module "cbr_account_level" {
       ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
     }]
-  })
+  }, {
+    "kms" = [{
+      endpointType      = "private"
+      service_ref_names = ["messages-for-rabbitmq"]
+    },
+      {
+        endpointType = "public"
+      zone_ids = [module.cbr_zone_operator_ips.zone_id] }
+    ]})
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
