@@ -156,6 +156,24 @@ variable "existing_serviceref_zone" {
     {
       zone_id = string
   }))
+  validation {
+    condition     = var.existing_serviceref_zone == null || (alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))]))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
+  validation {
+    condition = alltrue([
+      for key, _ in var.existing_serviceref_zone :
+      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+      "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"], key)
+    ])
+    error_message = "Provide a valid service reference"
+  }
   description = "Provide a valid service reference and existing zone id"
   default     = {}
 }
@@ -165,6 +183,10 @@ variable "existing_cbr_zone_vpcs" {
     {
       zone_id = string
   })
+  validation {
+    condition     = var.existing_cbr_zone_vpcs == null || (can(regex("^[0-9a-fA-F]{32}$", var.existing_cbr_zone_vpcs.zone_id)))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
   description = "Provide a existing zone id for VPC"
   default     = null
 }

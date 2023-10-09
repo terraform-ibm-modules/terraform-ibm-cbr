@@ -1,6 +1,3 @@
-<!-- BEGIN MODULE HOOK -->
-
-<!-- Update the title to match the module name and add a description  -->
 # Context-based restrictions module
 
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green?style=plastic)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
@@ -27,17 +24,16 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
     * [Zone example](./examples/zone)
 * [Contributing](#contributing)
-
-## terraform-ibm-cbr
 <!-- END OVERVIEW HOOK -->
 
-## Usage
+## terraform-ibm-cbr
+
+### Usage
 
 ```hcl
 module "ibm_cbr" "zone" {
-  # replace main with version
-  source = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version = "latest" # Replace "latest" with a release version to lock into a specific release
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   name             = "zone_for_pg_access"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
   zone_description = "Zone created from terraform"
@@ -46,8 +42,8 @@ module "ibm_cbr" "zone" {
 
 module "ibm_cbr" "rule" {
   # replace main with version
-  source = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version = "latest" # Replace "latest" with a release version to lock into a specific release
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
   enforcement_mode = "enabled"
@@ -56,13 +52,8 @@ module "ibm_cbr" "rule" {
   operations       = []
 }
 ```
-<!--
-Include the following 'Controls' section if the module implements NIST controls
-Remove the 'section if the module does not implement controls
--->
 
-
-## Required IAM access policies
+### Required IAM access policies
 
 You need the following permissions to run this module.
 
@@ -71,15 +62,6 @@ You need the following permissions to run this module.
 - VPC Infrastructure Services
     - `Editor` role access
 
-<!-- END MODULE HOOK -->
-<!-- BEGIN EXAMPLES HOOK -->
-## Examples
-
-- [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
-- [ CBR multi service profile](examples/multi-service-profile)
-- [ Multi-zone example](examples/multizone-rule)
-- [ Zone example](examples/zone)
-<!-- END EXAMPLES HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -127,7 +109,6 @@ You need the following permissions to run this module.
 | <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone resource instance link |
 | <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone resource instance id |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-<!-- BEGIN CONTRIBUTING HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->
 ## Contributing
@@ -135,5 +116,3 @@ You need the following permissions to run this module.
 You can report issues and request features for this module in GitHub issues in the module repo. See [Report an issue or request a feature](https://github.com/terraform-ibm-modules/.github/blob/main/.github/SUPPORT.md).
 
 To set up your local development environment, see [Local development setup](https://terraform-ibm-modules.github.io/documentation/#/local-dev-setup) in the project documentation.
-<!-- Source for this readme file: https://github.com/terraform-ibm-modules/common-dev-assets/tree/main/module-assets/ci/module-template-automation -->
-<!-- END CONTRIBUTING HOOK -->
