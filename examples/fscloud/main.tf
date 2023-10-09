@@ -89,10 +89,9 @@ module "cbr_account_level" {
   #   3. Add a block of ips to schematics public endpoint
   #   4. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
   custom_rule_contexts_by_service = merge({
-    for key in var.kms : key => [
-      {
-        endpointType      = "public"
-        service_ref_names = ["schematics"]
+    for key in var.kms : key => [{
+      endpointType      = "public"
+      service_ref_names = ["schematics"]
       },
       {
         endpointType = "public"
@@ -106,6 +105,11 @@ module "cbr_account_level" {
       endpointType = "private"
       ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
+    }]
+    }, {
+    "kms" = [{
+      endpointType      = "private"
+      service_ref_names = ["messages-for-rabbitmq"]
     }]
   })
 }
