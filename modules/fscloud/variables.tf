@@ -52,7 +52,7 @@ variable "allow_at_to_cos" {
 
 variable "allow_iks_to_is" {
   type        = bool
-  description = "Set rule for IKS to IS, default is true"
+  description = "Set rule for IKS to IS (VPC Infrastructure Services), default is true"
   default     = true
 }
 
