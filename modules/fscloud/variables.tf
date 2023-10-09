@@ -220,8 +220,8 @@ variable "location" {
 
 variable "kms" {
   type        = list(string)
-  description = "List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct'"
-  default     = ["kms", "hs-crypto"]
+  description = "List specific Key Management Service type, valid values are 'kms' for Key Protect and 'hs-crypto' for HPCS"
+  default     = ["hs-crypto"]
   validation {
     condition = alltrue([
       for kms in var.kms : can(regex("^(kms|hs-crypto)$", kms))

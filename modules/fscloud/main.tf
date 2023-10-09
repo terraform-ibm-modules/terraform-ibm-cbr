@@ -212,7 +212,7 @@ locals {
   logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
 
   prewired_rule_contexts_by_service = merge({
-    # COS -> (KMS and HPCS), Block storage -> (KMS and HPCS), ROKS -> (KMS and HPCS), ICD -> (KMS and HPCS)
+    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
     for key in var.kms : key => [{
       endpointType : "private",
       networkZoneIds : flatten([

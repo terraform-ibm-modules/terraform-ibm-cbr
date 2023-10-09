@@ -89,10 +89,7 @@ module "cbr_account_level" {
   #   3. Add a block of ips to schematics public endpoint
   #   4. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
   custom_rule_contexts_by_service = merge({
-    for key in var.kms : key => [{
-      endpointType      = "private"
-      service_ref_names = ["databases-for-mongodb", "databases-for-postgresql"]
-      },
+    for key in var.kms : key => [
       {
         endpointType      = "public"
         service_ref_names = ["schematics"]
