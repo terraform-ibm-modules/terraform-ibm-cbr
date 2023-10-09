@@ -106,11 +106,6 @@ module "cbr_account_level" {
       ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
     }]
-    }, {
-    "kms" = [{
-      endpointType      = "private"
-      service_ref_names = ["messages-for-rabbitmq"]
-    }]
   })
 }
 
