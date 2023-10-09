@@ -72,6 +72,6 @@ variable "allow_at_to_cos" {
 
 variable "allow_is_to_cos" {
   type        = bool
-  description = "Set rule for IS to COS, default is true"
+  description = "Set rule for IS (VPC Infrastructure Services) to COS, default is true"
   default     = true
 }
