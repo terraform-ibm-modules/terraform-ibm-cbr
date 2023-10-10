@@ -63,7 +63,6 @@ You need the following permissions to run this module.
 - VPC Infrastructure Services
     - `Editor` role access
 
-<!-- END MODULE HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
