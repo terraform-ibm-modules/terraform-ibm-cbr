@@ -21,7 +21,6 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
 * [Examples](./examples)
     * [CBR multi service profile](./examples/multi-service-profile)
     * [Multi resource rule example](./examples/multi-resource-rule)
-    * [Multi-rule example](./examples/multi-rule)
     * [Multi-zone example](./examples/multizone-rule)
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
     * [Zone example](./examples/zone)
@@ -69,7 +68,7 @@ You need the following permissions to run this module.
 ## Examples
 
 - [ Pre-wired CBR configuration for FS Cloud example](examples/fscloud)
-- [ Multi-rule example](examples/multi-rule)
+- [ Multi resource rule example](examples/multi-resource-rule)
 - [ CBR multi service profile](examples/multi-service-profile)
 - [ Multi-zone example](examples/multizone-rule)
 - [ Zone example](examples/zone)
