@@ -19,6 +19,30 @@ Important: In order to avoid unexpected breakage in the account against which th
 ## Note
 The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' does not support restriction per location.
 
+### Usage
+
+```hcl
+module "cbr_fscloud" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/fscloud"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  prefix                           = var.prefix
+  zone_vpc_crn_list                = var.zone_vpc_crn_list
+  allow_cos_to_kms                 = var.allow_cos_to_kms
+  allow_block_storage_to_kms       = var.allow_block_storage_to_kms
+  allow_roks_to_kms                = var.allow_roks_to_kms
+  allow_icd_to_kms                 = var.allow_icd_to_kms
+  allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
+  allow_vpcs_to_cos                = var.allow_vpcs_to_cos
+  allow_at_to_cos                  = var.allow_at_to_cos
+  allow_iks_to_is                  = var.allow_iks_to_is
+
+  skip_specific_services_for_zone_creation = var.skip_specific_services_for_zone_creation
+
+  target_service_details = var.target_service_details
+
+  custom_rule_contexts_by_service = var.custom_rule_contexts_by_service
+}
+```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements

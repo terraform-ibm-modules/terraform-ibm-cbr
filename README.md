@@ -43,15 +43,17 @@ module "ibm_cbr" "zone" {
 
 module "ibm_cbr" "rule" {
   # replace main with version
-  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
   enforcement_mode = "enabled"
   rule_contexts    = var.rule_contexts
   resources        = var.pg_resource
-  operations       = []
-}
+  operations       = [{ api_types = [{
+                        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+                      }]
+                     }]
 ```
 
 ### Required IAM access policies

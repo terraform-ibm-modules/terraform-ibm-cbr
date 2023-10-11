@@ -2,6 +2,21 @@
 
 Accepts a list of VPC crns / service references to create CBR zones and a list of target services, to create the rule matching these profiles.  It supports to target the service using name, account id, tags, resource group.
 
+### Usage
+
+```hcl
+module "cbr_rule_multi_service_profile" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/multi-service-profile"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  prefix                 = var.prefix
+  zone_service_ref_list  = var.zone_service_ref_list
+  zone_vpc_crn_list      = var.zone_vpc_crn_list
+  target_service_details = var.target_services_details
+  endpoints              = var.endpoints
+  location               = var.location
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
