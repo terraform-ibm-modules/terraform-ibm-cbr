@@ -228,7 +228,7 @@ locals {
         local.databases-for-redis_cbr_zone_id] : []
       ])
     }],
-    # Fs VPCs -> COS, AT -> COS, IS -> COS
+    # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
@@ -244,7 +244,7 @@ locals {
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
-    # IKS -> IS
+    # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
       networkZoneIds : flatten([
