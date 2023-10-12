@@ -230,7 +230,7 @@ locals {
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
@@ -239,14 +239,14 @@ locals {
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # VPCs -> container registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
-    }],
+    }] }, {
     # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
@@ -255,7 +255,6 @@ locals {
       ])
     }],
   })
-
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
