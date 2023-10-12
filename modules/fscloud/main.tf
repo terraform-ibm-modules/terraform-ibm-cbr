@@ -210,6 +210,8 @@ locals {
   databases-for-redis_cbr_zone_id = local.cbr_zones["databases-for-redis"].zone_id
   # tflint-ignore: terraform_naming_convention
   logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  is_cbr_zone_id = local.cbr_zones["is"].zone_id
 
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
@@ -219,17 +221,23 @@ locals {
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
         var.allow_block_storage_to_kms ? [local.server-protect_cbr_zone_id] : [],
         var.allow_roks_to_kms ? [local.containers-kubernetes_cbr_zone_id] : [],
-        var.allow_icd_to_kms ? [local.databases-for-cassandra_cbr_zone_id, local.databases-for-elasticsearch_cbr_zone_id, local.databases-for-enterprisedb_cbr_zone_id,
-          local.databases-for-etcd_cbr_zone_id, local.databases-for-mongodb_cbr_zone_id, local.databases-for-mysql_cbr_zone_id, local.databases-for-postgresql_cbr_zone_id,
+        var.allow_icd_to_kms ? [local.databases-for-cassandra_cbr_zone_id,
+          local.databases-for-elasticsearch_cbr_zone_id,
+          local.databases-for-enterprisedb_cbr_zone_id,
+          local.databases-for-etcd_cbr_zone_id,
+          local.databases-for-mongodb_cbr_zone_id,
+          local.databases-for-mysql_cbr_zone_id,
+          local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : []
       ])
-    }] }, {
-    # Fs VPCs -> COS, AT -> COS
+    }],
+    # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
         var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : [],
-        var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : []
+        var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
+        var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])
     }],
     # VPCs -> container registry
@@ -239,7 +247,7 @@ locals {
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
-    # IKS -> IS
+    # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
       networkZoneIds : flatten([

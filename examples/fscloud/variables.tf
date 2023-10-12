@@ -76,6 +76,12 @@ variable "allow_iks_to_is" {
   default     = true
 }
 
+variable "allow_is_to_cos" {
+  type        = bool
+  description = "Set rule for IS (VPC Infrastructure Services) to COS, default is true"
+  default     = true
+}
+
 variable "kms" {
   type        = list(string)
   description = "List specific Key Management Service (KMS) type, valid values are 'kms' for Key Protect and 'hs-crypto' for HPCS"

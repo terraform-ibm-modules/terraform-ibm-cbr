@@ -56,6 +56,12 @@ variable "allow_iks_to_is" {
   default     = true
 }
 
+variable "allow_is_to_cos" {
+  type        = bool
+  description = "Set rule for IS (VPC Infrastructure Services) to COS, default is true"
+  default     = true
+}
+
 variable "zone_service_ref_list" {
   type = list(string)
   validation {
