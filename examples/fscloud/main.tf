@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.0.6"
+  version = "1.1.0"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -15,7 +15,7 @@ module "resource_group" {
 ##############################################################################
 module "key_protect_module" {
   source            = "terraform-ibm-modules/key-protect/ibm"
-  version           = "v2.3.1"
+  version           = "v2.4.0"
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
@@ -69,6 +69,8 @@ module "cbr_account_level" {
   allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
   allow_vpcs_to_cos                = var.allow_vpcs_to_cos
   allow_at_to_cos                  = var.allow_at_to_cos
+  allow_iks_to_is                  = var.allow_iks_to_is
+  allow_is_to_cos                  = var.allow_is_to_cos
 
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]

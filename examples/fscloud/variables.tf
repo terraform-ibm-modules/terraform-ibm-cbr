@@ -69,3 +69,15 @@ variable "allow_at_to_cos" {
   description = "Set rule for Activity Tracker to COS, default is true"
   default     = true
 }
+
+variable "allow_iks_to_is" {
+  type        = bool
+  description = "Set rule for IKS to IS (VPC Infrastructure Services), default is true"
+  default     = true
+}
+
+variable "allow_is_to_cos" {
+  type        = bool
+  description = "Set rule for IS (VPC Infrastructure Services) to COS, default is true"
+  default     = true
+}
