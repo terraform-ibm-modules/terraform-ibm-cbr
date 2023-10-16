@@ -99,7 +99,7 @@ func TestRunCompleteExample(t *testing.T) {
 			expectedOutputs := []string{"rule_id", "zone_id", "account_id", "cos_guid", "resource_group_id"}
 			_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 			if assert.NoErrorf(t, outputErr, "Some outputs not found or nil") {
-				rules, err := cloudInfoSvc.GetCBRRuleByID(outputs["rule_id"].(string))
+				rules, _, err := cloudInfoSvc.GetCBRRuleByID(outputs["rule_id"].(string))
 				assert.Nil(t, err, "Failed to get rules")
 				if assert.NotNil(t, rules, "No rules found") {
 
@@ -241,7 +241,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 				ruleIds := strings.Split(rules.([]interface{})[0].(string), ",")
 				for index := range ruleIds {
 
-					rule, err := cloudInfoSvc.GetCBRRuleByID(ruleIds[index])
+					rule, _, err := cloudInfoSvc.GetCBRRuleByID(ruleIds[index])
 					if assert.Nil(t, err, "Failed to get the rule") &&
 						assert.NotNil(t, rule, "No rule found") {
 
