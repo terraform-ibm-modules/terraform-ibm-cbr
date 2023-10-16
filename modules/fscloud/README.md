@@ -26,23 +26,31 @@ The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 
 module "cbr_fscloud" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/fscloud"
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
-  prefix                           = var.prefix
-  zone_vpc_crn_list                = var.zone_vpc_crn_list
-  allow_cos_to_kms                 = var.allow_cos_to_kms
-  allow_block_storage_to_kms       = var.allow_block_storage_to_kms
-  allow_roks_to_kms                = var.allow_roks_to_kms
-  allow_icd_to_kms                 = var.allow_icd_to_kms
-  allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
-  allow_vpcs_to_cos                = var.allow_vpcs_to_cos
-  allow_at_to_cos                  = var.allow_at_to_cos
-  allow_iks_to_is                  = var.allow_iks_to_is
+  prefix                           = "fs-cbr"
+  zone_vpc_crn_list                = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
+  allow_cos_to_kms                 = true/false
+  allow_block_storage_to_kms       = true/false
+  allow_roks_to_kms                = true/false
+  allow_icd_to_kms                 = true/false
+  allow_vpcs_to_container_registry = true/false
+  allow_vpcs_to_cos                = true/false
+  allow_at_to_cos                  = true/false
+  allow_iks_to_is                  = true/false
 
-  skip_specific_services_for_zone_creation = var.skip_specific_services_for_zone_creation
+  # Will skip the zone creation for service ref. present in the list
+  skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
 
-  target_service_details = var.target_service_details
+  target_service_details = {
+                            "kms" = {
+                              "enforcement_mode" = "enabled"
+                           }}
 
-  custom_rule_contexts_by_service = var.custom_rule_contexts_by_service
-}
+  custom_rule_contexts_by_service = {
+                                    "schematics" = [{
+                                      endpointType = "public"
+                                      zone_ids     = [module.cbr_zone_operator_ips.zone_id]
+                                    }]
+                                  }
 ```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

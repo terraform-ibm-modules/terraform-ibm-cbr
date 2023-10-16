@@ -12,8 +12,36 @@ module "ibm_cbr" "rule" {
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
   enforcement_mode = "enabled"
-  rule_contexts    = var.rule_contexts
-  resources        = var.pg_resource
+  rule_contexts    = [{
+                      attributes = [{
+                        name  = "networkZoneId"
+                        value = module.cbr_zone.zone_id
+                      }]
+                     }]
+  resources        = [{
+                      attributes = [
+                        {
+                          name     = "accountId"
+                          value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "resourceGroupId",
+                          value    = module.resource_group.resource_group_id
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceInstance"
+                          value    = ibm_resource_instance.cos_instance.guid
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceName"
+                          value    = "cloud-object-storage"
+                          operator = "stringEquals"
+                        }
+                       ]
+                     }]
   operations       = [{ api_types = [{
                         api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
                       }]
