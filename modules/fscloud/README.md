@@ -28,6 +28,8 @@ module "cbr_fscloud" {
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   prefix                           = "fs-cbr"
   zone_vpc_crn_list                = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
+
+  # True or False to set prewired rule
   allow_cos_to_kms                 = true/false
   allow_block_storage_to_kms       = true/false
   allow_roks_to_kms                = true/false
