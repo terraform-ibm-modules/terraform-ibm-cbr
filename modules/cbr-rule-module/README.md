@@ -15,24 +15,24 @@ module "ibm_cbr" "rule" {
   rule_contexts    = [{
                       attributes = [{
                         name  = "networkZoneId"
-                        value = module.cbr_zone.zone_id
+                        value = "afe33d0061b6cea2c2e6f543111f5c8a" # pragma: allowlist secret
                       }]
                      }]
   resources        = [{
                       attributes = [
                         {
                           name     = "accountId"
-                          value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+                          value    = "defc0df06b644a9cabc6e44f55b3880s"
                           operator = "stringEquals"
                         },
                         {
                           name     = "resourceGroupId",
-                          value    = module.resource_group.resource_group_id
+                          value    = "8ce996b5e6ed4592ac0e39f4105351d6" # pragma: allowlist secret
                           operator = "stringEquals"
                         },
                         {
                           name     = "serviceInstance"
-                          value    = ibm_resource_instance.cos_instance.guid
+                          value    = "10732830-c128-48f0-aec6-c9eaa8d10c68"
                           operator = "stringEquals"
                         },
                         {

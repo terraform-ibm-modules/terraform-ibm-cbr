@@ -30,14 +30,14 @@ module "cbr_fscloud" {
   zone_vpc_crn_list                = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
 
   # True or False to set prewired rule
-  allow_cos_to_kms                 = true/false
-  allow_block_storage_to_kms       = true/false
-  allow_roks_to_kms                = true/false
-  allow_icd_to_kms                 = true/false
-  allow_vpcs_to_container_registry = true/false
-  allow_vpcs_to_cos                = true/false
-  allow_at_to_cos                  = true/false
-  allow_iks_to_is                  = true/false
+  allow_cos_to_kms                 = true
+  allow_block_storage_to_kms       = true
+  allow_roks_to_kms                = true
+  allow_icd_to_kms                 = true
+  allow_vpcs_to_container_registry = true
+  allow_vpcs_to_cos                = true
+  allow_at_to_cos                  = true
+  allow_iks_to_is                  = true
 
   # Will skip the zone creation for service ref. present in the list
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
@@ -50,9 +50,10 @@ module "cbr_fscloud" {
   custom_rule_contexts_by_service = {
                                     "schematics" = [{
                                       endpointType = "public"
-                                      zone_ids     = [module.cbr_zone_operator_ips.zone_id]
+                                      zone_ids     = "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
                                     }]
                                   }
+}
 ```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
