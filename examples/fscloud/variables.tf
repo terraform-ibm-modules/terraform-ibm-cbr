@@ -82,14 +82,14 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "kms" {
+variable "key_protect" {
   type        = list(string)
   description = "List specific Key Management Service (KMS) type, valid values are 'kms' for Key Protect and 'hs-crypto' for HPCS"
   default     = ["hs-crypto"]
   validation {
     condition = alltrue([
-      for kms in var.kms : can(regex("^(kms|hs-crypto)$", kms))
+      for key_protect_val in var.key_protect : can(regex("^(kms|hs-crypto)$", key_protect_val))
     ])
-    error_message = "Valid values for kms are 'kms' for Key Protect and 'hs-crypto' for HPCS"
+    error_message = "Valid values for key_protect are 'kms' for Key Protect and 'hs-crypto' for HPCS"
   }
 }

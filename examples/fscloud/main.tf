@@ -91,7 +91,7 @@ module "cbr_account_level" {
   #   3. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
   #   4. Flows from RabbitMQ to KMS on private endpoint
   custom_rule_contexts_by_service = merge({
-    for key in var.kms : key => [{
+    for key in var.key_protect : key => [{
       endpointType      = "public"
       service_ref_names = ["schematics"]
       },
@@ -109,10 +109,7 @@ module "cbr_account_level" {
       add_managed_vpc_zone = true
     }]
     }, {
-    "kms" = [{
-      endpointType      = "private"
-      service_ref_names = ["messages-for-rabbitmq"]
-      },
+    "kms" = [
       {
         endpointType = "public"
       zone_ids = [module.cbr_zone_operator_ips.zone_id] }
