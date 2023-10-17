@@ -2,6 +2,19 @@
 
 Creates a zone for Context Based Restrictions
 
+### Usage
+
+```hcl
+module "ibm_cbr" "zone" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  name             = "zone_for_pg_access"
+  account_id       = "defc0df06b644a9cabc6e44f55b3880s"
+  zone_description = "Zone created from terraform"
+  addresses        = [{type  = "vpc",value = "vpc_crn"}]
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 

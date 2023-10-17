@@ -36,21 +36,52 @@ module "ibm_cbr" "zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   name             = "zone_for_pg_access"
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
+  account_id       = "defc0df06b644a9cabc6e44f55b3880s" # pragma: allowlist secret
   zone_description = "Zone created from terraform"
   addresses        = [{type  = "vpc",value = "vpc_crn"}]
 }
 
 module "ibm_cbr" "rule" {
   # replace main with version
-  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   name             = "rule_for_pg_access"
   rule_description = "rule from terraform"
   enforcement_mode = "enabled"
-  rule_contexts    = var.rule_contexts
-  resources        = var.pg_resource
-  operations       = []
+  rule_contexts    = [{
+                      attributes = [{
+                        name  = "networkZoneId"
+                        value = "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
+                      }]
+                     }]
+  resources        = [{
+                      attributes = [
+                        {
+                          name     = "accountId"
+                          value    = "defc0df06b644a9cabc6e44f55b3880s" # pragma: allowlist secret
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "resourceGroupId",
+                          value    = "8ce996b5e6ed4592ac0e39f4105351d6" # pragma: allowlist secret
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceInstance"
+                          value    = "10732830-c128-48f0-aec6-c9eaa8d10c68" # pragma: allowlist secret
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceName"
+                          value    = "cloud-object-storage"
+                          operator = "stringEquals"
+                        }
+                       ]
+                     }]
+  operations       = [{ api_types = [{
+                        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+                      }]
+                     }]
 }
 ```
 

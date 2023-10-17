@@ -2,6 +2,27 @@
 
 Accepts a list of VPC crns / service references to create CBR zones and a list of target services, to create the rule matching these profiles.  It supports to target the service using name, account id, tags, resource group.
 
+### Usage
+
+```hcl
+module "cbr_rule_multi_service_profile" {
+  source           = "terraform-ibm-modules/cbr/ibm//modules/multi-service-profile"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  prefix                 = "multi-service-profile"
+  zone_service_ref_list  = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
+  zone_vpc_crn_list      = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
+  target_service_details = [
+                            {
+                              target_service_name = "secrets-manager",
+                              target_rg           = "a8cff104f1764e98aac9ab879198230a" # pragma: allowlist secret
+                              enforcement_mode    = "report"
+                            }
+                           ]
+  endpoints              = "private"
+  location               = "us-south"
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 

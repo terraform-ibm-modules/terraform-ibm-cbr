@@ -2,6 +2,53 @@
 
 Creates a rule for Context Based Restrictions
 
+### Usage
+
+```hcl
+module "ibm_cbr" "rule" {
+  # replace main with version
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
+  version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  name             = "rule_for_pg_access"
+  rule_description = "rule from terraform"
+  enforcement_mode = "enabled"
+  rule_contexts    = [{
+                      attributes = [{
+                        name  = "networkZoneId"
+                        value = "afe33d0061b6cea2c2e6f543111f5c8a" # pragma: allowlist secret
+                      }]
+                     }]
+  resources        = [{
+                      attributes = [
+                        {
+                          name     = "accountId"
+                          value    = "defc0df06b644a9cabc6e44f55b3880s"
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "resourceGroupId",
+                          value    = "8ce996b5e6ed4592ac0e39f4105351d6" # pragma: allowlist secret
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceInstance"
+                          value    = "10732830-c128-48f0-aec6-c9eaa8d10c68"
+                          operator = "stringEquals"
+                        },
+                        {
+                          name     = "serviceName"
+                          value    = "cloud-object-storage"
+                          operator = "stringEquals"
+                        }
+                       ]
+                     }]
+  operations       = [{ api_types = [{
+                        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+                      }]
+                     }]
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
