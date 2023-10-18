@@ -9,7 +9,7 @@ require (
 	github.com/IBM/platform-services-go-sdk v0.52.0
 	github.com/gruntwork-io/terratest v0.46.0
 	github.com/stretchr/testify v1.8.4
-	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.23.7
+	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.23.8
 )
 
 require (
