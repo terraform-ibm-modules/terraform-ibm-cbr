@@ -186,6 +186,10 @@ module "cbr_zone_vpcs" {
 ##############################################################################
 
 locals {
+  kms_values = [
+    for kms_val in var.kms :
+    kms_val == "key-protect" ? "kms" : kms_val
+  ]
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
   cos_cbr_zone_id = local.cbr_zones["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
@@ -215,7 +219,7 @@ locals {
 
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
-    for key in var.key_protect : key => [{
+    for key in local.kms_values : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],

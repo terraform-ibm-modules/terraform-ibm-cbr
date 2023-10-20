@@ -58,6 +58,13 @@ resource "ibm_is_subnet" "testacc_subnet" {
 # CBR zone & rule creation
 ##############################################################################
 
+locals {
+  kms_values = [
+    for kms_val in var.kms :
+    kms_val == "key-protect" ? "kms" : kms_val
+  ]
+}
+
 module "cbr_account_level" {
   source                           = "../../modules/fscloud"
   prefix                           = var.prefix
@@ -91,7 +98,7 @@ module "cbr_account_level" {
   #   3. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
   #   4. Flows from RabbitMQ to KMS on private endpoint
   custom_rule_contexts_by_service = merge({
-    for key in var.key_protect : key => [{
+    for key in local.kms_values : key => [{
       endpointType      = "public"
       service_ref_names = ["schematics"]
       },
