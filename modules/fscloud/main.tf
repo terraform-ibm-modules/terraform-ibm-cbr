@@ -63,7 +63,10 @@ locals {
     "kms" : {
       "enforcement_mode" : "report"
     },
-    "containers-kubernetes" : {
+    "containers-kubernetes-cluster" : {
+      "enforcement_mode" : "disabled"
+    },
+    "containers-kubernetes-management" : {
       "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {
@@ -277,16 +280,17 @@ locals {
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
-    databases-for-enterprisedb  = local.icd_api_types,
-    containers-kubernetes       = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
-    databases-for-cassandra     = local.icd_api_types,
-    databases-for-elasticsearch = local.icd_api_types,
-    databases-for-etcd          = local.icd_api_types,
-    databases-for-mongodb       = local.icd_api_types,
-    databases-for-postgresql    = local.icd_api_types,
-    databases-for-redis         = local.icd_api_types,
-    messages-for-rabbitmq       = local.icd_api_types,
-    databases-for-mysql         = local.icd_api_types
+    databases-for-enterprisedb       = local.icd_api_types,
+    containers-kubernetes-cluster    = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster"],
+    containers-kubernetes-management = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
+    databases-for-cassandra          = local.icd_api_types,
+    databases-for-elasticsearch      = local.icd_api_types,
+    databases-for-etcd               = local.icd_api_types,
+    databases-for-mongodb            = local.icd_api_types,
+    databases-for-postgresql         = local.icd_api_types,
+    databases-for-redis              = local.icd_api_types,
+    messages-for-rabbitmq            = local.icd_api_types,
+    databases-for-mysql              = local.icd_api_types
   }
 }
 
