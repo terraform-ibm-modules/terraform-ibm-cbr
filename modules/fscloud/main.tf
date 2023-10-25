@@ -178,36 +178,63 @@ module "cbr_zone_vpcs" {
   ]
 }
 
-
 ##############################################################################
-# Create CBR zones for each service
+# Create CBR rules for each service
 ##############################################################################
 
 locals {
-  # tflint-ignore: terraform_unused_declarations
-  validate_allow_rules = var.allow_cos_to_kms || var.allow_block_storage_to_kms || var.allow_roks_to_kms || var.allow_vpcs_to_container_registry || var.allow_vpcs_to_cos ? true : tobool("Minimum of one rule has to be set to True")
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
   cos_cbr_zone_id = local.cbr_zones["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
   server-protect_cbr_zone_id = local.cbr_zones["server-protect"].zone_id # block storage
   # tflint-ignore: terraform_naming_convention
   containers-kubernetes_cbr_zone_id = local.cbr_zones["containers-kubernetes"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-cassandra_cbr_zone_id = local.cbr_zones["databases-for-cassandra"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-elasticsearch_cbr_zone_id = local.cbr_zones["databases-for-elasticsearch"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-enterprisedb_cbr_zone_id = local.cbr_zones["databases-for-enterprisedb"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-etcd_cbr_zone_id = local.cbr_zones["databases-for-etcd"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-mongodb_cbr_zone_id = local.cbr_zones["databases-for-mongodb"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-mysql_cbr_zone_id = local.cbr_zones["databases-for-mysql"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-postgresql_cbr_zone_id = local.cbr_zones["databases-for-postgresql"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  databases-for-redis_cbr_zone_id = local.cbr_zones["databases-for-redis"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  is_cbr_zone_id = local.cbr_zones["is"].zone_id
 
   prewired_rule_contexts_by_service = {
-    # COS -> KMS, Block storage -> KMS, ROKS -> KMS
+    # COS -> KMS, Block storage -> KMS, ROKS -> KMS, ICD -> KMS
     "kms" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
         var.allow_block_storage_to_kms ? [local.server-protect_cbr_zone_id] : [],
-        var.allow_roks_to_kms ? [local.containers-kubernetes_cbr_zone_id] : []
+        var.allow_roks_to_kms ? [local.containers-kubernetes_cbr_zone_id] : [],
+        var.allow_icd_to_kms ? [local.databases-for-cassandra_cbr_zone_id,
+          local.databases-for-elasticsearch_cbr_zone_id,
+          local.databases-for-enterprisedb_cbr_zone_id,
+          local.databases-for-etcd_cbr_zone_id,
+          local.databases-for-mongodb_cbr_zone_id,
+          local.databases-for-mysql_cbr_zone_id,
+          local.databases-for-postgresql_cbr_zone_id,
+        local.databases-for-redis_cbr_zone_id] : []
       ])
     }],
-    # Fs VPCs -> COS
+    # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
-      endpointType : "private",
+      endpointType : "direct",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
+        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
+        var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])
     }],
     # VPCs -> container registry
@@ -217,20 +244,21 @@ locals {
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }],
-    # TODO: Activity Tracker route -> COS (pending support of AT as CBR zone)
+    # IKS -> IS (VPC Infrastructure Services)
+    "is" : [{
+      endpointType : "private",
+      networkZoneIds : flatten([
+        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
+      ])
+    }],
   }
 
-  prewired_rule_contexts_by_service_pre_check = { for key, value in local.prewired_rule_contexts_by_service :
+  prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
       for rule in value :
       rule if length(rule.networkZoneIds) > 0
     ]
   }
-
-  prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service_pre_check :
-    key => value if length(value) > 0
-  }
-
 
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
@@ -252,7 +280,6 @@ locals {
       }
     ]
   }
-
 
   # Merge map values (array of context) under the same service-name key
   all_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
@@ -300,11 +327,15 @@ module "cbr_rule" {
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
     api_types = [
-      # lookup the map for the target service name, if not present make api_type_id as empty
+      # lookup the map for the target service name, if empty then pass default value
       for apitype in lookup(local.operations_apitype_val, each.key, []) : {
         api_type_id = apitype
     }]
-  }] : []
+    }] : [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
 
   resources = [{
     tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {

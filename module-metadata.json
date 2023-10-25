@@ -61,7 +61,15 @@
       "name": "operations",
       "type": "list(object({\n    api_types = list(object({\n      api_type_id = string\n    }))\n  }))",
       "description": "(Optional, List) The operations this rule applies to",
-      "default": [],
+      "default": [
+        {
+          "api_types": [
+            {
+              "api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+            }
+          ]
+        }
+      ],
       "source": [
         "module.cbr_rule"
       ],
@@ -185,7 +193,7 @@
     }
   },
   "required_core": [
-    "\u003e= 1.3.0"
+    "\u003e= 1.3.0, \u003c1.6.0"
   ],
   "required_providers": {
     "ibm": {
