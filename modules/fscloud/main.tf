@@ -63,10 +63,7 @@ locals {
     "kms" : {
       "enforcement_mode" : "report"
     },
-    "containers-kubernetes-cluster" : {
-      "enforcement_mode" : "disabled"
-    },
-    "containers-kubernetes-management" : {
+    "containers-kubernetes" : {
       "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {

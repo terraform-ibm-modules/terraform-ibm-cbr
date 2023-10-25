@@ -27,8 +27,6 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
     * [Zone example](./examples/zone)
 * [Contributing](#contributing)
-
-## terraform-ibm-cbr
 <!-- END OVERVIEW HOOK -->
 
 ## Usage
