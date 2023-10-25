@@ -10,31 +10,55 @@ variable "zone_vpc_crn_list" {
 
 variable "allow_cos_to_kms" {
   type        = bool
-  description = "Set rule for COS to KMS, deafult is true"
+  description = "Set rule for COS to KMS, default is true"
   default     = true
 }
 
 variable "allow_block_storage_to_kms" {
   type        = bool
-  description = "Set rule for block storage to KMS, deafult is true"
+  description = "Set rule for block storage to KMS, default is true"
   default     = true
 }
 
 variable "allow_roks_to_kms" {
   type        = bool
-  description = "Set rule for ROKS to KMS, deafult is true"
+  description = "Set rule for ROKS to KMS, default is true"
+  default     = true
+}
+
+variable "allow_icd_to_kms" {
+  type        = bool
+  description = "Set rule for ICD to KMS, deafult is true"
   default     = true
 }
 
 variable "allow_vpcs_to_container_registry" {
   type        = bool
-  description = "Set rule for VPCs to container registry, deafult is true"
+  description = "Set rule for VPCs to container registry, default is true"
   default     = true
 }
 
 variable "allow_vpcs_to_cos" {
   type        = bool
-  description = "Set rule for VPCs to COS, deafult is true"
+  description = "Set rule for VPCs to COS, default is true"
+  default     = true
+}
+
+variable "allow_at_to_cos" {
+  type        = bool
+  description = "Set rule for Activity Tracker to COS, default is true"
+  default     = true
+}
+
+variable "allow_iks_to_is" {
+  type        = bool
+  description = "Set rule for IKS to IS (VPC Infrastructure Services), default is true"
+  default     = true
+}
+
+variable "allow_is_to_cos" {
+  type        = bool
+  description = "Set rule for IS (VPC Infrastructure Services) to COS, default is true"
   default     = true
 }
 
@@ -50,7 +74,7 @@ variable "zone_service_ref_list" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications"],
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
@@ -62,7 +86,7 @@ variable "zone_service_ref_list" {
     "databases-for-redis", "directlink",
     "iam-groups", "is", "messagehub",
     "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-  "apprapp", "compliance", "event-notifications"]
+  "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"]
   description = "(List) Service reference for the zone creation"
 }
 
@@ -89,7 +113,7 @@ variable "custom_rule_contexts_by_service" {
           "databases-for-redis", "directlink",
           "iam-groups", "is", "messagehub",
           "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications"],
+          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       ref)]]
 
     ]))
@@ -144,6 +168,24 @@ variable "existing_serviceref_zone" {
     {
       zone_id = string
   }))
+  validation {
+    condition     = var.existing_serviceref_zone == null || (alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))]))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
+  validation {
+    condition = alltrue([
+      for key, _ in var.existing_serviceref_zone :
+      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+      "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"], key)
+    ])
+    error_message = "Provide a valid service reference"
+  }
   description = "Provide a valid service reference and existing zone id"
   default     = {}
 }
@@ -153,6 +195,10 @@ variable "existing_cbr_zone_vpcs" {
     {
       zone_id = string
   })
+  validation {
+    condition     = var.existing_cbr_zone_vpcs == null || (can(regex("^[0-9a-fA-F]{32}$", var.existing_cbr_zone_vpcs.zone_id)))
+    error_message = "Value should be a valid zone id with 32 alphanumeric characters"
+  }
   description = "Provide a existing zone id for VPC"
   default     = null
 }
@@ -169,7 +215,7 @@ variable "skip_specific_services_for_zone_creation" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications"],
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
       service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
