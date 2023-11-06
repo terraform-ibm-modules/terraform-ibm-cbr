@@ -11,7 +11,7 @@ This module creates default coarse-grained CBR rules in a given account followin
 - All ICD -> HPCS
 - IKS -> IS (VPC Infrastructure Services)
 
-This module now supports Hyper Protect Crypto Services. By default it is set to use Hyper Protect Crypto Services but this can be modified to use Key Protect or both Key Protect and Hyper Protect Crypto Services using the terraform variable `key_protect`.
+This module now supports Hyper Protect Crypto Services. By default it is set to use Hyper Protect Crypto Services but this can be modified to use Key Protect or both Key Protect and Hyper Protect Crypto Services using the terraform variable `kms`.
 
 This module is designed to allow the consumer to add additional custom rules to open up additional flows necessarity for their usage. See the `custom_rule_contexts_by_service` input variable, and an [usage example](../../examples/fscloud/) demonstrating how to open up more flows.
 
