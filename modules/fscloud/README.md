@@ -69,6 +69,7 @@ module "cbr_fscloud" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ../../modules/cbr-rule-module | n/a |
+| <a name="module_cbr_rules_container_kubernetes_management"></a> [cbr\_rules\_container\_kubernetes\_management](#module\_cbr\_rules\_container\_kubernetes\_management) | ../../modules/cbr-rule-module | n/a |
 | <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ../../modules/cbr-zone-module | n/a |
 | <a name="module_cbr_zone_deny"></a> [cbr\_zone\_deny](#module\_cbr\_zone\_deny) | ../../modules/cbr-zone-module | n/a |
 | <a name="module_cbr_zone_vpcs"></a> [cbr\_zone\_vpcs](#module\_cbr\_zone\_vpcs) | ../../modules/cbr-zone-module | n/a |
