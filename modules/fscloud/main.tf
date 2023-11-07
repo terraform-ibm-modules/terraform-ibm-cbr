@@ -251,10 +251,12 @@ locals {
         var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
     }],
+    # Create IS management API
     "containers-kubernetes-management" : [{
       endpointType : "private",
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
     }],
+    # Create IS cluster control plane API
     "containers-kubernetes-cluster" : [{
       endpointType : "private",
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
@@ -312,9 +314,7 @@ locals {
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
-    databases-for-enterprisedb = local.icd_api_types,
-    #    containers-kubernetes    = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster"],
-    #    containers-kubernetes-management = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
+    databases-for-enterprisedb  = local.icd_api_types,
     databases-for-cassandra     = local.icd_api_types,
     databases-for-elasticsearch = local.icd_api_types,
     databases-for-etcd          = local.icd_api_types,
