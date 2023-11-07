@@ -85,6 +85,7 @@ module "cbr_account_level" {
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
   target_service_details = {
+    # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
     "kms" = {
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
@@ -93,10 +94,11 @@ module "cbr_account_level" {
 
   # Demonstrates how additional context to the rules created by this module can be added.
   # This example open up:
-  #   1. Flow from schematics on public HPCS endpoint
+  #   1. Flow from schematics to KMS on public HPCS endpoint
   #   2. Add a block of ips to schematics public endpoint
-  #   3. Flow from vpc(s) specified in input zone_vpc_crn_list to postgresql private endpoint
-  #   4. Flows from RabbitMQ to KMS on private endpoint
+  #   3. Flow from vpc(s) specified in input zone_vpc_crn_list to PostgreSQL private endpoint
+  #   4. Add a block of ips to Key Protect public endpoint
+
   custom_rule_contexts_by_service = merge({
     for key in local.kms_values : key => [{
       endpointType      = "public"
@@ -116,6 +118,7 @@ module "cbr_account_level" {
       add_managed_vpc_zone = true
     }]
     }, {
+    # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
     "kms" = [
       {
         endpointType = "public"
