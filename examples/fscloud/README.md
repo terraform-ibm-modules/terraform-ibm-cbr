@@ -2,7 +2,7 @@
 
 This example demonstrates how to use the [fscloud profile](../../profiles/fscloud/) module to lay out a complete "secure by default" coarse-grained CBR topology in a given account.
 
-This examples is designed to show case some of the key customization options for the module. In addition to the pre-wired CBR rules documented at [fscloud profile](../../profiles/fscloud/), this examples show how to customize the module to:
+This examples is designed to show case some of the key customization options for the module. In addition to the pre-wired CBR rules documented at [fscloud profile](../../profiles/fscloud/), this example shows how to customize the module to:
 1. Open up network traffic flow from Schematics to HPCS public endpoints.
 2. Open up network traffic flow from a block of IPs to the Schematics public endpoint.
 3. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
