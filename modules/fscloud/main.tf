@@ -251,12 +251,12 @@ locals {
         var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
     }],
-    # Create IS management API
+    # Create IS management API Rule
     "containers-kubernetes-management" : [{
       endpointType : "private",
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
     }],
-    # Create IS cluster control plane API
+    # Create IS cluster control plane API Rule
     "containers-kubernetes-cluster" : [{
       endpointType : "private",
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
@@ -394,6 +394,8 @@ module "cbr_rule" {
   }]
 }
 
+# Need to create a separate "cbr_rule" module block as there are 2 Rules for "containers-kubernetes" services,
+# cluster rule gets created in the above module, while management rule created below.
 module "cbr_rules_container_kubernetes_management" {
   for_each         = { for k, v in local.target_service_details : k => v if k == "containers-kubernetes" }
   source           = "../../modules/cbr-rule-module"
