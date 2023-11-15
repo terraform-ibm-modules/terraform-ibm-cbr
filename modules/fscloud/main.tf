@@ -187,7 +187,7 @@ module "cbr_zone_vpcs" {
 
 locals {
   kms_values = [
-    for kms_val in var.kms :
+    for kms_val in var.kms_service_targeted_by_prewired_rules :
     kms_val == "key-protect" ? "kms" : kms_val # It maps 'key-protect' input to 'kms' because target service name supported by CBR for Key Protect is 'kms'.
   ]
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture

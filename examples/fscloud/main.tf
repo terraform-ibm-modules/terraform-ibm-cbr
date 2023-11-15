@@ -58,26 +58,12 @@ resource "ibm_is_subnet" "testacc_subnet" {
 # CBR zone & rule creation
 ##############################################################################
 
-locals {
-  kms_values = [
-    for kms_val in var.kms :
-    kms_val == "key-protect" ? "kms" : kms_val
-  ]
-}
-
 module "cbr_account_level" {
-  source                           = "../../modules/fscloud"
-  prefix                           = var.prefix
-  zone_vpc_crn_list                = [ibm_is_vpc.example_vpc.crn]
-  allow_cos_to_kms                 = var.allow_cos_to_kms
-  allow_block_storage_to_kms       = var.allow_block_storage_to_kms
-  allow_roks_to_kms                = var.allow_roks_to_kms
-  allow_icd_to_kms                 = var.allow_icd_to_kms
-  allow_vpcs_to_container_registry = var.allow_vpcs_to_container_registry
-  allow_vpcs_to_cos                = var.allow_vpcs_to_cos
-  allow_at_to_cos                  = var.allow_at_to_cos
-  allow_iks_to_is                  = var.allow_iks_to_is
-  allow_is_to_cos                  = var.allow_is_to_cos
+  source            = "../../modules/fscloud"
+  prefix            = var.prefix
+  zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
+  # Demonstrates how to target either key-protect, hpcs, or both. Both in this fictional example.
+  kms_service_targeted_by_prewired_rules = ["key-protect", "hs-crypto"]
 
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
@@ -100,9 +86,10 @@ module "cbr_account_level" {
   #   4. Add a block of ips to Key Protect public endpoint
 
   custom_rule_contexts_by_service = merge({
-    for key in local.kms_values : key => [{
-      endpointType      = "public"
-      service_ref_names = ["schematics"]
+    "kms" = [
+      {
+        endpointType      = "public"
+        service_ref_names = ["schematics"]
       },
       {
         endpointType = "public"
