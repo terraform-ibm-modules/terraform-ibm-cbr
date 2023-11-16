@@ -146,26 +146,6 @@ module "cbr_zone" {
 }
 
 ###############################################################################
-# Pre-create default 'deny' zone. Zone that acts as a deny
-# Some context: CBR allow all, unless there is at least one zone defined in a rule
-# There is no concept of deny by default out of the box
-# We pick a "dummy" IP that we know won't route.
-###############################################################################
-
-module "cbr_zone_deny" {
-  source           = "../../modules/cbr-zone-module"
-  name             = "${var.prefix}-deny-all"
-  zone_description = "Zone that may be used to force a deny-all."
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  addresses = [
-    {
-      type  = "ipAddress"
-      value = "1.1.1.1"
-    }
-  ]
-}
-
-###############################################################################
 # Pre-create zones containing the fscloud VPCs
 ###############################################################################
 
@@ -267,11 +247,6 @@ locals {
     ]
   }
 
-  ## define default 'deny' rule context
-  deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
-    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
-  }
-
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
     target_service_name => [for custom_rule_context in custom_rule_contexts :
@@ -289,9 +264,9 @@ locals {
   }
 
   # Merge map values (array of context) under the same service-name key
-  all_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
+  all_services = keys(merge(local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
   allow_rules_by_service_intermediary = { for service_name in local.all_services :
-    service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
+    service_name => flatten([lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
   }
 
   allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
