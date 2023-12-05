@@ -63,6 +63,9 @@ locals {
     "kms" : {
       "enforcement_mode" : "report"
     },
+    "hs-crypto" : {
+      "enforcement_mode" : "report"
+    },
     "containers-kubernetes" : {
       "enforcement_mode" : "disabled"
     },
@@ -183,6 +186,10 @@ module "cbr_zone_vpcs" {
 ##############################################################################
 
 locals {
+  kms_values = [
+    for kms_val in var.kms_service_targeted_by_prewired_rules :
+    kms_val == "key-protect" ? "kms" : kms_val # It maps 'key-protect' input to 'kms' because target service name supported by CBR for Key Protect is 'kms'.
+  ]
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
   cos_cbr_zone_id = local.cbr_zones["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
@@ -210,9 +217,9 @@ locals {
   # tflint-ignore: terraform_naming_convention
   is_cbr_zone_id = local.cbr_zones["is"].zone_id
 
-  prewired_rule_contexts_by_service = {
-    # COS -> KMS, Block storage -> KMS, ROKS -> KMS, ICD -> KMS
-    "kms" : [{
+  prewired_rule_contexts_by_service = merge({
+    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
+    for key in local.kms_values : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
@@ -227,7 +234,7 @@ locals {
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
@@ -236,14 +243,14 @@ locals {
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # VPCs -> container registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
-    }],
+    }] }, {
     # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
@@ -262,6 +269,7 @@ locals {
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
     }],
   }
+  })
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
