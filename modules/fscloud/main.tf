@@ -268,7 +268,6 @@ locals {
       endpointType : "private",
       networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
     }],
-  }
   })
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
