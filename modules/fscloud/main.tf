@@ -66,7 +66,10 @@ locals {
     "hs-crypto" : {
       "enforcement_mode" : "report"
     },
-    "containers-kubernetes" : {
+    "containers-kubernetes-management" : {
+      "enforcement_mode" : "disabled"
+    },
+    "containers-kubernetes-cluster" : {
       "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {
@@ -257,17 +260,7 @@ locals {
       networkZoneIds : flatten([
         var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
-    }],
-    # Create IS management API Rule
-    "containers-kubernetes-management" : [{
-      endpointType : "private",
-      networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
-    }],
-    # Create IS cluster control plane API Rule
-    "containers-kubernetes-cluster" : [{
-      endpointType : "private",
-      networkZoneIds : [local.containers-kubernetes_cbr_zone_id]
-    }],
+    }]
   })
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
@@ -321,15 +314,23 @@ locals {
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
-    databases-for-enterprisedb  = local.icd_api_types,
-    databases-for-cassandra     = local.icd_api_types,
-    databases-for-elasticsearch = local.icd_api_types,
-    databases-for-etcd          = local.icd_api_types,
-    databases-for-mongodb       = local.icd_api_types,
-    databases-for-postgresql    = local.icd_api_types,
-    databases-for-redis         = local.icd_api_types,
-    messages-for-rabbitmq       = local.icd_api_types,
-    databases-for-mysql         = local.icd_api_types
+    databases-for-enterprisedb       = local.icd_api_types,
+    containers-kubernetes            = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
+    containers-kubernetes-cluster    = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster"],
+    containers-kubernetes-management = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:management"]
+    databases-for-cassandra          = local.icd_api_types,
+    databases-for-elasticsearch      = local.icd_api_types,
+    databases-for-etcd               = local.icd_api_types,
+    databases-for-mongodb            = local.icd_api_types,
+    databases-for-postgresql         = local.icd_api_types,
+    databases-for-redis              = local.icd_api_types,
+    messages-for-rabbitmq            = local.icd_api_types,
+    databases-for-mysql              = local.icd_api_types
+  }
+
+  fake_service_names = {
+    "containers-kubernetes-cluster"    = "containers-kubernetes",
+    "containers-kubernetes-management" = "containers-kubernetes"
   }
 }
 
@@ -337,7 +338,7 @@ locals {
 module "cbr_rule" {
   for_each         = local.target_service_details
   source           = "../../modules/cbr-rule-module"
-  rule_description = (contains([each.key], "containers-kubernetes")) ? "${var.prefix}-${each.key}-cluster-rule" : "${var.prefix}-${each.key}-rule"
+  rule_description = "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
@@ -348,7 +349,7 @@ module "cbr_rule" {
     }]
     }] : [{
     api_types = [{
-      api_type_id = (contains([each.key], "containers-kubernetes")) ? "crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster" : "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
     }]
   }]
 
@@ -371,7 +372,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
       }] : try(each.value.instance_id, null) != null ? [
       {
         name     = "accountId",
@@ -386,7 +387,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
       }] : [
       {
         name     = "accountId",
@@ -396,76 +397,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
     }]
-  }]
-}
-
-# Need to create a separate "cbr_rule" module block as there are 2 Rules for "containers-kubernetes" services,
-# cluster rule gets created in the above module, while management rule created below.
-module "cbr_rules_container_kubernetes_management" {
-  for_each         = { for k, v in local.target_service_details : k => v if k == "containers-kubernetes" }
-  source           = "../../modules/cbr-rule-module"
-  rule_description = "${var.prefix}-${each.key}-management-rule"
-  enforcement_mode = each.value.enforcement_mode
-  rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
-  operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
-    api_types = [
-      # lookup the map for the target service name, if empty then pass default value
-      for apitype in lookup(local.operations_apitype_val, each.key, []) : {
-        api_type_id = apitype
-    }]
-    }] : [{
-    api_types = [{
-      api_type_id = "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"
-    }]
-  }]
-  resources = [{
-    tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
-      name  = split(":", tag)[0]
-      value = split(":", tag)[1]
-    }] : []
-    attributes = try(each.value.target_rg, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "resourceGroupId",
-        operator = "stringEquals",
-        value    = each.value.target_rg
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = each.key
-      }] : try(each.value.instance_id, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "serviceInstance",
-        operator = "stringEquals",
-        value    = each.value.instance_id
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = each.key
-      }] : [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = each.key
-      }
-    ]
   }]
 }
