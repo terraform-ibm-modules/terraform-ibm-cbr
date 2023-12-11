@@ -107,6 +107,7 @@ variable "custom_rule_contexts_by_service" {
       for key, val in var.custom_rule_contexts_by_service :
       [for rule in val : [
         for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+          "containers-kubernetes-cluster", "containers-kubernetes-management",
           "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
           "databases-for-etcd", "databases-for-mongodb",
           "databases-for-mysql", "databases-for-postgresql",
@@ -147,7 +148,7 @@ variable "target_service_details" {
         "databases-for-enterprisedb", "databases-for-elasticsearch",
         "databases-for-etcd", "databases-for-mongodb",
         "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
-        "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
+        "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management",
         "messages-for-rabbitmq", "secrets-manager", "transit", "is",
       "schematics", "apprapp", "event-notifications", "compliance", "hs-crypto"], target_service_name)
     ])

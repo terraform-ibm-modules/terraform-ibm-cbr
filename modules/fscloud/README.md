@@ -1,18 +1,21 @@
 # Pre-wired CBR configuration for FS Cloud
 
 This module creates default coarse-grained CBR rules in a given account following a "secure by default" approach - that is: deny all flows by default, except known documented communication in the [Financial Services Cloud Reference Architecture](https://cloud.ibm.com/docs/framework-financial-services?topic=framework-financial-services-vpc-architecture-about):
-- COS -> KMS
-- Block storage -> KMS
-- ROKS -> KMS
-- All ICD services -> KMS
-- Activity Tracker route -> COS
-- VPCs where clusters are deployed -> COS
-- IS (VPC Infrastructure Services) -> COS
-- VPCs -> container registry
-- All ICD -> HPCS
-- IKS -> IS (VPC Infrastructure Services)
+- Cloud Object Storage (COS) -> Key Management Service (KMS)
+- Block Storage -> Key Management Service (KMS)
+- IBM Cloud Kubernetes Service (IKS) -> Key Management Service (KMS)
+- All IBM Cloud Databases (ICD) services -> Key Management Service (KMS)
+- Activity Tracker route -> Cloud Object Storage (COS)
+- Virtual Private Clouds (VPCs) where clusters are deployed -> Cloud Object Storage (COS)
+- IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
+- Virtual Private Cloud workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
+- IBM Cloud Databases (ICD) -> Hyper Protect Crypto Services (HPCS)
+- IBM Cloud Kubernetes Service (IKS) -> IS (VPC Infrastructure Services)
+
 
 **Note on KMS**: the module supports setting up rules for Key Protect, and Hyper Protect Crypto Services. By default the modules set rules for Hyper Protect Crypto Services, but this can be modified to use Key Protect, Hyper Protect, or both Key Protect and Hyper Protect Crypto Services using the input variable `kms_service_targeted_by_prewired_rules`.
+
+**Note on containers-kubernetes**: the module supports the pseudo-service names `containers-kubernetes-management` and `containers-kubernetes-cluster` to distinguish between the cluster and management APIs (see [details](https://cloud.ibm.com/docs/containers?topic=containers-cbr&interface=ui#protect-api-types-cbr) ). The module creates separates CBR rules for the two types of APIs by default to align with common real-world scenarios. `containers-kubernetes` can be used to create a CBR targetting both the cluster and management APIs.
 
 This module is designed to allow the consumer to add additional custom rules to open up additional flows necessarity for their usage. See the `custom_rule_contexts_by_service` input variable, and an [usage example](../../examples/fscloud/) demonstrating how to open up more flows.
 

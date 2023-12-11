@@ -103,14 +103,13 @@ module "cbr_account_level" {
       endpointType = "private"
       ## Give access to the zone containing the VPC passed in zone_vpc_crn_list input
       add_managed_vpc_zone = true
+    }],
+    "containers-kubernetes-cluster" = [{
+      endpointType = "private"
+      ## Give operator access to run kubectl against private endpoints on any cluster in account
+      zone_ids = [module.cbr_zone_operator_ips.zone_id]
     }]
-    }, {
-    # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
-    "kms" = [
-      {
-        endpointType = "public"
-      zone_ids = [module.cbr_zone_operator_ips.zone_id] }
-  ] })
+  })
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
