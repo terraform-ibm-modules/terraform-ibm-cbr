@@ -68,33 +68,90 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "zone_service_ref_list" {
-  type = list(string)
-  validation {
-    condition = alltrue([
-      for service_ref in var.zone_service_ref_list :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
-      service_ref)
-    ])
-    error_message = "Provide a valid service reference for zone creation"
+variable "zone_service_ref" {
+  type = object({
+    cloud-object-storage        = optional(string)
+    codeengine                  = optional(string)
+    containers-kubernetes       = optional(string)
+    databases-for-cassandra     = optional(string)
+    databases-for-elasticsearch = optional(string)
+    databases-for-enterprisedb  = optional(string)
+    databases-for-etcd          = optional(string)
+    databases-for-mongodb       = optional(string)
+    databases-for-mysql         = optional(string)
+    databases-for-postgresql    = optional(string)
+    databases-for-redis         = optional(string)
+    directlink                  = optional(string)
+    iam-groups                  = optional(string)
+    is                          = optional(string)
+    messagehub                  = optional(string)
+    messages-for-rabbitmq       = optional(string)
+    schematics                  = optional(string)
+    secrets-manager             = optional(string)
+    server-protect              = optional(string)
+    user-management             = optional(string)
+    apprapp                     = optional(string)
+    compliance                  = optional(string)
+    event-notifications         = optional(string)
+    logdna                      = optional(string)
+    logdnaat                    = optional(string)
+  })
+  default = {
+    cloud-object-storage        = null
+    codeengine                  = null
+    containers-kubernetes       = null
+    databases-for-cassandra     = null
+    databases-for-elasticsearch = null
+    databases-for-enterprisedb  = null
+    databases-for-etcd          = null
+    databases-for-mongodb       = null
+    databases-for-mysql         = null
+    databases-for-postgresql    = null
+    databases-for-redis         = null
+    directlink                  = null
+    iam-groups                  = null
+    is                          = null
+    messagehub                  = null
+    messages-for-rabbitmq       = null
+    schematics                  = null
+    secrets-manager             = null
+    server-protect              = null
+    user-management             = null
+    apprapp                     = null
+    compliance                  = null
+    event-notifications         = null
+    logdna                      = null
+    logdnaat                    = null
   }
-  default = ["cloud-object-storage", "codeengine", "containers-kubernetes",
-    "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-    "databases-for-etcd", "databases-for-mongodb",
-    "databases-for-mysql", "databases-for-postgresql",
-    "databases-for-redis", "directlink",
-    "iam-groups", "is", "messagehub",
-    "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-  "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"]
-  description = "(List) Service reference for the zone creation"
 }
+
+# variable "zone_service_ref_list" {
+#   type = list(string)
+#   validation {
+#     condition = alltrue([
+#       for service_ref in var.zone_service_ref_list :
+#       contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+#         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+#         "databases-for-etcd", "databases-for-mongodb",
+#         "databases-for-mysql", "databases-for-postgresql",
+#         "databases-for-redis", "directlink",
+#         "iam-groups", "is", "messagehub",
+#         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+#         "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
+#       service_ref)
+#     ])
+#     error_message = "Provide a valid service reference for zone creation"
+#   }
+#   default = ["cloud-object-storage", "codeengine", "containers-kubernetes",
+#     "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+#     "databases-for-etcd", "databases-for-mongodb",
+#     "databases-for-mysql", "databases-for-postgresql",
+#     "databases-for-redis", "directlink",
+#     "iam-groups", "is", "messagehub",
+#     "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+#   "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"]
+#   description = "(List) Service reference for the zone creation"
+# }
 
 variable "custom_rule_contexts_by_service" {
   # servicename -> [cbr rule context]
