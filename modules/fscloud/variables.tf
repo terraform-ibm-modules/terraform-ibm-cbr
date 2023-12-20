@@ -1,12 +1,7 @@
 variable "prefix" {
   type        = string
   description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
-}
-
-variable "name" {
-  type        = string
-  description = "Optional name for resources"
-  default     = null
+  default     = "khuztest"
 }
 
 variable "zone_vpc_crn_list" {
@@ -68,7 +63,7 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "zone_service_ref" {
+variable "zone_service_ref_list" {
   type = object({
     cloud-object-storage        = optional(string)
     codeengine                  = optional(string)
@@ -123,35 +118,23 @@ variable "zone_service_ref" {
     logdna                      = null
     logdnaat                    = null
   }
+  validation {
+    condition = alltrue([
+      for service_ref, service_ref_name in var.zone_service_ref_list : contains([
+        "cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
+      service_ref)
+    ])
+    error_message = "Provide a valid service reference for zone creation"
+  }
+  description = "Service reference for the zone creation"
 }
-
-# variable "zone_service_ref_list" {
-#   type = list(string)
-#   validation {
-#     condition = alltrue([
-#       for service_ref in var.zone_service_ref_list :
-#       contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-#         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-#         "databases-for-etcd", "databases-for-mongodb",
-#         "databases-for-mysql", "databases-for-postgresql",
-#         "databases-for-redis", "directlink",
-#         "iam-groups", "is", "messagehub",
-#         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-#         "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
-#       service_ref)
-#     ])
-#     error_message = "Provide a valid service reference for zone creation"
-#   }
-#   default = ["cloud-object-storage", "codeengine", "containers-kubernetes",
-#     "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-#     "databases-for-etcd", "databases-for-mongodb",
-#     "databases-for-mysql", "databases-for-postgresql",
-#     "databases-for-redis", "directlink",
-#     "iam-groups", "is", "messagehub",
-#     "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-#   "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"]
-#   description = "(List) Service reference for the zone creation"
-# }
 
 variable "custom_rule_contexts_by_service" {
   # servicename -> [cbr rule context]
@@ -196,6 +179,7 @@ variable "custom_rule_contexts_by_service" {
 }
 variable "target_service_details" {
   type = map(object({
+    description      = optional(string)
     target_rg        = optional(string)
     instance_id      = optional(string)
     enforcement_mode = string

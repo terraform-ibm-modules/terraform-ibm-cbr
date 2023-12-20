@@ -101,7 +101,7 @@ locals {
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
 
   zone_final_service_ref_list = {
-    for k, v in var.zone_service_ref : k => v if !contains(var.skip_specific_services_for_zone_creation, k)
+    for service_ref, service_ref_name in var.zone_service_ref_list : service_ref => service_ref_name if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
 }
 
@@ -111,18 +111,18 @@ locals {
 
 locals {
   service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? {
-    for k, v in local.zone_final_service_ref_list : k => {
-      name             = v == null ? "${var.prefix}-${k}-service-zone" : v
+    for service_ref, service_ref_name in local.zone_final_service_ref_list : service_ref => {
+      name             = service_ref_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_name
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-      zone_description = "Single zone for service ${k}."
+      zone_description = "Single zone for service ${service_ref}."
       # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
       addresses = [
         {
           type = "serviceRef"
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
-            service_name = k
-            location     = (k == "compliance" || k == "directlink" || k == "iam-groups" || k == "user-management" || k == "containers-kubernetes") ? null : var.location
+            service_name = service_ref
+            location     = (service_ref == "compliance" || service_ref == "directlink" || service_ref == "iam-groups" || service_ref == "user-management" || service_ref == "containers-kubernetes") ? null : var.location
           }
         }
       ]
@@ -130,7 +130,7 @@ locals {
 
   service_ref_zone_map_check = merge(local.service_ref_zone_list, var.existing_serviceref_zone)
 
-  service_ref_zone_map = { for k, v in local.service_ref_zone_map_check : k => v if !contains(keys(v), "zone_id") }
+  service_ref_zone_map = { for service_ref, service_ref_name in local.service_ref_zone_map_check : service_ref => service_ref_name if !contains(keys(service_ref_name), "zone_id") }
 
   cbr_zones = merge(module.cbr_zone, var.existing_serviceref_zone)
 
@@ -336,7 +336,7 @@ locals {
 module "cbr_rule" {
   for_each         = local.target_service_details
   source           = "../../modules/cbr-rule-module"
-  rule_description = "${var.prefix}-${each.key}-rule"
+  rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = lookup(local.allow_rules_by_service, each.key, [])
   operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
