@@ -63,7 +63,13 @@ locals {
     "kms" : {
       "enforcement_mode" : "report"
     },
-    "containers-kubernetes" : {
+    "hs-crypto" : {
+      "enforcement_mode" : "report"
+    },
+    "containers-kubernetes-management" : {
+      "enforcement_mode" : "disabled"
+    },
+    "containers-kubernetes-cluster" : {
       "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {
@@ -183,6 +189,10 @@ module "cbr_zone_vpcs" {
 ##############################################################################
 
 locals {
+  kms_values = [
+    for kms_val in var.kms_service_targeted_by_prewired_rules :
+    kms_val == "key-protect" ? "kms" : kms_val # It maps 'key-protect' input to 'kms' because target service name supported by CBR for Key Protect is 'kms'.
+  ]
   ## define FsCloud pre-wired CBR rule context - contains the known default flow that must be open for fscloud ref architecture
   cos_cbr_zone_id = local.cbr_zones["cloud-object-storage"].zone_id
   # tflint-ignore: terraform_naming_convention
@@ -210,9 +220,9 @@ locals {
   # tflint-ignore: terraform_naming_convention
   is_cbr_zone_id = local.cbr_zones["is"].zone_id
 
-  prewired_rule_contexts_by_service = {
-    # COS -> KMS, Block storage -> KMS, ROKS -> KMS, ICD -> KMS
-    "kms" : [{
+  prewired_rule_contexts_by_service = merge({
+    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
+    for key in local.kms_values : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_cos_to_kms ? [local.cos_cbr_zone_id] : [],
@@ -227,7 +237,7 @@ locals {
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
@@ -236,22 +246,22 @@ locals {
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])
-    }],
+    }] }, {
     # VPCs -> container registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
-    }],
+    }] }, {
     # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
-    }],
-  }
+    }]
+  })
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
@@ -304,16 +314,23 @@ locals {
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
-    databases-for-enterprisedb  = local.icd_api_types,
-    containers-kubernetes       = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
-    databases-for-cassandra     = local.icd_api_types,
-    databases-for-elasticsearch = local.icd_api_types,
-    databases-for-etcd          = local.icd_api_types,
-    databases-for-mongodb       = local.icd_api_types,
-    databases-for-postgresql    = local.icd_api_types,
-    databases-for-redis         = local.icd_api_types,
-    messages-for-rabbitmq       = local.icd_api_types,
-    databases-for-mysql         = local.icd_api_types
+    databases-for-enterprisedb       = local.icd_api_types,
+    containers-kubernetes            = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
+    containers-kubernetes-cluster    = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster"],
+    containers-kubernetes-management = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:management"]
+    databases-for-cassandra          = local.icd_api_types,
+    databases-for-elasticsearch      = local.icd_api_types,
+    databases-for-etcd               = local.icd_api_types,
+    databases-for-mongodb            = local.icd_api_types,
+    databases-for-postgresql         = local.icd_api_types,
+    databases-for-redis              = local.icd_api_types,
+    messages-for-rabbitmq            = local.icd_api_types,
+    databases-for-mysql              = local.icd_api_types
+  }
+
+  fake_service_names = {
+    "containers-kubernetes-cluster"    = "containers-kubernetes",
+    "containers-kubernetes-management" = "containers-kubernetes"
   }
 }
 
@@ -355,7 +372,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
       }] : try(each.value.instance_id, null) != null ? [
       {
         name     = "accountId",
@@ -370,7 +387,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
       }] : [
       {
         name     = "accountId",
@@ -380,7 +397,7 @@ module "cbr_rule" {
       {
         name     = "serviceName",
         operator = "stringEquals",
-        value    = each.key
+        value    = lookup(local.fake_service_names, each.key, each.key)
     }]
   }]
 }

@@ -113,6 +113,7 @@ variable "custom_rule_contexts_by_service" {
       for key, val in var.custom_rule_contexts_by_service :
       [for rule in val : [
         for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+          "containers-kubernetes-cluster", "containers-kubernetes-management",
           "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
           "databases-for-etcd", "databases-for-mongodb",
           "databases-for-mysql", "databases-for-postgresql",
@@ -153,9 +154,9 @@ variable "target_service_details" {
         "databases-for-enterprisedb", "databases-for-elasticsearch",
         "databases-for-etcd", "databases-for-mongodb",
         "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
-        "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
+        "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management",
         "messages-for-rabbitmq", "secrets-manager", "transit", "is",
-      "schematics", "apprapp", "event-notifications", "compliance"], target_service_name)
+      "schematics", "apprapp", "event-notifications", "compliance", "hs-crypto"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
@@ -234,4 +235,16 @@ variable "location" {
   type        = string
   description = "The region in which the network zone is scoped"
   default     = null
+}
+
+variable "kms_service_targeted_by_prewired_rules" {
+  type        = list(string)
+  description = "IBM Cloud offers two distinct Key Management Services (KMS): Key Protect and Hyper Protect Crypto Services (HPCS). This variable determines the specific KMS service to which the pre-configured rules will be applied. Use the value 'key-protect' to specify the Key Protect service, and 'hs-crypto' for the Hyper Protect Crypto Services (HPCS)."
+  default     = ["hs-crypto"]
+  validation {
+    condition = alltrue([
+      for key_protect_val in var.kms_service_targeted_by_prewired_rules : can(regex("^(key-protect|hs-crypto)$", key_protect_val))
+    ])
+    error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS"
+  }
 }
