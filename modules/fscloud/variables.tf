@@ -217,7 +217,7 @@ variable "existing_serviceref_zone" {
       zone_id = string
   }))
   validation {
-    condition     = alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))])
+    condition     = var.existing_serviceref_zone == null || (alltrue([for zone in var.existing_serviceref_zone : can(regex("^[0-9a-fA-F]{32}$", zone.zone_id))]))
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
   validation {
