@@ -132,7 +132,7 @@ variable "zone_service_ref_list" {
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
-  description = "Optional customize name of service reference for the zone creation"
+  description = "(Optional) Customized name of the zone for the service reference. If not provided, default zone name with the prefix will be created."
 }
 
 variable "custom_rule_contexts_by_service" {
