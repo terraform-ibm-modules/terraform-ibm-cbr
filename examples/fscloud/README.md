@@ -6,7 +6,7 @@ This example is designed to showcase some of the key customization options for t
 1. Allow network traffic flow from ICD MongoDB, ICD PostgreSQL to the Key Protect private endpoints.
 2. Allow network traffic flow from Schematics to Key Protect public endpoints.
 3. Allow network traffic flow from a block of IPs to the Schematics public endpoint.
-4. Open up network traffic flow from the VPC created in this example to ICD PostgreSQL private endpoints.
+4. Allow network traffic flow from the VPC created in this example to ICD PostgreSQL private endpoints.
 5. Customize the rule description for `kms` and the zone name for `codeengine`.
 
 Context: This example covers a "pseudo" real-world scenario where:
