@@ -10,6 +10,8 @@ This module can be used to provision and configure [Context Based Restrictions](
 
 See in particular the [fscloud module](./modules/fscloud/) that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
 
+:information_source: **Tip:** Changes to context-based restriction rules are propagated worldwide and have a TTL value of 10 minutes. Rule changes might not take effect until the propagation process is complete and the TTL cache is updated.
+
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-cbr](#terraform-ibm-cbr)
