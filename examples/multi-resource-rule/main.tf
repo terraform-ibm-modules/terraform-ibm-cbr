@@ -42,7 +42,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 
 module "cbr_zone_vpc" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.17.1"
+  version          = "1.18.0"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone containing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
@@ -54,7 +54,7 @@ module "cbr_zone_vpc" {
 
 module "cos_instance_and_bucket" {
   source                        = "terraform-ibm-modules/cos/ibm"
-  version                       = "7.1.4"
+  version                       = "7.1.5"
   resource_group_id             = module.resource_group.resource_group_id
   region                        = var.region
   create_cos_instance           = true
