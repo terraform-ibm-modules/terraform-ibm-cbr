@@ -1,6 +1,8 @@
 # Pre-wired CBR configuration for FS Cloud
 
-This module creates default coarse-grained CBR rules in a given account, following a "secure by default" approach - that is, denying all flows by default, except for known documented communication in the [Financial Services Cloud Reference Architecture](https://cloud.ibm.com/docs/framework-financial-services?topic=framework-financial-services-vpc-architecture-about):
+This module creates default coarse-grained CBR rules in a given account, following a "secure by default" approach. By default, the rules deny all flows except for the documented communication in the [reference architecture for IBM Cloud for Financial Services](https://cloud.ibm.com/docs/framework-financial-services?topic=framework-financial-services-vpc-architecture-about).
+
+The module creates the following rules:
 - Cloud Object Storage (COS) -> Key Management Service (KMS)
 - Block Storage -> Key Management Service (KMS)
 - IBM Cloud Kubernetes Service (IKS) -> Key Management Service (KMS)
