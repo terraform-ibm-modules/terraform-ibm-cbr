@@ -386,6 +386,21 @@ module "cbr_rule" {
         name     = "serviceName",
         operator = "stringEquals",
         value    = lookup(local.fake_service_names, each.key, each.key)
+      }] : try(each.value.region, null) != null ? [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      {
+        name     = "region",
+        operator = "stringEquals",
+        value    = each.value.region
+      },
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, each.key, each.key)
       }] : [
       {
         name     = "accountId",
