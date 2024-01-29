@@ -16,7 +16,7 @@ The example covers the following example scenario:
 - Schematics is used to execute the Terraform logic that creates Key Protect keys and key rings over its public endpoint.
 - Operators use machines with a set list of public IPs to interact with Schematics.
 - Applications are running in the VPC and need access to PostgreSQL via the private endpoint. For example with a VPE.
-5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
+- Skips creation of zones for these two service references ["user-management", "iam-groups"].
 
 ## Note
 - The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' do not support location-based restrictions for zone creation.
