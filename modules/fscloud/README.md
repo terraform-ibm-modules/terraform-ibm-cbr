@@ -21,7 +21,7 @@ This module is designed to allow the consumer to add additional custom rules to 
 
 As a best practice, the module also creates CBR zones for each service in the account. You can set CBR rules for these CBR zones by using the `custom_rule_contexts_by_service` variable.
 
-Important: To avoid unexpected breakage in the account against which this module is executed, the CBR rule enforcement mode is set to 'report' (or 'disabled' for services not supporting 'report' mode) by default. It is recommended to test this module first with these default settings and then use the `target_service_details` variable to set the enforcement mode to "enabled" gradually by service. The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the Key Protect ("kms") service.
+Important: To avoid failures in the account against which this module is executed, be default, the CBR rule enforcement mode is set to 'report' mode (or to 'disabled' for services that don't support 'report' mode). Test the module with these default settings. Then, service by service, update the enforcement mode in the `target_service_details` variable to "enabled". The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the Key Protect ("kms") service.
 
 ## Note
 The services 'compliance', 'directlink', 'iam-groups', 'containers-kubernetes', 'user-management' does not support restriction per location.
