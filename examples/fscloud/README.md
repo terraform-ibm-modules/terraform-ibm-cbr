@@ -12,7 +12,7 @@ This example showcases some of the key customization options for the module. In 
 Context: This example covers a "pseudo" real-world scenario where:
 1. ICD Mongodb and Postgresql instances are encrypted using keys stored in Key Protect.
 2. Schematics is used to execute terraform that creates Key Protect keys and key rings over its public endpoint.
-3. Operators use machines with a set list of public IPs to interact with Schematics.
+- Operators use machines with a set list of public IPs to interact with Schematics.
 4. Applications are running in the VPC and need access to PostgreSQL via the private endpoint - e.g., a VPE.
 5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
 
