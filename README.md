@@ -8,7 +8,7 @@
 
 This module can be used to provision and configure [Context-Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
 
-See in particular the [fscloud module](./modules/fscloud/) that enables creating an opinionated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
+See in particular the [fscloud module](./modules/fscloud/) that creates an opinionated account-level set of CBR rules and zones that are aligned with "secure by default" principles.
 
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
