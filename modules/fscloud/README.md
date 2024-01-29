@@ -19,7 +19,7 @@ This module creates default coarse-grained CBR rules in a given account, followi
 
 This module is designed to allow the consumer to add additional custom rules to open up additional flows necessarity for their usage. See the `custom_rule_contexts_by_service` input variable, and an [usage example](../../examples/fscloud/) demonstrating how to open up more flows.
 
-The module also pre-creates CBR zones for each service in the account as a best practice. CBR rules associated with these CBR zones can be set by using the `custom_rule_contexts_by_service` variable.
+As a best practice, the module also creates CBR zones for each service in the account. You can set CBR rules for these CBR zones by using the `custom_rule_contexts_by_service` variable.
 
 Important: To avoid unexpected breakage in the account against which this module is executed, the CBR rule enforcement mode is set to 'report' (or 'disabled' for services not supporting 'report' mode) by default. It is recommended to test this module first with these default settings and then use the `target_service_details` variable to set the enforcement mode to "enabled" gradually by service. The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the Key Protect ("kms") service.
 
