@@ -2,7 +2,7 @@
 
 An end-to-end example that uses the submodule cbr-service-profile. This example leverages the IBM Cloud Provider to automate the following infrastructure:
 
-- Create a VPC and create a CBR zone to allowlist the VPC.
+- Create a VPC and create a CBR zone to allow access to the VPC.
 - Create a service reference-based CBR zone.
 - Create a set of CBR rules.
   - Based on the list of target service details provided, create rules for each of them.
