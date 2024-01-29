@@ -15,7 +15,7 @@ The example covers the following example scenario:
 - The instances of Databases for MongoDB and Databases for Postgresql are encrypted with keys that are stored in Key Protect.
 - Schematics is used to execute the Terraform logic that creates Key Protect keys and key rings over its public endpoint.
 - Operators use machines with a set list of public IPs to interact with Schematics.
-4. Applications are running in the VPC and need access to PostgreSQL via the private endpoint - e.g., a VPE.
+- Applications are running in the VPC and need access to PostgreSQL via the private endpoint. For example with a VPE.
 5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
 
 ## Note
