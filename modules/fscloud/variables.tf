@@ -184,6 +184,7 @@ variable "target_service_details" {
     enforcement_mode = string
     tags             = optional(list(string))
     region           = optional(string)
+    global_deny      = optional(bool, true)
   }))
   description = "Details of the target service for which a rule is created. The key is the service name."
   validation {

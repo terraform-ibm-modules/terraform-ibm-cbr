@@ -273,6 +273,15 @@ locals {
     target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
   }
 
+  global_deny_target_service_details = { for target_service_name, attributes in var.target_service_details :
+    target_service_name => attributes if attributes.global_deny == true
+  }
+
+  ## define default 'deny' rule context
+  deny_rule_context_by_service_scoped = { for target_service_name in keys(local.global_deny_target_service_details) :
+    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
+  }
+
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
     target_service_name => [for custom_rule_context in custom_rule_contexts :
@@ -296,6 +305,19 @@ locals {
   }
 
   allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
+    target_service_name => [for context in contexts : { attributes = [
+      {
+        "name" : "endpointType",
+        "value" : context.endpointType
+      },
+      {
+        "name" : "networkZoneId",
+        "value" : join(",", context.networkZoneIds)
+      }
+    ] }]
+  }
+
+  deny_rules_by_service = { for target_service_name, contexts in local.deny_rule_context_by_service_scoped :
     target_service_name => [for context in contexts : { attributes = [
       {
         "name" : "endpointType",
@@ -402,6 +424,34 @@ module "cbr_rule" {
         operator = "stringEquals",
         value    = lookup(local.fake_service_names, each.key, each.key)
       }] : [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, each.key, each.key)
+    }]
+  }]
+}
+
+module "global_deny_cbr_rule" {
+  depends_on       = [module.cbr_rule]
+  for_each         = local.global_deny_target_service_details
+  source           = "../../modules/cbr-rule-module"
+  rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-global-deny-rule"
+  enforcement_mode = each.value.enforcement_mode
+  rule_contexts    = lookup(local.deny_rules_by_service, each.key, [])
+
+
+  resources = [{
+    tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
+      name  = split(":", tag)[0]
+      value = split(":", tag)[1]
+    }] : []
+    attributes = [
       {
         name     = "accountId",
         operator = "stringEquals",
