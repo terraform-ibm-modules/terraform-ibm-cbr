@@ -214,7 +214,7 @@ variable "target_service_details" {
         "messages-for-rabbitmq", "secrets-manager", "is",
       "apprapp", "event-notifications", "hs-crypto"], target_service_name) if attributes.region != null
     ])
-    error_message = "Provide a valid target service name that is supports region attribute."
+    error_message = "Provide a valid target service name that supports region attribute."
   }
   validation {
     condition = alltrue([
