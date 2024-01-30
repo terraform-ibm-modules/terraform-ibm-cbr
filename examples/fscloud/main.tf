@@ -77,7 +77,7 @@ module "cbr_account_level" {
       "description"      = "kms-rule-example-of-customized-description"
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
-      "global_deny"        = false
+      "global_deny"      = false
     }
     "cloud-object-storage" = {
       "enforcement_mode" = "enabled"
