@@ -78,6 +78,7 @@ module "cbr_account_level" {
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
       "global_deny"      = false
+      "target_rg"        = module.resource_group.resource_group_id
     }
     "cloud-object-storage" = {
       "enforcement_mode" = "enabled"

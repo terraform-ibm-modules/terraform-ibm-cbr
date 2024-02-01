@@ -354,6 +354,37 @@ locals {
   }
 }
 
+locals {
+  target_service_details_attributes = { for key, value in local.target_service_details :
+    key => [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, key, key)
+      },
+      try(value.target_rg, null) != null ? {
+        name     = "resourceGroupId",
+        operator = "stringEquals",
+        value    = value.target_rg
+      } : {},
+      try(value.instance_id, null) != null ? {
+        name     = "serviceInstance",
+        operator = "stringEquals",
+        value    = value.instance_id
+      } : {},
+      try(value.region, null) != null ? {
+        name     = "region",
+        operator = "stringEquals",
+        value    = value.region
+      } : {}
+  ] }
+}
+
 # Create a rule for all services by default
 module "cbr_rule" {
   for_each         = local.target_service_details
@@ -378,62 +409,12 @@ module "cbr_rule" {
       name  = split(":", tag)[0]
       value = split(":", tag)[1]
     }] : []
-    attributes = try(each.value.target_rg, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "resourceGroupId",
-        operator = "stringEquals",
-        value    = each.value.target_rg
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-      }] : try(each.value.instance_id, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "serviceInstance",
-        operator = "stringEquals",
-        value    = each.value.instance_id
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-      }] : try(each.value.region, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "region",
-        operator = "stringEquals",
-        value    = each.value.region
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-      }] : [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-    }]
+    attributes = flatten([
+      for key, value in local.target_service_details_attributes : [
+        for attribute in value :
+        attribute if length(attribute) > 0
+      ] if key == each.key
+    ])
   }]
 }
 
