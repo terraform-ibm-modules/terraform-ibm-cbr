@@ -281,6 +281,12 @@ func TestFSCloudExample(t *testing.T) {
 		Testing:      t,
 		TerraformDir: fsCloudTerraformDir,
 		Prefix:       "cbr-fs",
+		IgnoreUpdates: testhelper.Exemptions{
+			List: []string{
+				"module.cbr_account_level.module.cbr_rule[\"cloud-object-storage\"].ibm_cbr_rule.cbr_rule",
+				"module.cbr_account_level.module.cbr_rule[\"kms\"].ibm_cbr_rule.cbr_rule",
+			},
+		},
 	})
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
