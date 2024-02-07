@@ -362,11 +362,6 @@ locals {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, key, key)
-      },
       try(value.target_rg, null) != null ? {
         name     = "resourceGroupId",
         operator = "stringEquals",
@@ -381,7 +376,12 @@ locals {
         name     = "region",
         operator = "stringEquals",
         value    = value.region
-      } : {}
+      } : {},
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, key, key)
+      }
   ] }
 }
 
