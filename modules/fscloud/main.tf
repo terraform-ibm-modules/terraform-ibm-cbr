@@ -5,101 +5,6 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
 locals {
-  target_service_details_default = {
-    "iam-groups" : {
-      "enforcement_mode" : "report"
-    },
-    "iam-access-management" : {
-      "enforcement_mode" : "report"
-    },
-    "iam-identity" : {
-      "enforcement_mode" : "report"
-    },
-    "user-management" : {
-      "enforcement_mode" : "report"
-    },
-    "cloud-object-storage" : {
-      "enforcement_mode" : "report"
-    },
-    "codeengine" : {
-      "enforcement_mode" : "report"
-    },
-    "container-registry" : {
-      "enforcement_mode" : "report"
-    },
-    "databases-for-cassandra" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-enterprisedb" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-elasticsearch" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-etcd" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-mongodb" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-mysql" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-postgresql" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-redis" : {
-      "enforcement_mode" : "disabled"
-    },
-    "directlink" : {
-      "enforcement_mode" : "report"
-    },
-    "dns-svcs" : {
-      "enforcement_mode" : "report"
-    },
-    "messagehub" : {
-      "enforcement_mode" : "report"
-    },
-    "kms" : {
-      "enforcement_mode" : "report"
-    },
-    "hs-crypto" : {
-      "enforcement_mode" : "report"
-    },
-    "containers-kubernetes-management" : {
-      "enforcement_mode" : "disabled"
-    },
-    "containers-kubernetes-cluster" : {
-      "enforcement_mode" : "disabled"
-    },
-    "messages-for-rabbitmq" : {
-      "enforcement_mode" : "disabled"
-    },
-    "secrets-manager" : {
-      "enforcement_mode" : "report"
-    },
-    "transit" : {
-      "enforcement_mode" : "report"
-    },
-    "is" : {
-      "enforcement_mode" : "report"
-    },
-    "schematics" : {
-      "enforcement_mode" : "report"
-    },
-    "apprapp" : {
-      "enforcement_mode" : "report"
-    },
-    "event-notifications" : {
-      "enforcement_mode" : "report"
-    },
-    "compliance" : {
-      "enforcement_mode" : "report"
-    }
-  }
-
-  target_service_details = merge(local.target_service_details_default, var.target_service_details)
-
   zone_final_service_ref_list = {
     for service_ref, service_ref_name in var.zone_service_ref_list : service_ref => service_ref_name if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
@@ -268,11 +173,6 @@ locals {
     ]
   }
 
-  ## define default 'deny' rule context
-  deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
-    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
-  }
-
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
     target_service_name => [for custom_rule_context in custom_rule_contexts :
@@ -290,9 +190,9 @@ locals {
   }
 
   # Merge map values (array of context) under the same service-name key
-  all_services = keys(merge(local.deny_rule_context_by_service, local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
+  all_services = keys(merge(local.prewired_rule_contexts_by_service_check, local.custom_rule_contexts_by_service))
   allow_rules_by_service_intermediary = { for service_name in local.all_services :
-    service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
+    service_name => flatten([lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
   }
 
   allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
@@ -334,7 +234,7 @@ locals {
 
 # Create a rule for all services by default
 module "cbr_rule" {
-  for_each         = local.target_service_details
+  for_each         = var.target_service_details
   source           = "../../modules/cbr-rule-module"
   rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-rule"
   enforcement_mode = each.value.enforcement_mode

@@ -135,14 +135,3 @@ module "cbr_zone_operator_ips" {
     value = "0.0.0.0/0" # All ip for this public example - this would be narrowed down typically to an enterprise ip block
   }]
 }
-
-## Examples of data lookup on objects (zone, rule) created by the fscloud profile module
-## Get rule targetting "event-notification"
-data "ibm_cbr_rule" "event_notification_rule" {
-  rule_id = module.cbr_account_level.map_target_service_rule_ids["event-notifications"].rule_id
-}
-
-## Get zone having "event-notification" as single source
-data "ibm_cbr_zone" "event_notifications_zone" {
-  zone_id = module.cbr_account_level.map_service_ref_name_zoneid["event-notifications"].zone_id
-}
