@@ -1,4 +1,4 @@
-# Context-based restrictions module
+# Context-based Restrictions Module
 
 [![Graduated (Supported)](https://img.shields.io/badge/Status-Graduated%20(Supported)-brightgreen)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
@@ -6,9 +6,9 @@
 [![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-cbr?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/releases/latest)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 
-This module can be used to provision and configure [Context Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
+This module can be used to provision and configure [Context-Based Restrictions](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-create&interface=ui).
 
-See in particular the [fscloud module](./modules/fscloud/) that enables creating an opiniated account-level coarse-grained set of CBR rules and zones aligned with the "secure by default" principles.
+See in particular the [fscloud module](./modules/fscloud/) that creates an opinionated account-level set of CBR rules and zones that are aligned with "secure by default" principles.
 
 :information_source: **Tip:** Changes to context-based restriction rules are propagated worldwide and have a TTL value of 10 minutes. Rule changes might not take effect until the propagation process is complete and the TTL cache is updated.
 
@@ -21,11 +21,11 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [cbr-zone-module](./modules/cbr-zone-module)
     * [fscloud](./modules/fscloud)
 * [Examples](./examples)
-    * [CBR multi service profile](./examples/multi-service-profile)
-    * [Multi resource rule example](./examples/multi-resource-rule)
-    * [Multi-zone example](./examples/multizone-rule)
-    * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
-    * [Zone example](./examples/zone)
+    * [CBR Multi Service Profile](./examples/multi-service-profile)
+    * [Multi-Resource Rule Example](./examples/multi-resource-rule)
+    * [Multi-zone Example](./examples/multizone-rule)
+    * [Pre-wired CBR Configuration for FS Cloud Example](./examples/fscloud)
+    * [Zone Example](./examples/zone)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -149,4 +149,4 @@ You need the following permissions to run this module.
 
 You can report issues and request features for this module in GitHub issues in the module repo. See [Report an issue or request a feature](https://github.com/terraform-ibm-modules/.github/blob/main/.github/SUPPORT.md).
 
-To set up your local development environment, see [Local development setup](https://terraform-ibm-modules.github.io/documentation/#/local-dev-setup) in the project documentation.
+To set up your local development environment, see [Local Development Setup](https://terraform-ibm-modules.github.io/documentation/#/local-dev-setup) in the project documentation.
