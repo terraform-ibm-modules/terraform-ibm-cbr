@@ -52,26 +52,6 @@ module "cbr_zone" {
 }
 
 ###############################################################################
-# Pre-create default 'deny' zone. Zone that acts as a deny
-# Some context: CBR allow all, unless there is at least one zone defined in a rule
-# There is no concept of deny by default out of the box
-# We pick a "dummy" IP that we know won't route.
-###############################################################################
-
-module "cbr_zone_deny" {
-  source           = "../../modules/cbr-zone-module"
-  name             = "${var.prefix}-deny-all"
-  zone_description = "Zone that may be used to force a deny-all."
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  addresses = [
-    {
-      type  = "ipAddress"
-      value = "1.1.1.1"
-    }
-  ]
-}
-
-###############################################################################
 # Pre-create zones containing the fscloud VPCs
 ###############################################################################
 
