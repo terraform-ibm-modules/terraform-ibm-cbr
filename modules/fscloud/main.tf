@@ -217,9 +217,11 @@ locals {
   logdnaat_cbr_zone_id = local.cbr_zones["logdnaat"].zone_id
   # tflint-ignore: terraform_naming_convention
   is_cbr_zone_id = local.cbr_zones["is"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  messagehub_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
 
   prewired_rule_contexts_by_service = merge({
-    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS
+    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Messagehub (Event Streams) -> HPCS
     for key in local.kms_values : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
@@ -233,7 +235,8 @@ locals {
           local.databases-for-mongodb_cbr_zone_id,
           local.databases-for-mysql_cbr_zone_id,
           local.databases-for-postgresql_cbr_zone_id,
-        local.databases-for-redis_cbr_zone_id] : []
+        local.databases-for-redis_cbr_zone_id] : [],
+        var.allow_messagehub_to_kms ? [local.messagehub_cbr_zone_id] : []
       ])
     }] }, {
     # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS

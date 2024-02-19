@@ -28,7 +28,13 @@ variable "allow_roks_to_kms" {
 
 variable "allow_icd_to_kms" {
   type        = bool
-  description = "Set rule for ICD to KMS, deafult is true"
+  description = "Set rule for ICD to KMS, default is true"
+  default     = true
+}
+
+variable "allow_messagehub_to_kms" {
+  type        = bool
+  description = "Set rule for Messagehub (Event Streams) to KMS, default is true"
   default     = true
 }
 
