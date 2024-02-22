@@ -218,7 +218,7 @@ locals {
   # tflint-ignore: terraform_naming_convention
   is_cbr_zone_id = local.cbr_zones["is"].zone_id
   # tflint-ignore: terraform_naming_convention
-  messagehub_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
+  event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
 
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Messagehub (Event Streams) -> HPCS
@@ -236,10 +236,10 @@ locals {
           local.databases-for-mysql_cbr_zone_id,
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : [],
-        var.allow_messagehub_to_kms ? [local.messagehub_cbr_zone_id] : []
+        var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
       ])
     }] }, {
-    # Fs VPCs -> COS, AT -> COS, IS (VPC Infrastructure Services) -> COS
+    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([

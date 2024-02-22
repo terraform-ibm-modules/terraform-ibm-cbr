@@ -10,8 +10,8 @@ This module creates default coarse-grained CBR rules in a given account followin
 - IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
 - Virtual Private Cloud workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
 - IBM Cloud Databases (ICD) -> Hyper Protect Crypto Services (HPCS)
-- IBM Cloud Kubernetes Service (IKS) -> IS (VPC Infrastructure Services)
-- Messagehub (Event Streams) -> Hyper Protect Crypto Services (HPCS)
+- IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
+- Event Streams (Messagehub) -> Hyper Protect Crypto Services (HPCS)
 
 
 **Note on KMS**: the module supports setting up rules for Key Protect, and Hyper Protect Crypto Services. By default the modules set rules for Hyper Protect Crypto Services, but this can be modified to use Key Protect, Hyper Protect, or both Key Protect and Hyper Protect Crypto Services using the input variable `kms_service_targeted_by_prewired_rules`.
@@ -93,10 +93,10 @@ module "cbr_fscloud" {
 | <a name="input_allow_at_to_cos"></a> [allow\_at\_to\_cos](#input\_allow\_at\_to\_cos) | Set rule for Activity Tracker to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_block_storage_to_kms"></a> [allow\_block\_storage\_to\_kms](#input\_allow\_block\_storage\_to\_kms) | Set rule for block storage to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_cos_to_kms"></a> [allow\_cos\_to\_kms](#input\_allow\_cos\_to\_kms) | Set rule for COS to KMS, default is true | `bool` | `true` | no |
+| <a name="input_allow_event_streams_to_kms"></a> [allow\_event\_streams\_to\_kms](#input\_allow\_event\_streams\_to\_kms) | Set rule for Event Streams (Messagehub) to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_icd_to_kms"></a> [allow\_icd\_to\_kms](#input\_allow\_icd\_to\_kms) | Set rule for ICD to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_iks_to_is"></a> [allow\_iks\_to\_is](#input\_allow\_iks\_to\_is) | Set rule for IKS to IS (VPC Infrastructure Services), default is true | `bool` | `true` | no |
 | <a name="input_allow_is_to_cos"></a> [allow\_is\_to\_cos](#input\_allow\_is\_to\_cos) | Set rule for IS (VPC Infrastructure Services) to COS, default is true | `bool` | `true` | no |
-| <a name="input_allow_messagehub_to_kms"></a> [allow\_messagehub\_to\_kms](#input\_allow\_messagehub\_to\_kms) | Set rule for Messagehub (Event Streams) to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_roks_to_kms"></a> [allow\_roks\_to\_kms](#input\_allow\_roks\_to\_kms) | Set rule for ROKS to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |

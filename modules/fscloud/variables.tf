@@ -32,9 +32,9 @@ variable "allow_icd_to_kms" {
   default     = true
 }
 
-variable "allow_messagehub_to_kms" {
+variable "allow_event_streams_to_kms" {
   type        = bool
-  description = "Set rule for Messagehub (Event Streams) to KMS, default is true"
+  description = "Set rule for Event Streams (Messagehub) to KMS, default is true"
   default     = true
 }
 
