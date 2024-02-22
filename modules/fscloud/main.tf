@@ -221,7 +221,7 @@ locals {
   event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
 
   prewired_rule_contexts_by_service = merge({
-    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Messagehub (Event Streams) -> HPCS
+    # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Event Streams (Messagehub) -> HPCS
     for key in local.kms_values : key => [{
       endpointType : "private",
       networkZoneIds : flatten([
