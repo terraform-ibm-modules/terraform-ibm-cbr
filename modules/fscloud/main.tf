@@ -147,26 +147,6 @@ module "cbr_zone" {
 }
 
 ###############################################################################
-# Pre-create default 'deny' zone. Zone that acts as a deny
-# Some context: CBR allow all, unless there is at least one zone defined in a rule
-# There is no concept of deny by default out of the box
-# We pick a "dummy" IP that we know won't route.
-###############################################################################
-
-module "cbr_zone_deny" {
-  source           = "../../modules/cbr-zone-module"
-  name             = "${var.prefix}-deny-all"
-  zone_description = "Zone that may be used to force a deny-all."
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  addresses = [
-    {
-      type  = "ipAddress"
-      value = "1.1.1.1"
-    }
-  ]
-}
-
-###############################################################################
 # Pre-create zones containing the fscloud VPCs
 ###############################################################################
 
@@ -273,17 +253,13 @@ locals {
 
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
-    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
+    target_service_name => []
   }
 
   global_deny_target_service_details = { for target_service_name, attributes in var.target_service_details :
     target_service_name => attributes if attributes.global_deny == true
   }
 
-  ## define default 'deny' rule context
-  deny_rule_context_by_service_scoped = { for target_service_name in keys(local.global_deny_target_service_details) :
-    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
-  }
 
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
@@ -320,17 +296,8 @@ locals {
     ] }]
   }
 
-  deny_rules_by_service = { for target_service_name, contexts in local.deny_rule_context_by_service_scoped :
-    target_service_name => [for context in contexts : { attributes = [
-      {
-        "name" : "endpointType",
-        "value" : context.endpointType
-      },
-      {
-        "name" : "networkZoneId",
-        "value" : join(",", context.networkZoneIds)
-      }
-    ] }]
+  deny_rules_by_service = { for target_service_name in keys(local.global_deny_target_service_details) :
+    target_service_name => []
   }
 
   # Some services have restrictions on the api types that can apply CBR - we codify this below
