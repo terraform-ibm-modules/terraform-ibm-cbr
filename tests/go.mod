@@ -6,7 +6,7 @@ toolchain go1.21.3
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.15.3
-	github.com/IBM/platform-services-go-sdk v0.59.3
+	github.com/IBM/platform-services-go-sdk v0.60.0
 	github.com/gruntwork-io/terratest v0.46.11
 	github.com/stretchr/testify v1.9.0
 	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.29.5
