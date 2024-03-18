@@ -69,7 +69,7 @@ module "cbr_fscloud" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.56.1, < 2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.62.0, < 2.0.0 |
 
 ### Modules
 
@@ -77,8 +77,8 @@ module "cbr_fscloud" {
 |------|--------|---------|
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ../../modules/cbr-rule-module | n/a |
 | <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ../../modules/cbr-zone-module | n/a |
-| <a name="module_cbr_zone_deny"></a> [cbr\_zone\_deny](#module\_cbr\_zone\_deny) | ../../modules/cbr-zone-module | n/a |
 | <a name="module_cbr_zone_vpcs"></a> [cbr\_zone\_vpcs](#module\_cbr\_zone\_vpcs) | ../../modules/cbr-zone-module | n/a |
+| <a name="module_global_deny_cbr_rule"></a> [global\_deny\_cbr\_rule](#module\_global\_deny\_cbr\_rule) | ../../modules/cbr-rule-module | n/a |
 
 ### Resources
 
@@ -107,7 +107,7 @@ module "cbr_fscloud" {
 | <a name="input_location"></a> [location](#input\_location) | The region in which the network zone is scoped | `string` | `null` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | n/a | yes |
 | <a name="input_skip_specific_services_for_zone_creation"></a> [skip\_specific\_services\_for\_zone\_creation](#input\_skip\_specific\_services\_for\_zone\_creation) | Provide a list of service references for which zone creation is not required | `list(string)` | `[]` | no |
-| <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | Details of the target service for which a rule is created. The key is the service name. | <pre>map(object({<br>    description      = optional(string)<br>    target_rg        = optional(string)<br>    instance_id      = optional(string)<br>    enforcement_mode = string<br>    tags             = optional(list(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | Details of the target service for which a rule is created. The key is the service name. | <pre>map(object({<br>    description      = optional(string)<br>    target_rg        = optional(string)<br>    instance_id      = optional(string)<br>    enforcement_mode = string<br>    tags             = optional(list(string))<br>    region           = optional(string)<br>    global_deny      = optional(bool, true)<br>  }))</pre> | `{}` | no |
 | <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | (Optional) Customized name of the zone for the service reference. If not provided, default zone name with the prefix will be created. | <pre>object({<br>    cloud-object-storage        = optional(string)<br>    codeengine                  = optional(string)<br>    containers-kubernetes       = optional(string)<br>    databases-for-cassandra     = optional(string)<br>    databases-for-elasticsearch = optional(string)<br>    databases-for-enterprisedb  = optional(string)<br>    databases-for-etcd          = optional(string)<br>    databases-for-mongodb       = optional(string)<br>    databases-for-mysql         = optional(string)<br>    databases-for-postgresql    = optional(string)<br>    databases-for-redis         = optional(string)<br>    directlink                  = optional(string)<br>    iam-groups                  = optional(string)<br>    is                          = optional(string)<br>    messagehub                  = optional(string)<br>    messages-for-rabbitmq       = optional(string)<br>    schematics                  = optional(string)<br>    secrets-manager             = optional(string)<br>    server-protect              = optional(string)<br>    user-management             = optional(string)<br>    apprapp                     = optional(string)<br>    compliance                  = optional(string)<br>    event-notifications         = optional(string)<br>    logdna                      = optional(string)<br>    logdnaat                    = optional(string)<br>  })</pre> | <pre>{<br>  "apprapp": null,<br>  "cloud-object-storage": null,<br>  "codeengine": null,<br>  "compliance": null,<br>  "containers-kubernetes": null,<br>  "databases-for-cassandra": null,<br>  "databases-for-elasticsearch": null,<br>  "databases-for-enterprisedb": null,<br>  "databases-for-etcd": null,<br>  "databases-for-mongodb": null,<br>  "databases-for-mysql": null,<br>  "databases-for-postgresql": null,<br>  "databases-for-redis": null,<br>  "directlink": null,<br>  "event-notifications": null,<br>  "iam-groups": null,<br>  "is": null,<br>  "logdna": null,<br>  "logdnaat": null,<br>  "messagehub": null,<br>  "messages-for-rabbitmq": null,<br>  "schematics": null,<br>  "secrets-manager": null,<br>  "server-protect": null,<br>  "user-management": null<br>}</pre> | no |
 | <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | n/a | yes |
 

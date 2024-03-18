@@ -9,7 +9,7 @@ resource "ibm_cbr_rule" "cbr_rule" {
   enforcement_mode = var.enforcement_mode
 
   dynamic "contexts" {
-    for_each = var.rule_contexts
+    for_each = length(var.rule_contexts) > 0 ? var.rule_contexts : []
     iterator = context
     content {
       dynamic "attributes" {

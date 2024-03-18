@@ -55,7 +55,7 @@ module "ibm_cbr" "rule" {
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.56.1, < 2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.62.0, < 2.0.0 |
 
 ### Modules
 
@@ -74,7 +74,7 @@ No modules.
 | <a name="input_enforcement_mode"></a> [enforcement\_mode](#input\_enforcement\_mode) | (String) The rule enforcement mode | `string` | `"report"` | no |
 | <a name="input_operations"></a> [operations](#input\_operations) | (Optional, List) The operations this rule applies to, by default it will protect all of the service and platform APIs the target service supports. | <pre>list(object({<br>    api_types = list(object({<br>      api_type_id = string<br>    }))<br>  }))</pre> | <pre>[<br>  {<br>    "api_types": [<br>      {<br>        "api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:"<br>      }<br>    ]<br>  }<br>]</pre> | no |
 | <a name="input_resources"></a> [resources](#input\_resources) | (List) The resources this rule apply to | <pre>list(object({<br>    attributes = optional(list(object({<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    })))<br>    tags = optional(list(object({<br>      name     = string<br>      value    = string<br>      operator = optional(string)<br>    })))<br>  }))</pre> | n/a | yes |
-| <a name="input_rule_contexts"></a> [rule\_contexts](#input\_rule\_contexts) | (List) The contexts the rule applies to | <pre>list(object({<br>    attributes = optional(list(object({<br>      name  = string<br>      value = string<br>    })))<br>  }))</pre> | n/a | yes |
+| <a name="input_rule_contexts"></a> [rule\_contexts](#input\_rule\_contexts) | (List) The contexts the rule applies to | <pre>list(object({<br>    attributes = optional(list(object({<br>      name  = string<br>      value = string<br>    })))<br>  }))</pre> | `[]` | no |
 | <a name="input_rule_description"></a> [rule\_description](#input\_rule\_description) | (Optional, String) The description of the rule | `string` | `null` | no |
 
 ### Outputs

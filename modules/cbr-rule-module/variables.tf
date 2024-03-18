@@ -29,7 +29,7 @@ variable "rule_contexts" {
   }))
   description = "(List) The contexts the rule applies to"
   validation {
-    condition = anytrue(
+    condition = length(var.rule_contexts) == 0 || alltrue(
       flatten(
         [for rule_context in var.rule_contexts :
           [for attribute in rule_context.attributes : alltrue([
@@ -42,6 +42,7 @@ variable "rule_contexts" {
     )
     error_message = "Value should be a valid rule context name"
   }
+  default = []
 }
 
 variable "enforcement_mode" {

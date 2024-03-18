@@ -147,26 +147,6 @@ module "cbr_zone" {
 }
 
 ###############################################################################
-# Pre-create default 'deny' zone. Zone that acts as a deny
-# Some context: CBR allow all, unless there is at least one zone defined in a rule
-# There is no concept of deny by default out of the box
-# We pick a "dummy" IP that we know won't route.
-###############################################################################
-
-module "cbr_zone_deny" {
-  source           = "../../modules/cbr-zone-module"
-  name             = "${var.prefix}-deny-all"
-  zone_description = "Zone that may be used to force a deny-all."
-  account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
-  addresses = [
-    {
-      type  = "ipAddress"
-      value = "1.1.1.1"
-    }
-  ]
-}
-
-###############################################################################
 # Pre-create zones containing the fscloud VPCs
 ###############################################################################
 
@@ -273,8 +253,13 @@ locals {
 
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
-    target_service_name => [{ endpointType : "public", networkZoneIds : [module.cbr_zone_deny.zone_id] }]
+    target_service_name => []
   }
+
+  global_deny_target_service_details = { for target_service_name, attributes in var.target_service_details :
+    target_service_name => attributes if attributes.global_deny == true
+  }
+
 
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
@@ -311,6 +296,10 @@ locals {
     ] }]
   }
 
+  deny_rules_by_service = { for target_service_name in keys(local.global_deny_target_service_details) :
+    target_service_name => []
+  }
+
   # Some services have restrictions on the api types that can apply CBR - we codify this below
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
@@ -333,6 +322,37 @@ locals {
     "containers-kubernetes-cluster"    = "containers-kubernetes",
     "containers-kubernetes-management" = "containers-kubernetes"
   }
+}
+
+locals {
+  target_service_details_attributes = { for key, value in local.target_service_details :
+    key => [
+      {
+        name     = "accountId",
+        operator = "stringEquals",
+        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+      },
+      try(value.target_rg, null) != null ? {
+        name     = "resourceGroupId",
+        operator = "stringEquals",
+        value    = value.target_rg
+      } : {},
+      try(value.instance_id, null) != null ? {
+        name     = "serviceInstance",
+        operator = "stringEquals",
+        value    = value.instance_id
+      } : {},
+      try(value.region, null) != null ? {
+        name     = "region",
+        operator = "stringEquals",
+        value    = value.region
+      } : {},
+      {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, key, key)
+      }
+  ] }
 }
 
 # Create a rule for all services by default
@@ -359,37 +379,30 @@ module "cbr_rule" {
       name  = split(":", tag)[0]
       value = split(":", tag)[1]
     }] : []
-    attributes = try(each.value.target_rg, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "resourceGroupId",
-        operator = "stringEquals",
-        value    = each.value.target_rg
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-      }] : try(each.value.instance_id, null) != null ? [
-      {
-        name     = "accountId",
-        operator = "stringEquals",
-        value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-      },
-      {
-        name     = "serviceInstance",
-        operator = "stringEquals",
-        value    = each.value.instance_id
-      },
-      {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, each.key, each.key)
-      }] : [
+    attributes = flatten([
+      for key, value in local.target_service_details_attributes : [
+        for attribute in value :
+        attribute if length(attribute) > 0
+      ] if key == each.key
+    ])
+  }]
+}
+
+module "global_deny_cbr_rule" {
+  depends_on       = [module.cbr_rule]
+  for_each         = local.global_deny_target_service_details
+  source           = "../../modules/cbr-rule-module"
+  rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-global-deny-rule"
+  enforcement_mode = each.value.enforcement_mode
+  rule_contexts    = lookup(local.deny_rules_by_service, each.key, [])
+
+
+  resources = [{
+    tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
+      name  = split(":", tag)[0]
+      value = split(":", tag)[1]
+    }] : []
+    attributes = [
       {
         name     = "accountId",
         operator = "stringEquals",

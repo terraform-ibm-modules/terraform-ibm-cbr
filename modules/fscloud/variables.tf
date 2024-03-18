@@ -189,6 +189,8 @@ variable "target_service_details" {
     instance_id      = optional(string)
     enforcement_mode = string
     tags             = optional(list(string))
+    region           = optional(string)
+    global_deny      = optional(bool, true)
   }))
   description = "Details of the target service for which a rule is created. The key is the service name."
   validation {
@@ -205,6 +207,20 @@ variable "target_service_details" {
       "schematics", "apprapp", "event-notifications", "compliance", "hs-crypto"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
+  }
+  validation {
+    condition = alltrue([
+      for target_service_name, attributes in var.target_service_details :
+      contains(["iam-identity", "codeengine",
+        "container-registry", "databases-for-cassandra",
+        "databases-for-enterprisedb", "databases-for-elasticsearch",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "messagehub",
+        "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management",
+        "messages-for-rabbitmq", "secrets-manager", "is",
+      "apprapp", "event-notifications", "hs-crypto"], target_service_name) if attributes.region != null
+    ])
+    error_message = "Provide a valid target service name that supports region attribute."
   }
   validation {
     condition = alltrue([
