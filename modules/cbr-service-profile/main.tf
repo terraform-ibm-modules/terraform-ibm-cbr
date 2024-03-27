@@ -12,7 +12,9 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
   # tflint-ignore: terraform_unused_declarations
-  validate_location_and_service_name = ((contains(["compliance", "directlink", "iam-groups", "containers-kubernetes", "user-management"], var.zone_service_ref_list)) && var.location != null) ? tobool("Error: The services 'compliance','directlink','iam-groups','containers-kubernetes','user-management' does not support location") : true
+  validate_location_and_service_name = (length(setintersection(["compliance", "directlink", "iam-groups", "containers-kubernetes", "user-management"], var.zone_service_ref_list)) > 0 && var.location != null) ? tobool("Error: The services 'compliance','directlink','iam-groups','containers-kubernetes','user-management' does not support location") : true
+
+
 
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
@@ -58,7 +60,6 @@ locals {
 
   zone_list = concat(tolist(local.vpc_zone_list), tolist(local.service_ref_zone_list))
 }
-
 module "cbr_zone" {
   count            = length(local.zone_list)
   source           = "../cbr-zone-module"
