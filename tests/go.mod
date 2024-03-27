@@ -22,6 +22,7 @@ require (
 	github.com/IBM-Cloud/bluemix-go v0.0.0-20240212062122-3386b538a495 // indirect
 	github.com/IBM-Cloud/power-go-client v1.6.0 // indirect
 	github.com/IBM/cloud-databases-go-sdk v0.5.0 // indirect
+	github.com/IBM/schematics-go-sdk v0.2.3 // indirect
 	github.com/IBM/vpc-go-sdk v1.0.2 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230828082145-3c4c8a2d2371 // indirect

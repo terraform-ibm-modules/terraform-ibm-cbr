@@ -14,12 +14,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
 const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
 const multiServiceExampleTerraformDir = "examples/multi-service-profile"
-const fsCloudTerraformDir = "examples/fscloud"
+const fsCloudExampleTerraformDir = "examples/fscloud"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 func TestRunZoneExample(t *testing.T) {
@@ -274,17 +275,30 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	options.TestTearDown()
 }
 
-func TestFSCloudExample(t *testing.T) {
+func TestFSCloudInSchematics(t *testing.T) {
 	t.Parallel()
 
-	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:      t,
-		TerraformDir: fsCloudTerraformDir,
-		Prefix:       "cbr-fs",
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		TarIncludePatterns: []string{
+			"*.tf",
+			fsCloudExampleTerraformDir + "/*.tf",
+			"modules/fscloud/*.tf",
+			"modules/cbr-zone-module/*.tf",
+			"modules/cbr-rule-module/*.tf",
+		},
+		TemplateFolder:         fsCloudExampleTerraformDir,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
 	})
-	output, err := options.RunTestConsistency()
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+	}
+
+	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
 }
 
 func TestRunUpgradeExample(t *testing.T) {
