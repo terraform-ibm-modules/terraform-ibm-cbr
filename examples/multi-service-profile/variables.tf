@@ -36,7 +36,7 @@ variable "resource_tags" {
 
 variable "zone_service_ref_list" {
   type        = list(string)
-  default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
+  default     = ["cloud-object-storage", "server-protect"]
   description = "(List) Service reference for the zone creation"
 }
 
