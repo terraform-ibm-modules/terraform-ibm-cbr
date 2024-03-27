@@ -38,7 +38,7 @@ variable "zone_service_ref_list" {
 variable "location" {
   type        = string
   description = "The region in which the network zone is scoped"
-  default     = "us-south"
+  default     = null
 }
 
 variable "target_service_details" {
