@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.1.4"
+  version = "1.1.5"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -48,6 +48,7 @@ resource "ibm_is_subnet" "testacc_subnet" {
 locals {
   zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
   enforcement_mode  = "report"
+  location          = "us-south"
   # Merge zone ids to pass as contexts to the rule
   target_services_details = [
     {
@@ -65,5 +66,5 @@ module "cbr_rule_multi_service_profile" {
   zone_vpc_crn_list      = local.zone_vpc_crn_list
   target_service_details = local.target_services_details
   endpoints              = var.endpoints
-  location               = var.location
+  location               = local.location
 }

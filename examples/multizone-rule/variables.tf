@@ -7,13 +7,11 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "test-terraform-multizone"
 }
 
 variable "region" {
   description = "Name of the Region to deploy into"
   type        = string
-  default     = "us-south"
 }
 
 variable "resource_group" {
