@@ -7,7 +7,7 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "test-terraform-multizone"
+  default     = "test-terraform-multiservice"
 }
 
 variable "region" {
@@ -19,7 +19,7 @@ variable "region" {
 variable "location" {
   description = "The region in which the network zone is scoped"
   type        = string
-  default     = "us-south"
+  default     = "dal" # dal metro is the equivalent location for the us-south region
 }
 
 variable "resource_group" {
@@ -36,7 +36,7 @@ variable "resource_tags" {
 
 variable "zone_service_ref_list" {
   type        = list(string)
-  default     = ["cloud-object-storage", "containers-kubernetes", "server-protect"]
+  default     = ["cloud-object-storage", "server-protect"]
   description = "(List) Service reference for the zone creation"
 }
 
