@@ -14,6 +14,12 @@ variable "region" {
   type        = string
 }
 
+variable "location" {
+  description = "The region in which the network zone is scoped"
+  type        = string
+  default     = "dal" # dal metro is the equivalent location for the us-south region
+}
+
 variable "resource_group" {
   type        = string
   description = "An existing resource group name to use for this example, if unset a new resource group will be created"
