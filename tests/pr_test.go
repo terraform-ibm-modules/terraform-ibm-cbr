@@ -290,6 +290,7 @@ func TestFSCloudInSchematics(t *testing.T) {
 		TemplateFolder:         fsCloudExampleTerraformDir,
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
+		Prefix:                 "fs",
 		WaitJobCompleteMinutes: 60,
 	})
 
