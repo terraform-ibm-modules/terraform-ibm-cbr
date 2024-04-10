@@ -95,6 +95,11 @@ variable "zone_service_ref_list" {
     event-notifications         = optional(string)
     logdna                      = optional(string)
     logdnaat                    = optional(string)
+    cloudantnosqldb             = optional(string)
+    globalcatalog-collection    = optional(string)
+    sysdig-monitor              = optional(string)
+    sysdig-secure               = optional(string)
+    toolchain                   = optional(string)
   })
   default = {
     cloud-object-storage        = null
@@ -122,6 +127,11 @@ variable "zone_service_ref_list" {
     event-notifications         = null
     logdna                      = null
     logdnaat                    = null
+    cloudantnosqldb             = null
+    globalcatalog-collection    = null
+    sysdig-monitor              = null
+    sysdig-secure               = null
+    toolchain                   = null
   }
   validation {
     condition = alltrue([
@@ -133,8 +143,8 @@ variable "zone_service_ref_list" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
-      service_ref)
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
+      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -165,9 +175,9 @@ variable "custom_rule_contexts_by_service" {
           "databases-for-redis", "directlink",
           "iam-groups", "is", "messagehub",
           "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
+          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
+          "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"],
       ref)]]
-
     ]))
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -251,7 +261,8 @@ variable "existing_serviceref_zone" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-      "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"], key)
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
+      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], key)
     ])
     error_message = "Provide a valid service reference"
   }
@@ -284,8 +295,8 @@ variable "skip_specific_services_for_zone_creation" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat"],
-      service_ref)
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
+      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
