@@ -95,6 +95,31 @@ locals {
     },
     "compliance" : {
       "enforcement_mode" : "report"
+    },
+    "IAM" : {
+      "enforcement_mode" : "report"
+      "service_group_id" : "IAM"
+    },
+    "context-based-restrictions" : {
+      "enforcement_mode" : "report"
+    },
+    "globalcatalog-collection" : {
+      "enforcement_mode" : "report"
+    },
+    "logdna" : {
+      "enforcement_mode" : "report"
+    },
+    "logdnaat" : {
+      "enforcement_mode" : "report"
+    },
+    "mqcloud" : {
+      "enforcement_mode" : "disabled"
+    },
+    "sysdig-monitor" : {
+      "enforcement_mode" : "report"
+    },
+    "sysdig-secure" : {
+      "enforcement_mode" : "report"
     }
   }
 
@@ -332,6 +357,11 @@ locals {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
+      try(value.service_group_id, null) != null ? {
+        name     = "service_group_id",
+        operator = "stringEquals",
+        value    = value.service_group_id
+      } : {},
       try(value.target_rg, null) != null ? {
         name     = "resourceGroupId",
         operator = "stringEquals",
@@ -347,11 +377,11 @@ locals {
         operator = "stringEquals",
         value    = value.region
       } : {},
-      {
+      try(value.service_group_id, null) == null ? {
         name     = "serviceName",
         operator = "stringEquals",
         value    = lookup(local.fake_service_names, key, key)
-      }
+      } : {}
   ] }
 }
 
