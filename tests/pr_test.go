@@ -291,11 +291,14 @@ func TestFSCloudInSchematics(t *testing.T) {
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
 		Prefix:                 "fs",
+		Region:                 "us-south",
 		WaitJobCompleteMinutes: 60,
 	})
 
 	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
 		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "region", Value: options.Region, DataType: "string"},
 	}
 
 	err := options.RunSchematicTest()
