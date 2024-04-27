@@ -7,13 +7,11 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "example-cbr-new"
 }
 
 variable "region" {
   description = "Name of the Region to deploy into"
   type        = string
-  default     = "us-south"
 }
 
 variable "resource_group" {
