@@ -249,6 +249,10 @@ locals {
       endpointType : "direct",
       networkZoneIds : flatten([
         var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : [],
+      ])
+      }, {
+      endpointType : "private",
+      networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
       ])

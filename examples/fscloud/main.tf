@@ -81,7 +81,7 @@ module "cbr_account_level" {
       "target_rg"        = module.resource_group.resource_group_id
     }
     "cloud-object-storage" = {
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "report"
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false
     }

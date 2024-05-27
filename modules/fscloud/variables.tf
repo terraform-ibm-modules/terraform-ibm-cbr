@@ -6,6 +6,7 @@ variable "prefix" {
 variable "zone_vpc_crn_list" {
   type        = list(string)
   description = "(List) VPC CRN for the zones"
+  default     = []
 }
 
 variable "allow_cos_to_kms" {
