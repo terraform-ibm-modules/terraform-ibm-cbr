@@ -32,11 +32,26 @@ variable "resource_tags" {
   default     = []
 }
 
+# variable "zone_service_ref_list" {
+#   type        = list(string)
+#   default     = ["cloud-object-storage", "server-protect"]
+#   description = "(List) Service reference for the zone creation"
+# }
+
 variable "zone_service_ref_list" {
-  type        = list(string)
-  default     = ["cloud-object-storage", "server-protect"]
-  description = "(List) Service reference for the zone creation"
+  type = map(object({
+    serviceRef_location = optional(string)
+  }))
+  description = "ted"
+  default = {
+    "cloud-object-storage" = {
+      serviceRef_location = "syd"
+    },
+    "server-protect" = {
+      serviceRef_location = "au"
+  } }
 }
+
 
 variable "endpoints" {
   type        = list(string)

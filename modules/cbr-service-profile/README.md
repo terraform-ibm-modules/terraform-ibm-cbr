@@ -49,10 +49,10 @@ module "cbr_rule_multi_service_profile" {
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct' | `list(string)` | <pre>[<br>  "private"<br>]</pre> | no |
-| <a name="input_location"></a> [location](#input\_location) | The region in which the network zone is scoped | `string` | n/a | yes |
+| <a name="input_location"></a> [location](#input\_location) | The region in which the network zone is scoped. If no value is passed, serviceRef zone doesn't scope to any location | `string` | `null` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | `"serviceprofile"` | no |
 | <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | (String) Details of the target service for which the rule has to be created | <pre>list(object({<br>    target_service_name = string<br>    target_rg           = optional(string)<br>    enforcement_mode    = string<br>    tags                = optional(list(string))<br>  }))</pre> | n/a | yes |
-| <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | (List) Service reference for the zone creation | `list(string)` | `[]` | no |
+| <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | (String) Details of the target service for which the rule has to be created | <pre>map(object({<br>    serviceRef_location = optional(string)<br>  }))</pre> | n/a | yes |
 | <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | `[]` | no |
 
 ### Outputs
