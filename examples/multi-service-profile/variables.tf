@@ -28,23 +28,20 @@ variable "resource_tags" {
 
 variable "zone_service_ref_list" {
   type = map(object({
-    serviceRef_location = optional(string)
+    serviceRef_location = optional(list(string), [])
   }))
-  description = "Provide a valid service reference for zone creation with optional service reference location"
+  description = "Provide a valid service reference for zone creation with optional service reference locations"
   default = {
     "cloud-object-storage" = {
-      serviceRef_location = "syd"
+      serviceRef_location = ["syd", "au"]
     },
     "server-protect" = {
-      serviceRef_location = "au"
+      serviceRef_location = ["au"]
     },
     "directlink" = {
-      serviceRef_location = null
+      serviceRef_location = []
     },
-    "iam-groups" = {},
-
-    "event-notifications" = {}
-
+    "iam-groups" = {}
   }
 }
 

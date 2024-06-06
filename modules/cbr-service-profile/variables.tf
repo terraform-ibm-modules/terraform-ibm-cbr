@@ -16,7 +16,7 @@ variable "zone_vpc_crn_list" {
 
 variable "zone_service_ref_list" {
   type = map(object({
-    serviceRef_location = optional(string)
+    serviceRef_location = optional(list(string), [])
   }))
   description = "Provide a valid service reference for zone creation with optional service reference location"
   # Validation to restrict the target service name to be the list of supported targets only.

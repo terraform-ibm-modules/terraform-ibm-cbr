@@ -212,7 +212,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 				t.Run("verify service reference exist", func(t *testing.T) {
 					var serviceRefExists bool
 					var actual_references []string
-					expected_references := []string{"cloud-object-storage", "server-protect"}
+					expected_references := []string{"cloud-object-storage", "server-protect", "directlink", "iam-groups"}
 
 					zoneIds := zones[0].([]interface{})
 					for index := range zoneIds {
@@ -220,12 +220,18 @@ func TestMultiServiceProfileExample(t *testing.T) {
 						zone_details, err := cloudInfoSvc.GetCBRZoneByID(zone)
 						if assert.Nil(t, err, "Failed to get the zone") &&
 							assert.NotNil(t, zone_details, "No zone found") {
+							uniqueMap := make(map[string]struct{})
 							for addr_index := range zone_details.Addresses {
 								switch zone_details.Addresses[addr_index].(type) {
 								case *contextbasedrestrictionsv1.AddressServiceRef:
 									serviceRefExists = true
 									serviceRef := zone_details.Addresses[addr_index].(*contextbasedrestrictionsv1.AddressServiceRef)
-									actual_references = append(actual_references, *serviceRef.Ref.ServiceName)
+									serviceName := *serviceRef.Ref.ServiceName
+									if _, ok := uniqueMap[serviceName]; !ok {
+										// Adding multilocation support for COS causing same number of COS as items in list as serviceRef, to avoid duplicates, making the list as unique
+										uniqueMap[serviceName] = struct{}{}
+										actual_references = append(actual_references, serviceName)
+									}
 								}
 							}
 						}
