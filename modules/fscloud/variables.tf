@@ -136,7 +136,7 @@ variable "zone_service_ref_list" {
   }
   validation {
     condition = alltrue([
-      for service_ref, _ in var.zone_service_ref_list : contains([
+      for service_ref, service_ref_name in var.zone_service_ref_list : contains([
         "cloud-object-storage", "codeengine", "containers-kubernetes",
         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
         "databases-for-etcd", "databases-for-mongodb",

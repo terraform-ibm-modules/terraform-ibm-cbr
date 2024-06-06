@@ -18,50 +18,23 @@ variable "zone_service_ref_list" {
   type = map(object({
     serviceRef_location = optional(string)
   }))
-  description = "(String) Details of the target service for which the rule has to be created"
-  #Validation to restrict the target service name to be the list of supported targets only.
-  # validation {
-  #   condition = alltrue([
-  #     for service_ref in var.zone_service_ref_list :
-  #     contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-  #       "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-  #       "databases-for-etcd", "databases-for-mongodb",
-  #       "databases-for-mysql", "databases-for-postgresql",
-  #       "databases-for-redis", "directlink",
-  #       "iam-groups", "is", "messagehub",
-  #       "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-  #       "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-  #     "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
-  #   ])
-  #   error_message = "Provide a valid target service name that is supported by context-based restrictions"
-  # }
-}
-
-# variable "zone_service_ref_list" {
-#   type = list(string)
-#   validation {
-#     condition = alltrue([
-#       for service_ref in var.zone_service_ref_list :
-#       contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-#         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-#         "databases-for-etcd", "databases-for-mongodb",
-#         "databases-for-mysql", "databases-for-postgresql",
-#         "databases-for-redis", "directlink",
-#         "iam-groups", "is", "messagehub",
-#         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-#         "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-#       "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
-#     ])
-#     error_message = "Provide a valid service reference for zone creation"
-#   }
-#   default     = []
-#   description = "(List) Service reference for the zone creation"
-# }
-
-variable "location" {
-  type        = string
-  description = "The region in which the network zone is scoped. If no value is passed, serviceRef zone doesn't scope to any location"
-  default     = null
+  description = "Provide a valid service reference for zone creation with optional service reference location"
+  # Validation to restrict the target service name to be the list of supported targets only.
+  validation {
+    condition = alltrue([
+      for service_ref, service_ref_location in var.zone_service_ref_list :
+      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
+        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
+        "databases-for-etcd", "databases-for-mongodb",
+        "databases-for-mysql", "databases-for-postgresql",
+        "databases-for-redis", "directlink",
+        "iam-groups", "is", "messagehub",
+        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
+      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
+    ])
+    error_message = "Provide a valid target service name that is supported by context-based restrictions"
+  }
 }
 
 variable "target_service_details" {
