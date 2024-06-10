@@ -16,8 +16,8 @@ module "cbr_rule_multi_service_profile" {
                               "server-protect" = {
                                 serviceRef_location = ["au"]
                               },
-                              "directlink" = {}, # as directlink does not support restriction per location, hence passing empty map
-                              "event-notifications" = {} # if map is empty for serviceRef then it is not scoped to any location
+                                "directlink"          = {}, # directlink does not support restriction per location, hence passing empty map or []/null value can also be passed for serviceRef_location
+                                "event-notifications" = {}  # if map is empty or []/null is passed for serviceRef_location then it is not scoped to any location
                              }
   zone_vpc_crn_list      = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
   target_service_details = [

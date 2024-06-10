@@ -38,8 +38,8 @@ variable "zone_service_ref_list" {
     "server-protect" = {
       serviceRef_location = ["au"]
     },
-    "directlink"          = {}, # directlink does not support restriction per location, hence passing empty map
-    "event-notifications" = {}  # if map is empty for serviceRef then it is not scoped to any location
+    "directlink"          = {}, # directlink does not support restriction per location, hence passing empty map or []/null value can also be passed for serviceRef_location
+    "event-notifications" = {}  # if map is empty or []/null is passed for serviceRef_location then it is not scoped to any location
   }
 }
 
