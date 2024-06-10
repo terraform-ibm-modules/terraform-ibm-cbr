@@ -11,16 +11,13 @@ module "cbr_rule_multi_service_profile" {
   prefix                 = "multi-service-profile"
   zone_service_ref_list  = {
                               "cloud-object-storage" = {
-                                serviceRef_location = "syd"
+                                serviceRef_location = = ["syd", "au"]
                               },
                               "server-protect" = {
-                                serviceRef_location = "au"
+                                serviceRef_location = ["au"]
                               },
-                                "directlink" = {
-                                  serviceRef_location = null
-                              },
-                                "iam-groups" = {},
-                              "event-notifications" = {}
+                              "directlink" = {}, # as directlink does not support restriction per location, hence passing empty map
+                              "event-notifications" = {} # if map is empty for serviceRef then it is not scoped to any location
                              }
   zone_vpc_crn_list      = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
   target_service_details = [
