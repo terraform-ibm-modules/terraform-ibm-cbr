@@ -212,7 +212,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 				t.Run("verify service reference exist", func(t *testing.T) {
 					var serviceRefExists bool
 					var actual_references []string
-					expected_references := []string{"cloud-object-storage", "server-protect", "directlink", "iam-groups"}
+					expected_references := []string{"cloud-object-storage", "server-protect", "directlink", "event-notifications"}
 
 					zoneIds := zones[0].([]interface{})
 					for index := range zoneIds {
