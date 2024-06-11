@@ -102,12 +102,9 @@ module "cbr_account_level" {
   custom_rule_contexts_by_service = merge({
     "kms" = [
       {
-        endpointType      = "public"
+        endpointType      = "private"
         service_ref_names = ["schematics"]
-      },
-      {
-        endpointType = "public"
-      zone_ids = [module.cbr_zone_operator_ips.zone_id] }
+      }
     ] }, {
     "schematics" = [{
       endpointType = "public"
