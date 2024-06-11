@@ -18,7 +18,7 @@ variable "zone_service_ref_list" {
   type = map(object({
     serviceRef_location = optional(list(string), [])
   }))
-  description = "Provide a valid service reference for zone creation with optional service reference location"
+  description = "Provide a valid service reference for zone creation with optional service reference location, if empty map or []/null is passed for serviceRef_location then serviceRef zone is not scoped to any location"
   # Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
