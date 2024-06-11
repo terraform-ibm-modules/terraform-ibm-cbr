@@ -15,11 +15,11 @@ module "resource_group" {
 ##############################################################################
 module "key_protect_module" {
   source            = "terraform-ibm-modules/key-protect/ibm"
-  version           = "v2.4.1"
+  version           = "v2.7.1"
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
-  service_endpoints = "private"
+  allowed_network   = "private-only"
   plan              = "tiered-pricing"
 }
 
@@ -102,12 +102,9 @@ module "cbr_account_level" {
   custom_rule_contexts_by_service = merge({
     "kms" = [
       {
-        endpointType      = "public"
+        endpointType      = "private"
         service_ref_names = ["schematics"]
-      },
-      {
-        endpointType = "public"
-      zone_ids = [module.cbr_zone_operator_ips.zone_id] }
+      }
     ] }, {
     "schematics" = [{
       endpointType = "public"
