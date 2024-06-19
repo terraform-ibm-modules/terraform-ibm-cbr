@@ -33,7 +33,7 @@ variable "zone_service_ref_list" {
         "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
       "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
     ])
-    error_message = "Provide a valid target service name that is supported by context-based restrictions"
+    error_message = "Provide a valid target service name that is supported by context-based restrictions."
   }
 }
 
