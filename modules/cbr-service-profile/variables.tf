@@ -18,7 +18,7 @@ variable "zone_service_ref_list" {
   type = map(object({
     serviceRef_location = optional(list(string), [])
   }))
-  description = "Provide a valid service reference with location where context-based restriction zones are created. If no value is specified for serviceRef_location, the zones are not scoped to any location."
+  description = "Provide a valid service reference with the location where the context-based restriction zones are created. If no value is specified for `serviceRef_location`, the zones are not scoped to any location."
   # Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
