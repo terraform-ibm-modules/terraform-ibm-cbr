@@ -15,7 +15,7 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_location_and_service_name = [
     for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
-    contains(keys(var.zone_service_ref_list), item) ? length(var.zone_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' does not support location") : true
+    contains(keys(var.zone_service_ref_list), item) ? length(var.zone_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
   ]
 
   # Restrict and allow the api types as per the target service
