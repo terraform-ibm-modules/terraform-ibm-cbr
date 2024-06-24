@@ -16,8 +16,8 @@ module "cbr_rule_multi_service_profile" {
                               "server-protect" = {
                                 serviceRef_location = ["au"]
                               },
-                                "directlink"          = {}, # directlink does not support restriction per location, hence passing empty map or []/null value can also be passed for serviceRef_location
-                                "event-notifications" = {}  # if empty map or []/null is passed for serviceRef_location then serviceRef zone is not scoped to any location
+                                "directlink"          = {}, # directlink does not support restriction per location, hence no value is specified for serviceRef_location.
+                                "event-notifications" = {}
                              }
   zone_vpc_crn_list      = ["crn:v1:bluemix:public:is:us-south:a/abac0df06b644a9cabc6e44f55b3880e::vpc:r006-069c6449-03a9-49f1-9070-4d23fc79285e"]
   target_service_details = [
@@ -59,7 +59,7 @@ module "cbr_rule_multi_service_profile" {
 | <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct' | `list(string)` | <pre>[<br>  "private"<br>]</pre> | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | `"serviceprofile"` | no |
 | <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | (String) Details of the target service for which the rule has to be created | <pre>list(object({<br>    target_service_name = string<br>    target_rg           = optional(string)<br>    enforcement_mode    = string<br>    tags                = optional(list(string))<br>  }))</pre> | n/a | yes |
-| <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | Provide a valid service reference for zone creation with optional service reference location, if empty map or []/null is passed for serviceRef\_location then serviceRef zone is not scoped to any location | <pre>map(object({<br>    serviceRef_location = optional(list(string), [])<br>  }))</pre> | n/a | yes |
+| <a name="input_zone_service_ref_list"></a> [zone\_service\_ref\_list](#input\_zone\_service\_ref\_list) | Provide a valid service reference with location where context-based restriction zones are created. If no value is specified for serviceRef\_location, the zones are not scoped to any location. | <pre>map(object({<br>    serviceRef_location = optional(list(string), [])<br>  }))</pre> | n/a | yes |
 | <a name="input_zone_vpc_crn_list"></a> [zone\_vpc\_crn\_list](#input\_zone\_vpc\_crn\_list) | (List) VPC CRN for the zones | `list(string)` | `[]` | no |
 
 ### Outputs

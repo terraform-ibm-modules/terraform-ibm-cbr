@@ -30,7 +30,7 @@ variable "zone_service_ref_list" {
   type = map(object({
     serviceRef_location = optional(list(string), [])
   }))
-  description = "Provide a valid service reference for zone creation with optional service reference location, if empty map or []/null is passed for serviceRef_location then serviceRef zone is not scoped to any location"
+  description = "Provide a valid service reference with location where context-based restriction zones are created. If no value is specified for serviceRef_location, the zones are not scoped to any location."
   default = {
     "cloud-object-storage" = {
       serviceRef_location = ["syd", "au"]
@@ -38,8 +38,8 @@ variable "zone_service_ref_list" {
     "server-protect" = {
       serviceRef_location = ["au"]
     },
-    "directlink"          = {}, # directlink does not support restriction per location, hence passing empty map or []/null value can also be passed for serviceRef_location
-    "event-notifications" = {}  # if empty map or []/null is passed for serviceRef_location then serviceRef zone is not scoped to any location
+    "directlink"          = {}, # directlink does not support restriction per location, hence no value is specified for serviceRef_location.
+    "event-notifications" = {}
   }
 }
 
