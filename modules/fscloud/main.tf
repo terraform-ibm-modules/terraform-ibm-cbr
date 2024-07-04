@@ -126,8 +126,17 @@ locals {
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
 
   zone_final_service_ref_list = {
-    for service_ref, service_ref_name in var.zone_service_ref_list : service_ref => service_ref_name if !contains(var.skip_specific_services_for_zone_creation, service_ref)
+    for service_ref, service_ref_details in var.zone_service_ref_list : service_ref => (
+      service_ref_details != null ? {
+        zone_name           = service_ref_details.zone_name != null ? service_ref_details.zone_name : null,
+        serviceRef_location = service_ref_details.serviceRef_location != null ? service_ref_details.serviceRef_location : []
+        } : {
+        zone_name           = null,
+        serviceRef_location = []
+      }
+    ) if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
+
 }
 
 ###############################################################################
@@ -135,19 +144,33 @@ locals {
 ###############################################################################
 
 locals {
+
+  # tflint-ignore: terraform_unused_declarations
+  validate_location_and_service_name = [
+    for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
+    contains(keys(local.zone_final_service_ref_list), item) ? length(local.zone_final_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
+  ]
   service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? {
-    for service_ref, service_ref_name in local.zone_final_service_ref_list : service_ref => {
-      name             = service_ref_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_name
+    for service_ref, service_ref_details in local.zone_final_service_ref_list : service_ref => {
+      name             = service_ref_details.zone_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_details.zone_name
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "Single zone for service ${service_ref}."
-      # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
-      addresses = [
+      addresses = length(service_ref_details.serviceRef_location) == 0 ? [
         {
           type = "serviceRef"
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
             service_name = service_ref
-            location     = (service_ref == "directlink" || service_ref == "globalcatalog-collection" || service_ref == "user-management" || service_ref == "iam-groups") ? null : var.location
+            location     = null
+          }
+        }
+        ] : [for loc in service_ref_details.serviceRef_location :
+        {
+          type = "serviceRef"
+          ref = {
+            account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
+            service_name = service_ref
+            location     = loc
           }
         }
       ]
