@@ -69,133 +69,15 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "zone_service_ref_list" {
-  type = object({
-    cloud-object-storage = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    codeengine = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    containers-kubernetes = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-cassandra = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-elasticsearch = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-enterprisedb = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-etcd = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-mongodb = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-mysql = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-postgresql = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    databases-for-redis = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    directlink = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    iam-groups = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    is = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    messagehub = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    messages-for-rabbitmq = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    schematics = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    secrets-manager = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    server-protect = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    user-management = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    apprapp = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    compliance = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    event-notifications = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    logdna = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    logdnaat = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    cloudantnosqldb = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    globalcatalog-collection = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    sysdig-monitor = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    sysdig-secure = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-    toolchain = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-  })
+variable "zone_service_ref_map" {
+  type = map(object({
+    zone_name           = optional(string)
+    serviceRef_location = optional(list(string))
+  }))
   default = {}
   validation {
     condition = alltrue([
-      for service_ref, service_ref_name in var.zone_service_ref_list : contains([
+      for service_ref, service_ref_name in var.zone_service_ref_map : contains([
         "cloud-object-storage", "codeengine", "containers-kubernetes",
         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
         "databases-for-etcd", "databases-for-mongodb",

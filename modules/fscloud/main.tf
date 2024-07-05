@@ -5,6 +5,38 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
 locals {
+  default_service_ref_map = {
+    "cloud-object-storage"        = null
+    "codeengine"                  = null
+    "containers-kubernetes"       = null
+    "databases-for-cassandra"     = null
+    "databases-for-elasticsearch" = null
+    "databases-for-enterprisedb"  = null
+    "databases-for-etcd"          = null
+    "databases-for-mongodb"       = null
+    "databases-for-mysql"         = null
+    "databases-for-postgresql"    = null
+    "databases-for-redis"         = null
+    "directlink"                  = null
+    "iam-groups"                  = null
+    "is"                          = null
+    "messagehub"                  = null
+    "messages-for-rabbitmq"       = null
+    "schematics"                  = null
+    "secrets-manager"             = null
+    "server-protect"              = null
+    "user-management"             = null
+    "apprapp"                     = null
+    "compliance"                  = null
+    "event-notifications"         = null
+    "logdna"                      = null
+    "logdnaat"                    = null
+    "cloudantnosqldb"             = null
+    "globalcatalog-collection"    = null
+    "sysdig-monitor"              = null
+    "sysdig-secure"               = null
+    "toolchain"                   = null
+  }
   target_service_details_default = {
     "iam-groups" : {
       "enforcement_mode" : "report"
@@ -124,9 +156,10 @@ locals {
   }
 
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
+  merge_service_refs     = merge(local.default_service_ref_map, var.zone_service_ref_map)
 
   zone_final_service_ref_list = {
-    for service_ref, service_ref_details in var.zone_service_ref_list : service_ref => (
+    for service_ref, service_ref_details in local.merge_service_refs : service_ref => (
       service_ref_details != null ? {
         zone_name           = service_ref_details.zone_name != null ? service_ref_details.zone_name : null,
         serviceRef_location = service_ref_details.serviceRef_location != null ? service_ref_details.serviceRef_location : []

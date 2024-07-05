@@ -14,7 +14,7 @@ variable "zone_vpc_crn_list" {
   description = "(List) VPC CRN for the zones"
 }
 
-variable "zone_service_ref_list" {
+variable "zone_service_ref_map" {
   type = map(object({
     serviceRef_location = optional(list(string), [])
   }))
@@ -22,7 +22,7 @@ variable "zone_service_ref_list" {
   # Validation to restrict the target service name to be the list of supported targets only.
   validation {
     condition = alltrue([
-      for service_ref, service_ref_location in var.zone_service_ref_list :
+      for service_ref, service_ref_location in var.zone_service_ref_map :
       contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
         "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
         "databases-for-etcd", "databases-for-mongodb",
