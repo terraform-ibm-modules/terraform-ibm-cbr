@@ -98,7 +98,7 @@ module "cbr_account_level" {
     },
     cloud-object-storage = {
       zone_name = "COS-zone-example-of-customized-zone-name"
-    },
+    }
   }
 
   # Demonstrates how additional context to the rules created by this module can be added.
