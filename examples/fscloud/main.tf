@@ -87,7 +87,7 @@ module "cbr_account_level" {
     }
   }
 
-  # Demonstrates how a customized name optional location can be set for the CBR serviceRef zones
+  # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
   zone_service_ref_map = {
     "codeengine" = {
       zone_name           = "codeengine-zone-example-of-customized-zone-name"
