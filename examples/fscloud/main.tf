@@ -115,7 +115,7 @@ module "cbr_account_level" {
         service_ref_names = ["schematics"]
       }
     ] }, {
-    "schematicss" = [{
+    "schematics" = [{
       endpointType = "public"
       zone_ids     = [module.cbr_zone_operator_ips.zone_id]
     }],

@@ -105,6 +105,14 @@ variable "custom_rule_contexts_by_service" {
       add_managed_vpc_zone = optional(bool, false)
       zone_ids             = optional(list(string), [])
   })))
+
+  validation {
+    condition = alltrue([
+      for service_target in keys(var.custom_rule_contexts_by_service) : contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_target)
+    ])
+    error_message = "Provide a valid target service name that is supported by context-based restrictions"
+  }
+
   validation {
     condition = alltrue(flatten([
       for key, val in var.custom_rule_contexts_by_service :
