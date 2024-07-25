@@ -345,6 +345,7 @@ locals {
     databases-for-redis              = local.icd_api_types,
     messages-for-rabbitmq            = local.icd_api_types,
     databases-for-mysql              = local.icd_api_types
+    mqcloud                          = local.icd_api_types
   }
 
   fake_service_names = {
