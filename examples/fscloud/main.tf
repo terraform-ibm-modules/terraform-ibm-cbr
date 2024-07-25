@@ -85,6 +85,10 @@ module "cbr_account_level" {
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false
     }
+    "mqcloud" : {
+      "enforcement_mode" = "disabled"
+      "region"           = "eu-fr2"
+    },
   }
 
   # Demonstrates how a customized name can be set for the CBR zone
