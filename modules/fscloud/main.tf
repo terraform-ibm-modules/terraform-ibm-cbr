@@ -285,7 +285,7 @@ locals {
     target_service_name => []
   }
 
-  global_deny_target_service_details = { for target_service_name, attributes in var.target_service_details :
+  global_deny_target_service_details = { for target_service_name, attributes in local.target_service_details :
     target_service_name => attributes if attributes.global_deny == true
   }
 
