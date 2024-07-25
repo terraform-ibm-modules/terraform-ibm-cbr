@@ -87,8 +87,8 @@ module "cbr_account_level" {
     }
     "mqcloud" : {
       "enforcement_mode" = "disabled"
-      "region"           = "eu-fr2"
-    },
+      "region"           = "eu-fr2" 
+    }
   }
 
   # Demonstrates how a customized name can be set for the CBR zone
