@@ -29,7 +29,8 @@ locals {
     databases-for-mongodb       = local.icd_api_types,
     databases-for-postgresql    = local.icd_api_types,
     databases-for-redis         = local.icd_api_types,
-    messages-for-rabbitmq       = local.icd_api_types
+    messages-for-rabbitmq       = local.icd_api_types,
+    mqcloud                     = local.icd_api_types
   }
 
   vpc_zone_list = (length(var.zone_vpc_crn_list) > 0) ? [{
