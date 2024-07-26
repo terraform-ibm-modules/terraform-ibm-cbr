@@ -88,6 +88,7 @@ module "cbr_account_level" {
     "mqcloud" : {
       "enforcement_mode" = "disabled"
       "region"           = "eu-fr2" # BNPP region
+      "global_deny"      = false
     }
   }
 
