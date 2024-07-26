@@ -7,8 +7,8 @@ This examples is designed to show case some of the key customization options for
 2. Open up network traffic flow from Schematics to Key Protect public endpoints.
 3. Open up network traffic flow from a block of IPs to the Schematics public endpoint.
 4. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
-5. Customized the rule description for `kms` and the zone name for `codeengine`.
-6. Restricting network traffic flow for pseudo `IAM` service. To restrict IAM service, `service-group-id` is required to be specified to enable restriction for `all-iam-account-management-services`.
+5. Customize the rule description for `kms` and the zone name for `codeengine`.
+6. Restrict network traffic flow for pseudo `IAM` service that requires specifying `service-group-id` to enable restriction for `all-iam-account-management-services`.
 
 Context: this examples covers a "pseudo" real-world scenario where:
 1. ICD Mongodb and Postgresql instances are encrypted using keys storage in Key Protect.
@@ -18,4 +18,4 @@ Context: this examples covers a "pseudo" real-world scenario where:
 5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
 
 ## Note
-The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' does not support restriction per location.
+The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restrictions per location.

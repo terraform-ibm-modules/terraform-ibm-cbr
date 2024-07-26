@@ -27,7 +27,7 @@ Important: In order to avoid unexpected breakage in the account against which th
 **Note on Event Notifications**: Event Notifications introduced SMTP API that does not support `report` enforcement mode. By default `report` mode is set which excludes SMTP API. If enforcement mode is set to `enabled`, CBR will be applied to the SMTP API as well.
 
 ## Note
-The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' does not support restriction per location.
+The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
 
 ### Usage
 
