@@ -24,6 +24,8 @@ The module also pre-create CBR zone for each service in the account as a best pr
 
 Important: In order to avoid unexpected breakage in the account against which this module is executed, the CBR rule enforcement mode is set to 'report' (or 'disabled' for services not supporting 'report' mode) by default. It is recommended to test out this module first with these default, and then use the `target_service_details` variable to set the enforcement mode to "enabled" gradually by service. The [usage example](../../examples/fscloud/) demonstrates how to set the enforcement mode to 'enabled' for the key protect ("kms") service.
 
+**Note on Event Notifications**: Event Notifications introduced SMTP API that does not support `report` enforcement mode. By default `report` mode is set which excludes SMTP API. If enforcement mode is set to `enabled`, CBR will be applied to the SMTP API as well.
+
 ## Note
 The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' does not support restriction per location.
 

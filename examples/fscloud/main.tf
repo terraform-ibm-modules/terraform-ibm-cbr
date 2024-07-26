@@ -85,6 +85,11 @@ module "cbr_account_level" {
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false
     }
+    "mqcloud" : {
+      "enforcement_mode" = "disabled"
+      "region"           = "eu-fr2" # BNPP region
+      "global_deny"      = false
+    }
   }
 
   # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
