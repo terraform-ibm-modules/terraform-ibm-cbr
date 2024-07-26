@@ -96,7 +96,7 @@ locals {
     "compliance" : {
       "enforcement_mode" : "report"
     },
-    "IAM" : {
+    "all-iam-account-management-services" : {
       "enforcement_mode" : "report"
       "service_group_id" : "IAM"
     },

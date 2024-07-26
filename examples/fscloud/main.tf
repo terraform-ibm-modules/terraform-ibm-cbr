@@ -90,6 +90,11 @@ module "cbr_account_level" {
       "region"           = "eu-fr2" # BNPP region
       "global_deny"      = false
     }
+    "all-iam-account-management-services" : {
+      "enforcement_mode" : "report"
+      "service_group_id" : "IAM"
+      "global_deny" = false
+    }
   }
 
   # Demonstrates how a customized name can be set for the CBR zone
