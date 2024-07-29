@@ -87,13 +87,12 @@ module "cbr_account_level" {
     }
     "mqcloud" : {
       "enforcement_mode" = "disabled"
-      "region"           = "eu-fr2" # BNPP region
+      "region"           = "eu-fr2" # BNPP region (rule service region/serviceInstance restrictions are enabled for service 'mqcloud`)
       "global_deny"      = false
     }
-    "all-iam-account-management-services" : {
-      "enforcement_mode" : "report"
-      "service_group_id" : "IAM"
-      "global_deny" = false
+    "IAM" : {
+      "enforcement_mode" = "report"
+      "global_deny"      = false
     }
   }
 
