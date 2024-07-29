@@ -6,8 +6,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 
 locals {
 
-  service_group_ids         = ["IAM"] # List of pseudo services for which service_group_id is required
-  check_if_service_group_id = [for key in keys(local.target_service_details) : key if contains(local.service_group_ids, key)]
+  service_group_ids = ["IAM"] # List of pseudo services for which service_group_id is required
 
   target_service_details_default = {
     "iam-groups" : {
@@ -362,7 +361,7 @@ locals {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
-      contains(local.check_if_service_group_id, key) ? {
+      contains(local.service_group_ids, key) ? {
         name     = "service_group_id",
         operator = "stringEquals",
         value    = key
@@ -445,7 +444,7 @@ module "global_deny_cbr_rule" {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
-      contains(local.check_if_service_group_id, each.key) ? {
+      contains(local.service_group_ids, each.key) ? {
         name     = "service_group_id",
         operator = "stringEquals",
         value    = each.key
