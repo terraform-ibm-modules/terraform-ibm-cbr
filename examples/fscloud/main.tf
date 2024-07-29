@@ -87,13 +87,13 @@ module "cbr_account_level" {
     }
     "mqcloud" : {
       "enforcement_mode" = "disabled"
-      "region"           = "eu-fr2" # BNPP region (rule service region/serviceInstance restrictions are enabled for service 'mqcloud`)
+      "region"           = "eu-fr2" # BNPP region (region or serviceInstance is/are required for service 'mqcloud`)
       "global_deny"      = false
     }
-    # "IAM" : {
-    #   "enforcement_mode" = "report"
-    #   "global_deny"      = false
-    # }
+    "IAM" : {
+      "enforcement_mode" = "report"
+      "global_deny"      = false
+    }
   }
 
   # Demonstrates how a customized name can be set for the CBR zone
