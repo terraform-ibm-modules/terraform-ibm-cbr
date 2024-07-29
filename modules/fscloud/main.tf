@@ -5,6 +5,9 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
 locals {
+
+  service_group_ids = ["IAM"] # List of pseudo services for which service_group_id is required
+
   target_service_details_default = {
     "iam-groups" : {
       "enforcement_mode" : "report"
@@ -98,7 +101,6 @@ locals {
     },
     "IAM" : {
       "enforcement_mode" : "report"
-      "service_group_id" : "IAM"
     },
     "context-based-restrictions" : {
       "enforcement_mode" : "report"
@@ -325,10 +327,6 @@ locals {
     ] }]
   }
 
-  deny_rules_by_service = { for target_service_name in keys(local.global_deny_target_service_details) :
-    target_service_name => []
-  }
-
   # Some services have restrictions on the api types that can apply CBR - we codify this below
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
@@ -355,6 +353,7 @@ locals {
 }
 
 locals {
+
   target_service_details_attributes = { for key, value in local.target_service_details :
     key => [
       {
@@ -362,11 +361,15 @@ locals {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
-      try(value.service_group_id, null) != null ? {
+      contains(local.service_group_ids, key) ? {
         name     = "service_group_id",
         operator = "stringEquals",
-        value    = value.service_group_id
-      } : {},
+        value    = key
+        } : {
+        name     = "serviceName",
+        operator = "stringEquals",
+        value    = lookup(local.fake_service_names, key, key)
+      },
       try(value.target_rg, null) != null ? {
         name     = "resourceGroupId",
         operator = "stringEquals",
@@ -381,11 +384,6 @@ locals {
         name     = "region",
         operator = "stringEquals",
         value    = value.region
-      } : {},
-      try(value.service_group_id, null) == null ? {
-        name     = "serviceName",
-        operator = "stringEquals",
-        value    = lookup(local.fake_service_names, key, key)
       } : {}
   ] }
 }
@@ -433,8 +431,7 @@ module "global_deny_cbr_rule" {
   source           = "../../modules/cbr-rule-module"
   rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-global-deny-rule"
   enforcement_mode = each.value.enforcement_mode
-  rule_contexts    = lookup(local.deny_rules_by_service, each.key, [])
-
+  rule_contexts    = []
 
   resources = [{
     tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
@@ -447,10 +444,15 @@ module "global_deny_cbr_rule" {
         operator = "stringEquals",
         value    = data.ibm_iam_account_settings.iam_account_settings.account_id
       },
-      {
+      contains(local.service_group_ids, each.key) ? {
+        name     = "service_group_id",
+        operator = "stringEquals",
+        value    = each.key
+        } : {
         name     = "serviceName",
         operator = "stringEquals",
         value    = lookup(local.fake_service_names, each.key, each.key)
-    }]
+      }
+    ]
   }]
 }
