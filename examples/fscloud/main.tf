@@ -70,24 +70,30 @@ module "cbr_account_level" {
 
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
+
+  ## When a scope is specified in a rule for the target service, a new separate global rule will be created for the respective target service to scope all the resources. This can be opted out by setting the variable 'global_deny = false'
+  ## It is mandatory to set 'global_deny = false' when no scope is specified for the target service
   target_service_details = {
     # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
     "kms" = {
-      # Demonstrates how a customized CBR description (also seen as being the rule name) can be set
+      # Demonstrates how a customized CBR description (also seen as being the rule name) can be set, and a new separate global rule will be created
       "description"      = "kms-rule-example-of-customized-description"
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
-      "global_deny"      = false
       "target_rg"        = module.resource_group.resource_group_id
     }
     "cloud-object-storage" = {
       "enforcement_mode" = "enabled"
       "target_rg"        = module.resource_group.resource_group_id
-      "global_deny"      = false
+      "global_deny"      = false # opting out from creating a new global rule
+    }
+    "messagehub" = {
+      "enforcement_mode" = "enabled"
+      "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
     "mqcloud" : {
-      "enforcement_mode" = "disabled"
-      "region"           = "eu-fr2" # BNPP region (region or serviceInstance is/are required for service 'mqcloud`)
+      "enforcement_mode" = "enabled"
+      "region"           = "eu-fr2" # BNPP region (region and/or instance_id is/are required for service 'mqcloud')
       "global_deny"      = false
     }
     "IAM" : {

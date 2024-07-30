@@ -225,6 +225,14 @@ variable "target_service_details" {
     ])
     error_message = "Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'"
   }
+  validation {
+    condition = alltrue([
+      for details in var.target_service_details : (
+        details.target_rg != null || details.instance_id != null || details.region != null || details.tags != null || details.global_deny == false
+      )
+    ])
+    error_message = "If any of target_rg, instance_id, region, or tags are not defined, global_deny must be set to false."
+  }
   default = {}
 }
 
