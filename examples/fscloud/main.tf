@@ -95,11 +95,11 @@ module "cbr_account_level" {
     "mqcloud" : {
       "enforcement_mode" = "enabled"
       "region"           = "eu-fr2" # BNPP region (region and/or instance_id is/are required for service 'mqcloud')
-      "global_deny"      = false    # opting out from creating a new global rule
+      "global_deny"      = false
     }
     "IAM" : {
       "enforcement_mode" = "report"
-      "global_deny"      = false # opting out from creating a new global rule
+      "global_deny"      = false
     }
   }
 
