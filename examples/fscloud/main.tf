@@ -81,24 +81,25 @@ module "cbr_account_level" {
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
       "target_rg"        = module.resource_group.resource_group_id
+      "global_deny"      = false # opting out from creating a new global rule
     }
     "cloud-object-storage" = {
+      "enforcement_mode" = "enabled"
+      "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
+    }
+    "messagehub" = {
       "enforcement_mode" = "enabled"
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false # opting out from creating a new global rule
     }
-    "messagehub" = {
-      "enforcement_mode" = "enabled"
-      "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
-    }
     "mqcloud" : {
       "enforcement_mode" = "enabled"
       "region"           = "eu-fr2" # BNPP region (region and/or instance_id is/are required for service 'mqcloud')
-      "global_deny"      = false
+      "global_deny"      = false    # opting out from creating a new global rule
     }
     "IAM" : {
       "enforcement_mode" = "report"
-      "global_deny"      = false
+      "global_deny"      = false # opting out from creating a new global rule
     }
   }
 
