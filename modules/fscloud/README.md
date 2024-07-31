@@ -72,7 +72,7 @@ module "cbr_fscloud" {
     }
     "mqcloud" : {
       "enforcement_mode" = "enabled"
-      "region"           = "eu-fr2" # BNPP region (region and/or instance_id is/are required for service 'mqcloud')
+      "region"           = "eu-fr2" # region and/or instance_id is/are required for service 'mqcloud'
       "global_deny"      = false
     }
     "IAM" : {
