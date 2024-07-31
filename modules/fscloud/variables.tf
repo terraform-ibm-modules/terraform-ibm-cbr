@@ -225,7 +225,6 @@ variable "target_service_details" {
     ])
     error_message = "Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'"
   }
-
   default = {}
 }
 
