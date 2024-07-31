@@ -70,9 +70,9 @@ module "cbr_account_level" {
 
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
-
-  ## When a scope is specified in a rule for the target service, a new separate global rule will be created for the respective target service to scope all the resources. This can be opted out by setting the variable 'global_deny = false'
+  ## When a scope is specified in a rule for the target service, a new separate global rule will be created for the respective target service to scope all the resources of that service. This can be opted out by setting the variable 'global_deny = false'
   ## It is mandatory to set 'global_deny = false' when no scope is specified for the target service
+
   target_service_details = {
     # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
     "kms" = {

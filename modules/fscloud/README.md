@@ -26,9 +26,9 @@ Important: In order to avoid unexpected breakage in the account against which th
 
 **Note on Event Notifications**: Event Notifications introduced SMTP API that does not support `report` enforcement mode. By default `report` mode is set which excludes SMTP API. If enforcement mode is set to `enabled`, CBR will be applied to the SMTP API as well.
 
-**Note on global_deny variable**: When a scope is specified in a rule for the target service, a new separate global rule will be created for the respective target service to scope all the resources. This can be opted out by setting the variable global_deny = false. It is mandatory to set `global_deny = false` when no scope is specified for the target service.
+**Note on global_deny variable**: When a `scope` is specified in a rule for the target service, a new separate `global rule` will be created for the respective target service to scope `all the resources` of that service. This can be opted out by setting the variable `global_deny = false`. It is also mandatory to set `global_deny = false` when no scope is specified for the target service.
 
-**Note on `mqcloud`**: Region and/or instance_id is/are required for service 'mqcloud` to create the CBR rule.
+**Note on `mqcloud`**: Region and/or instance_id is/are required for service `mqcloud` to create the CBR rule.
 
 ## Note
 The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
