@@ -63,7 +63,7 @@ module "cbr_fscloud" {
     }
     "cloud-object-storage" = {
       "enforcement_mode" = "enabled"
-      "target_rg"        = m"a8cff104f1764e98aac9ab879198230a" # pragma: allowlist secret
+      "target_rg"        = "a8cff104f1764e98aac9ab879198230a" # pragma: allowlist secret
       "global_deny"      = false # opting out from creating a new global rule
     }
     "messagehub" = {
