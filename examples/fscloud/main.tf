@@ -88,9 +88,9 @@ module "cbr_account_level" {
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
     "messagehub" = {
+      # As the service is scoped, a new global rule will also get created
       "enforcement_mode" = "enabled"
       "target_rg"        = module.resource_group.resource_group_id
-      "global_deny"      = false # opting out from creating a new global rule
     }
     "mqcloud" : {
       "enforcement_mode" = "enabled"
