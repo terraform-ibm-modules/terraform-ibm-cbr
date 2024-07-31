@@ -26,8 +26,12 @@ Important: In order to avoid unexpected breakage in the account against which th
 
 **Note on Event Notifications**: Event Notifications introduced SMTP API that does not support `report` enforcement mode. By default `report` mode is set which excludes SMTP API. If enforcement mode is set to `enabled`, CBR will be applied to the SMTP API as well.
 
+**Note on global_deny variable**: When a `scope` is specified in a rule for the target service, a new separate `global rule` will be created for the respective target service to scope `all the resources` of that service. This can be opted out by setting the variable `global_deny = false`. It is also mandatory to set `global_deny = false` when no scope is specified for the target service.
+
+**Note on `mqcloud`**: Region and/or instance_id is/are required for service `mqcloud` to create the CBR rule.
+
 ## Note
-The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' does not support restriction per location.
+The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
 
 ### Usage
 
@@ -51,10 +55,31 @@ module "cbr_fscloud" {
   # Will skip the zone creation for service ref. present in the list
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
 
-  target_service_details = {
-                            "kms" = {
-                              "enforcement_mode" = "enabled"
-                           }}
+ target_service_details = {
+    "kms" = {
+      "enforcement_mode" = "enabled"
+      "instance_id"      = "dhd2-2bdjd-2bdjd-asgd3" # pragma: allowlist secret
+      "target_rg"        = "a8cff104f1764e98aac9ab879198230a" # pragma: allowlist secret
+    }
+    "cloud-object-storage" = {
+      "enforcement_mode" = "enabled"
+      "target_rg"        = "a8cff104f1764e98aac9ab879198230a" # pragma: allowlist secret
+      "global_deny"      = false # opting out from creating a new global rule
+    }
+    "messagehub" = {
+      "enforcement_mode" = "enabled"
+      "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
+    }
+    "mqcloud" : {
+      "enforcement_mode" = "enabled"
+      "region"           = "eu-fr2" # region and/or instance_id is/are required for service 'mqcloud'
+      "global_deny"      = false
+    }
+    "IAM" : {
+      "enforcement_mode" = "report"
+      "global_deny"      = false
+    }
+  }
 
   custom_rule_contexts_by_service = {
                                     "schematics" = [{

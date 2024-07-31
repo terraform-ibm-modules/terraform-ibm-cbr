@@ -70,6 +70,9 @@ module "cbr_account_level" {
 
   ## Enable enforcement for key protect as an example
   ## The other services not referenced here, are either report, or disabled (when not support report)
+  ## When a scope is specified in a rule for the target service, a new separate global rule will be created for the respective target service to scope all the resources of that service. This can be opted out by setting the variable 'global_deny = false'
+  ## It is mandatory to set 'global_deny = false' when no scope is specified for the target service
+
   target_service_details = {
     # Using 'kms' for Key Protect value as target service name supported by CBR for Key Protect is 'kms'.
     "kms" = {
@@ -77,17 +80,25 @@ module "cbr_account_level" {
       "description"      = "kms-rule-example-of-customized-description"
       "enforcement_mode" = "enabled"
       "instance_id"      = module.key_protect_module.key_protect_guid
-      "global_deny"      = false
       "target_rg"        = module.resource_group.resource_group_id
+      "global_deny"      = false # opting out from creating a new global rule
     }
     "cloud-object-storage" = {
       "enforcement_mode" = "enabled"
+      "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
+    }
+    "messagehub" = {
+      # As the service is scoped, a new global rule will also get created
+      "enforcement_mode" = "enabled"
       "target_rg"        = module.resource_group.resource_group_id
-      "global_deny"      = false
     }
     "mqcloud" : {
-      "enforcement_mode" = "disabled"
-      "region"           = "eu-fr2" # BNPP region
+      "enforcement_mode" = "enabled"
+      "region"           = "eu-fr2" # region and/or instance_id is/are required for service 'mqcloud'
+      "global_deny"      = false
+    }
+    "IAM" : {
+      "enforcement_mode" = "report"
       "global_deny"      = false
     }
   }
