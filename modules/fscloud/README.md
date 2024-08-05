@@ -8,7 +8,7 @@ This module creates default coarse-grained CBR rules in a given account followin
 - Activity Tracker route -> Cloud Object Storage (COS)
 - Virtual Private Clouds (VPCs) where clusters are deployed -> Cloud Object Storage (COS)
 - IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
-- Virtual Private Cloud workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
+- Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
 - IBM Cloud Databases (ICD) -> Hyper Protect Crypto Services (HPCS)
 - IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
 - Event Streams (Messagehub) -> Hyper Protect Crypto Services (HPCS)
