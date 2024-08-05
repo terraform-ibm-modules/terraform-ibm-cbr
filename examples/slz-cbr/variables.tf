@@ -4,12 +4,6 @@ variable "ibmcloud_api_key" {
   sensitive   = true
 }
 
-variable "prefix" {
-  type        = string
-  description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
-  default     = "slz"
-}
-
 variable "region" {
   description = "Name of the region to deploy into"
   type        = string
@@ -25,7 +19,7 @@ variable "provision_cbr" {
 variable "cbr_prefix" {
   type        = string
   description = "String to use as the prefix for all context-based restriction resources, default is `account-infra-base` if `provision_cbr` is set to true."
-  default     = "acct-infra-base"
+  default     = "slz"
 }
 
 variable "cbr_allow_cos_to_kms" {
