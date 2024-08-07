@@ -28,7 +28,7 @@ Important: In order to avoid unexpected breakage in the account against which th
 
 **Note on global_deny variable**: When a `scope` is specified in a rule for the target service, a new separate `global rule` will be created for the respective target service to scope `all the resources` of that service. This can be opted out by setting the variable `global_deny = false`. It is also mandatory to set `global_deny = false` when no scope is specified for the target service.
 
-**Note on `mqcloud`**: Region and/or instance_id is/are required for service `mqcloud` to create the CBR rule.
+**Note on `mqcloud`**: Region and/or instance_id is/are required for service `mqcloud` to create the CBR rule. This service is only available in eu-fr2 region.
 
 ## Note
 The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
@@ -69,11 +69,6 @@ module "cbr_fscloud" {
     "messagehub" = {
       "enforcement_mode" = "enabled"
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
-    }
-    "mqcloud" : {
-      "enforcement_mode" = "enabled"
-      "region"           = "eu-fr2" # region and/or instance_id is/are required for service 'mqcloud'
-      "global_deny"      = false
     }
     "IAM" : {
       "enforcement_mode" = "report"
