@@ -94,7 +94,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "event-notifications" : {
-      "enforcement_mode" : "report"
+      "enforcement_mode" : "disabled"
     },
     "compliance" : {
       "enforcement_mode" : "report"
@@ -397,10 +397,6 @@ module "cbr_rule" {
       # lookup the map for the target service name, if empty then pass default value
       for apitype in lookup(local.operations_apitype_val, each.key, []) : {
         api_type_id = apitype
-    }] # Addding condition below for Event Notifications to enable CBR for control plane API explicitly for report mode as SMTP API does not support report mode
-    }] : each.key == "event-notifications" && each.value.enforcement_mode == "report" ? [{
-    api_types = [{
-      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane"
     }]
     }] : [{
     api_types = [{
