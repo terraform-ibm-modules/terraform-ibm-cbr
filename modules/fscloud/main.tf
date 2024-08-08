@@ -146,9 +146,6 @@ locals {
     "logdnaat" : {
       "enforcement_mode" : "report"
     },
-    "mqcloud" : {
-      "enforcement_mode" : "disabled"
-    },
     "sysdig-monitor" : {
       "enforcement_mode" : "report"
     },
