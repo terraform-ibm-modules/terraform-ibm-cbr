@@ -8,38 +8,6 @@ locals {
 
   service_group_ids = ["IAM"] # List of pseudo services for which service_group_id is required
 
-  default_service_ref_map = {
-    "cloud-object-storage"        = null
-    "codeengine"                  = null
-    "containers-kubernetes"       = null
-    "databases-for-cassandra"     = null
-    "databases-for-elasticsearch" = null
-    "databases-for-enterprisedb"  = null
-    "databases-for-etcd"          = null
-    "databases-for-mongodb"       = null
-    "databases-for-mysql"         = null
-    "databases-for-postgresql"    = null
-    "databases-for-redis"         = null
-    "directlink"                  = null
-    "iam-groups"                  = null
-    "is"                          = null
-    "messagehub"                  = null
-    "messages-for-rabbitmq"       = null
-    "schematics"                  = null
-    "secrets-manager"             = null
-    "server-protect"              = null
-    "user-management"             = null
-    "apprapp"                     = null
-    "compliance"                  = null
-    "event-notifications"         = null
-    "logdna"                      = null
-    "logdnaat"                    = null
-    "cloudantnosqldb"             = null
-    "globalcatalog-collection"    = null
-    "sysdig-monitor"              = null
-    "sysdig-secure"               = null
-    "toolchain"                   = null
-  }
   target_service_details_default = {
     "iam-groups" : {
       "enforcement_mode" : "report"
@@ -155,10 +123,9 @@ locals {
   }
 
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
-  merge_service_refs     = merge(local.default_service_ref_map, var.zone_service_ref_map)
 
-  zone_final_service_ref_map = {
-    for service_ref, service_ref_details in local.merge_service_refs : service_ref => (
+  zone_final_service_ref_list = {
+    for service_ref, service_ref_details in var.zone_service_ref_list : service_ref => (
       service_ref_details != null ? {
         zone_name           = service_ref_details.zone_name != null ? service_ref_details.zone_name : null,
         serviceRef_location = service_ref_details.serviceRef_location != null ? service_ref_details.serviceRef_location : []
@@ -180,10 +147,10 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_location_and_service_name = [
     for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
-    contains(keys(local.zone_final_service_ref_map), item) ? length(local.zone_final_service_ref_map[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
+    contains(keys(local.zone_final_service_ref_list), item) ? length(local.zone_final_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
   ]
-  service_ref_zone_list = (length(local.zone_final_service_ref_map) > 0) ? {
-    for service_ref, service_ref_details in local.zone_final_service_ref_map : service_ref => {
+  service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? {
+    for service_ref, service_ref_details in local.zone_final_service_ref_list : service_ref => {
       name             = service_ref_details.zone_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_details.zone_name
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "Single zone for service ${service_ref}."

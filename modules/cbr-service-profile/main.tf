@@ -10,12 +10,12 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 ##############################################################################
 locals {
   # tflint-ignore: terraform_unused_declarations
-  validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_map) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
+  validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
 
   # tflint-ignore: terraform_unused_declarations
   validate_location_and_service_name = [
     for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
-    contains(keys(var.zone_service_ref_map), item) ? length(var.zone_service_ref_map[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
+    contains(keys(var.zone_service_ref_list), item) ? length(var.zone_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
   ]
 
   # Restrict and allow the api types as per the target service
@@ -43,8 +43,8 @@ locals {
     ]
   }] : []
 
-  service_ref_zone_list = (length(var.zone_service_ref_map) > 0) ? [
-    for serviceref, location in var.zone_service_ref_map : {
+  service_ref_zone_list = (length(var.zone_service_ref_list) > 0) ? [
+    for serviceref, location in var.zone_service_ref_list : {
       name             = "${var.prefix}-${serviceref}-cbr-serviceref-zone"
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "${serviceref}-cbr-serviceref-zone"

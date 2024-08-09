@@ -99,15 +99,15 @@ module "cbr_account_level" {
   }
 
   # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
-  zone_service_ref_map = {
-    "codeengine" = {
+  zone_service_ref_list = {
+    codeengine = {
       zone_name           = "codeengine-zone-example-of-customized-zone-name"
-      serviceRef_location = ["au", "syd"]
+      serviceRef_location = ["au", "tok"]
     },
-    "server-protect" = {
-      serviceRef_location = ["au"]
+    server-protect = {
+      serviceRef_location = ["fr"]
     },
-    "cloud-object-storage" = {
+    cloud-object-storage = {
       zone_name = "COS-zone-example-of-customized-zone-name"
     }
   }

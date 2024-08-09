@@ -26,7 +26,7 @@ variable "resource_tags" {
   default     = []
 }
 
-variable "zone_service_ref_map" {
+variable "zone_service_ref_list" {
   type = map(object({
     serviceRef_location = optional(list(string), [])
   }))
