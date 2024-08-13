@@ -8,8 +8,8 @@ This examples is designed to show case some of the key customization options for
 3. Open up network traffic flow from a block of IPs to the Schematics public endpoint.
 4. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
 5. Customize the rule description for `kms` and the zone name for `codeengine` and `cloud-object-storage`.
-6. Adds optional locations to open traffic only from `au` and `tok` locations for the `codeengine` network zone and leaves the flow closed in other locations.
-7. Adds optional location to open traffic only from `fr` location for `server-protect` network zone and leaves the flow closed in other locations.
+6. Add optional locations to open traffic only from `au` and `tok` locations for the `codeengine` network zone and leave the flow closed in other locations.
+7. Add optional location to open traffic only from `fr` location for `server-protect` network zone and leave the flow closed in other locations.
 
 Context: this examples covers a "pseudo" real-world scenario where:
 1. ICD Mongodb and Postgresql instances are encrypted using keys storage in Key Protect.
