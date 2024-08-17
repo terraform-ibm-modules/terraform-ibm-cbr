@@ -2,14 +2,14 @@ module github.com/terraform-ibm-modules/terraform-ibm-cbr
 
 go 1.21
 
-toolchain go1.22.6
+toolchain go1.23.0
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.17.4
-	github.com/IBM/platform-services-go-sdk v0.65.1
+	github.com/IBM/platform-services-go-sdk v0.66.0
 	github.com/gruntwork-io/terratest v0.47.0
 	github.com/stretchr/testify v1.9.0
-	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.36.0
+	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.37.0
 )
 
 require (
