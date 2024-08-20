@@ -94,7 +94,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "event-notifications" : {
-      "enforcement_mode" : "report"
+      "enforcement_mode" : "disabled"
     },
     "compliance" : {
       "enforcement_mode" : "report"
@@ -114,9 +114,6 @@ locals {
     "logdnaat" : {
       "enforcement_mode" : "report"
     },
-    "mqcloud" : {
-      "enforcement_mode" : "disabled"
-    },
     "sysdig-monitor" : {
       "enforcement_mode" : "report"
     },
@@ -128,8 +125,17 @@ locals {
   target_service_details = merge(local.target_service_details_default, var.target_service_details)
 
   zone_final_service_ref_list = {
-    for service_ref, service_ref_name in var.zone_service_ref_list : service_ref => service_ref_name if !contains(var.skip_specific_services_for_zone_creation, service_ref)
+    for service_ref, service_ref_details in var.zone_service_ref_list : service_ref => (
+      service_ref_details != null ? {
+        zone_name           = service_ref_details.zone_name != null ? service_ref_details.zone_name : null,
+        serviceRef_location = service_ref_details.serviceRef_location != null ? service_ref_details.serviceRef_location : []
+        } : {
+        zone_name           = null,
+        serviceRef_location = []
+      }
+    ) if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
+
 }
 
 ###############################################################################
@@ -137,19 +143,33 @@ locals {
 ###############################################################################
 
 locals {
+
+  # tflint-ignore: terraform_unused_declarations
+  validate_location_and_service_name = [
+    for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
+    contains(keys(local.zone_final_service_ref_list), item) ? length(local.zone_final_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
+  ]
   service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? {
-    for service_ref, service_ref_name in local.zone_final_service_ref_list : service_ref => {
-      name             = service_ref_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_name
+    for service_ref, service_ref_details in local.zone_final_service_ref_list : service_ref => {
+      name             = service_ref_details.zone_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_details.zone_name
       account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
       zone_description = "Single zone for service ${service_ref}."
-      # when the target service is containers-kubernetes or any icd services, context cannot have a serviceref
-      addresses = [
+      addresses = length(service_ref_details.serviceRef_location) == 0 ? [
         {
           type = "serviceRef"
           ref = {
             account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
             service_name = service_ref
-            location     = (service_ref == "directlink" || service_ref == "globalcatalog-collection" || service_ref == "user-management" || service_ref == "iam-groups") ? null : var.location
+            location     = null
+          }
+        }
+        ] : [for loc in service_ref_details.serviceRef_location :
+        {
+          type = "serviceRef"
+          ref = {
+            account_id   = data.ibm_iam_account_settings.iam_account_settings.account_id
+            service_name = service_ref
+            location     = loc
           }
         }
       ]
@@ -400,10 +420,6 @@ module "cbr_rule" {
       # lookup the map for the target service name, if empty then pass default value
       for apitype in lookup(local.operations_apitype_val, each.key, []) : {
         api_type_id = apitype
-    }] # Addding condition below for Event Notifications to enable CBR for control plane API explicitly for report mode as SMTP API does not support report mode
-    }] : each.key == "event-notifications" && each.value.enforcement_mode == "report" ? [{
-    api_types = [{
-      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane"
     }]
     }] : [{
     api_types = [{

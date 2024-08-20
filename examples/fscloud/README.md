@@ -4,11 +4,12 @@ This example demonstrates how to use the [fscloud profile](../../profiles/fsclou
 
 This examples is designed to show case some of the key customization options for the module. In addition to the pre-wired CBR rules documented at [fscloud profile](../../profiles/fscloud/), this examples show how to customize the module to:
 1. Open up network traffic flow from ICD mongodb, ICD Postgresql to the Key Protect private endpoints.
-2. Open up network traffic flow from Schematics to Key Protect public endpoints.
+2. Open up network traffic flow from Schematics to Key Protect private endpoints.
 3. Open up network traffic flow from a block of IPs to the Schematics public endpoint.
 4. Open up network traffic flow from the VPC created in this example to ICD postgresql private endpoints.
-5. Customize the rule description for `kms` and the zone name for `codeengine`.
-6. Restrict network traffic flow for pseudo `IAM` service.
+5. Customize the rule description for `kms` and the zone name for `codeengine` and `cloud-object-storage`.
+6. Add optional locations to open traffic only from `au` and `tok` locations for the `codeengine` network zone and leave the flow closed in other locations.
+7. Add optional location to open traffic only from `fr` location for `server-protect` network zone and leave the flow closed in other locations.
 
 Context: this examples covers a "pseudo" real-world scenario where:
 1. ICD Mongodb and Postgresql instances are encrypted using keys storage in Key Protect.
@@ -18,4 +19,4 @@ Context: this examples covers a "pseudo" real-world scenario where:
 5. Skips creation of zones for these two service references ["user-management", "iam-groups"].
 
 ## Note
-The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restrictions per location.
+- The services 'compliance', 'directlink', 'iam-groups', 'user-management' do not support restriction per location for zone creation.

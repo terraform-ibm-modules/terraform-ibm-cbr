@@ -15,7 +15,7 @@ module "resource_group" {
 ##############################################################################
 module "key_protect_module" {
   source            = "terraform-ibm-modules/key-protect/ibm"
-  version           = "v2.8.1"
+  version           = "v2.8.4"
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
@@ -92,20 +92,24 @@ module "cbr_account_level" {
       "enforcement_mode" = "enabled"
       "target_rg"        = module.resource_group.resource_group_id
     }
-    "mqcloud" : {
-      "enforcement_mode" = "enabled"
-      "region"           = "eu-fr2" # region and/or instance_id is/are required for service 'mqcloud'
-      "global_deny"      = false
-    }
     "IAM" : {
       "enforcement_mode" = "report"
       "global_deny"      = false
     }
   }
 
-  # Demonstrates how a customized name can be set for the CBR zone
+  # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
   zone_service_ref_list = {
-    "codeengine" = "codeengine-zone-example-of-customized-zone-name"
+    codeengine = {
+      zone_name           = "codeengine-zone-example-of-customized-zone-name"
+      serviceRef_location = ["au", "tok"]
+    },
+    server-protect = {
+      serviceRef_location = ["fr"]
+    },
+    cloud-object-storage = {
+      zone_name = "COS-zone-example-of-customized-zone-name"
+    }
   }
 
   # Demonstrates how additional context to the rules created by this module can be added.
