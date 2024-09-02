@@ -285,9 +285,18 @@ variable "target_service_details" {
     enforcement_mode = string
     tags             = optional(list(string))
     region           = optional(string)
+    geography        = optional(string)
     global_deny      = optional(bool, true)
   }))
   description = "Details of the target service for which a rule is created. The key is the service name."
+
+  validation {
+    condition = alltrue([
+      for _, details in var.target_service_details :
+      !(details.region != null && details.geography != null)
+    ])
+    error_message = "You can specify either 'region' or 'geography', but not both. More info - https://cloud.ibm.com/docs/Registry?topic=Registry-registry-cbr&interface=ui#registry-cbr_region_policy."
+  }
   validation {
     condition = alltrue([
       for target_service_name, _ in var.target_service_details :
