@@ -307,7 +307,7 @@ variable "target_service_details" {
         )
       )
     ])
-    error_message = "Provide a valid target service name that is supported by context-based restrictions. Each service must have either 'region' or 'geography', but not both or null."
+    error_message = "Provide a valid target service that must have either 'region' or 'geography', but not both or null."
   }
 
   validation {
