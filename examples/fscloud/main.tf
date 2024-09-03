@@ -105,7 +105,7 @@ module "cbr_account_level" {
       serviceRef_location = ["au", "tok"]
     },
     server-protect = {
-      serviceRef_location = ["fr"]
+      serviceRef_location = ["eu"]
     },
     cloud-object-storage = {
       zone_name = "COS-zone-example-of-customized-zone-name"
