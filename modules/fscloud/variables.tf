@@ -292,13 +292,6 @@ variable "target_service_details" {
 
   validation {
     condition = alltrue([
-      for _, details in var.target_service_details :
-      !(details.region != null && details.geography != null)
-    ])
-    error_message = "You can specify either 'region' or 'geography', but not both. More info - https://cloud.ibm.com/docs/Registry?topic=Registry-registry-cbr&interface=ui#registry-cbr_region_policy."
-  }
-  validation {
-    condition = alltrue([
       for target_service_name, _ in var.target_service_details :
       contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
     ])
@@ -306,11 +299,19 @@ variable "target_service_details" {
   }
   validation {
     condition = alltrue([
-      for target_service_name, attributes in var.target_service_details :
-      contains(["cloud-object-storage", "codeengine", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "event-notifications", "hs-crypto", "iam-identity", "is", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "secrets-manager", "sysdig-monitor", "sysdig-secure"], target_service_name) if attributes.region != null
+      for target_service_name, target_service in var.target_service_details : (
+        contains([
+          "IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"
+        ], target_service_name) &&
+        (
+          (target_service.region != null && target_service.geography == null) ||
+          (target_service.region == null && target_service.geography != null)
+        )
+      )
     ])
-    error_message = "Provide a valid target service name that supports region attribute."
+    error_message = "Provide a valid target service name that is supported by context-based restrictions. Each service must have either 'region' or 'geography', but not both or null."
   }
+
   validation {
     condition = alltrue([
       for target_service_name, details in var.target_service_details :
