@@ -448,7 +448,17 @@ module "global_deny_cbr_rule" {
   rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-global-deny-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = []
-
+  operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
+    api_types = [
+      # lookup the map for the target service name, if empty then pass default value
+      for apitype in lookup(local.operations_apitype_val, each.key, []) : {
+        api_type_id = apitype
+    }]
+    }] : [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
   resources = [{
     tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
       name  = split(":", tag)[0]
