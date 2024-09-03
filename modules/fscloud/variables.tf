@@ -302,12 +302,11 @@ variable "target_service_details" {
       for target_service_name, attributes in var.target_service_details : (
         contains(["cloud-object-storage", "codeengine", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "event-notifications", "hs-crypto", "iam-identity", "is", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "secrets-manager", "sysdig-monitor", "sysdig-secure"], target_service_name) &&
         (
-          (attributes.region != null && attributes.geography == null) ||
-          (attributes.region == null && attributes.geography != null)
+          !(attributes.region != null && attributes.geography != null)
         )
       )
     ])
-    error_message = "Provide a valid target service that must have either 'region' or 'geography', but not both or null."
+    error_message = "Both `region` and `geography` cannot be set simultaneously for the target service."
   }
 
   validation {
