@@ -69,6 +69,12 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
+variable "allow_scc_to_cos" {
+  type        = bool
+  description = "Set rule for SCC (Security and Compliance Center) to COS, default is true"
+  default     = true
+}
+
 variable "zone_service_ref_list" {
   type = object({
     cloud-object-storage = optional(object({

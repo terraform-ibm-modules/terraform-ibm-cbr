@@ -5,13 +5,13 @@ This module creates default coarse-grained CBR rules in a given account followin
 - Block Storage -> Hyper Protect Crypto Services (HPCS)
 - IBM Cloud Kubernetes Service (IKS) -> Hyper Protect Crypto Services (HPCS)
 - All IBM Cloud Databases (ICD) services -> Hyper Protect Crypto Services (HPCS)
-- Activity Tracker route -> Cloud Object Storage (COS)
-- Virtual Private Clouds (VPCs) where clusters are deployed -> Cloud Object Storage (COS)
-- IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
-- Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
-- IBM Cloud Databases (ICD) -> Hyper Protect Crypto Services (HPCS)
-- IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
 - Event Streams (Messagehub) -> Hyper Protect Crypto Services (HPCS)
+- Virtual Private Clouds (VPCs) where clusters are deployed -> Cloud Object Storage (COS)
+- Activity Tracker route -> Cloud Object Storage (COS)
+- IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
+- Security and Compliance Center (SCC) -> Cloud Object Storage (COS)
+- Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
+- IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
 
 
 **Note on KMS**: the module supports setting up rules for Key Protect, and Hyper Protect Crypto Services. By default the modules set rules for Hyper Protect Crypto Services, but this can be modified to use Key Protect, Hyper Protect, or both Key Protect and Hyper Protect Crypto Services using the input variable `kms_service_targeted_by_prewired_rules`.
@@ -120,6 +120,7 @@ module "cbr_fscloud" {
 | <a name="input_allow_iks_to_is"></a> [allow\_iks\_to\_is](#input\_allow\_iks\_to\_is) | Set rule for IKS to IS (VPC Infrastructure Services), default is true | `bool` | `true` | no |
 | <a name="input_allow_is_to_cos"></a> [allow\_is\_to\_cos](#input\_allow\_is\_to\_cos) | Set rule for IS (VPC Infrastructure Services) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_roks_to_kms"></a> [allow\_roks\_to\_kms](#input\_allow\_roks\_to\_kms) | Set rule for ROKS to KMS, default is true | `bool` | `true` | no |
+| <a name="input_allow_scc_to_cos"></a> [allow\_scc\_to\_cos](#input\_allow\_scc\_to\_cos) | Set rule for SCC (Security and Compliance Center) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |
 | <a name="input_custom_rule_contexts_by_service"></a> [custom\_rule\_contexts\_by\_service](#input\_custom\_rule\_contexts\_by\_service) | Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service\_ref\_names or add\_managed\_vpc\_zone are passed in. | <pre>map(list(object(<br>    {<br>      endpointType = string # "private, public or direct"<br><br>      # Service-name (module lookup for existing network zone) and/or CBR zone id<br>      service_ref_names    = optional(list(string), [])<br>      add_managed_vpc_zone = optional(bool, false)<br>      zone_ids             = optional(list(string), [])<br>  })))</pre> | `{}` | no |
