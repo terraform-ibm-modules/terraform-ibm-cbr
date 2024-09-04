@@ -308,15 +308,14 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for target_service_name, attributes in var.target_service_details : (
-        contains(["container-registry"], target_service_name) &&
-        (
+        target_service_name != "container-registry" || (
+          contains(["container-registry"], target_service_name) &&
           !(attributes.region != null && attributes.geography != null)
         )
       )
     ])
     error_message = "Both `region` and `geography` cannot be set simultaneously for the container registry service."
   }
-
   validation {
     condition = alltrue([
       for target_service_name, details in var.target_service_details :

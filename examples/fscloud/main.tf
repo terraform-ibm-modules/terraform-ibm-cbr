@@ -96,6 +96,10 @@ module "cbr_account_level" {
       "enforcement_mode" = "report"
       "global_deny"      = false
     }
+    "container-registry" : {
+      "enforcement_mode" : "enabled"
+      "geography" : "global"
+    }
   }
 
   # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
