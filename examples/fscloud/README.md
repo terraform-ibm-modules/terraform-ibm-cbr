@@ -10,7 +10,7 @@ This examples is designed to show case some of the key customization options for
 5. Customize the rules for `kms`, `cloud-object-storage`,  `databases-for-postgresql`, `messagehub`, `IAM` and `container-registry`.
 6. Customize the zone name for `codeengine` and `cloud-object-storage`.
 7. Add optional locations to open traffic only from `au` and `tok` locations for the `codeengine` network zone and leave the flow closed in other locations.
-8. Add optional location to open traffic only from `fr` location for `server-protect` network zone and leave the flow closed in other locations.
+8. Add optional location to open traffic only from `eu` location for `server-protect` network zone and leave the flow closed in other locations.
 
 Context: this examples covers a "pseudo" real-world scenario where:
 1. ICD Mongodb and Postgresql instances are encrypted using keys storage in Key Protect.
