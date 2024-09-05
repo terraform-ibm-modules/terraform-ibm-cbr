@@ -87,6 +87,10 @@ module "cbr_account_level" {
       "enforcement_mode" = "enabled"
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
+    "databases-for-postgresql" = {
+      "enforcement_mode" = "enabled"
+      "target_rg"        = module.resource_group.resource_group_id
+    }
     "messagehub" = {
       # As the service is scoped, a new global rule will also get created
       "enforcement_mode" = "enabled"
