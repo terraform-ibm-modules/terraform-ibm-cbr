@@ -22,7 +22,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "cloud-object-storage" : {
-      "enforcement_mode" : "enabled"
+      "enforcement_mode" : "report"
     },
     "codeengine" : {
       "enforcement_mode" : "report"

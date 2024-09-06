@@ -30,6 +30,8 @@ Important: In order to avoid unexpected breakage in the account against which th
 
 **Note on `mqcloud`**: Region and/or instance_id is/are required for service `mqcloud` to create the CBR rule. This service is only available in eu-fr2 region.
 
+**Note on `Security and Compliance Center (SCC) scan`**: Compliance can only be claimed after all the enforcement mode have been set to enabled.
+
 ## Note
 The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
 
