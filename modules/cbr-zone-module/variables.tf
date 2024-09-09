@@ -216,3 +216,19 @@ variable "excluded_addresses" {
     error_message = "Value should be a valid as per the type"
   }
 }
+
+variable "zone_id" {
+  type = string
+  validation {
+    condition     = var.zone_id == null || (can(regex("^[0-9a-fA-F]{32}$", var.zone_id)))
+    error_message = "Value should be a valid zone ID with 32 alphanumeric characters"
+  }
+  description = "Provide a existing zone id for VPC"
+  default     = null
+}
+
+variable "use_existing_cbr_zone" {
+  type        = bool
+  description = "Whether to update CBR zone using existing zone ID."
+  default     = false
+}
