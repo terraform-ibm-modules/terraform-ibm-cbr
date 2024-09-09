@@ -51,4 +51,3 @@ output "zone_href" {
   value       = module.ibm_cbr_zone.zone_href
   description = "cbr_zone resource instance href"
 }
-

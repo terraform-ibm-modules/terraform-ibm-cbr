@@ -101,8 +101,8 @@ module "ibm_cbr_zone" {
 }
 
 module "update_cbr_zone" {
-  source           = "../../modules/cbr-zone-module"
+  source                = "../../modules/cbr-zone-module"
   use_existing_cbr_zone = true
-  zone_id          = module.ibm_cbr_zone.zone_id
-  addresses        = local.new_zone_address_details
+  zone_id               = module.ibm_cbr_zone.zone_id
+  addresses             = local.new_zone_address_details
 }

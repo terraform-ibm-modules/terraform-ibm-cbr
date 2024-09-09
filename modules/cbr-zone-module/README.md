@@ -54,9 +54,9 @@ No modules.
 | <a name="input_addresses"></a> [addresses](#input\_addresses) | (List) The list of addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>    ref = optional(object({<br>      account_id       = string<br>      location         = optional(string)<br>      service_instance = optional(string)<br>      service_name     = optional(string)<br>      service_type     = optional(string)<br>    }))<br>  }))</pre> | `[]` | no |
 | <a name="input_excluded_addresses"></a> [excluded\_addresses](#input\_excluded\_addresses) | (Optional, List) The list of excluded addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Optional, String) The name of the zone | `string` | `null` | no |
-| <a name="input_use_existing_cbr_zone"></a> [use\_existing\_cbr\_zone](#input\_use\_existing\_cbr\_zone) | Whether to update CBR zone using existing zone ID. | `bool` | `false` | no |
+| <a name="input_use_existing_cbr_zone"></a> [use\_existing\_cbr\_zone](#input\_use\_existing\_cbr\_zone) | Whether to update CBR zone using existing zone ID | `bool` | `false` | no |
 | <a name="input_zone_description"></a> [zone\_description](#input\_zone\_description) | (Optional, String) The description of the zone | `string` | `null` | no |
-| <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | Provide a existing zone id for VPC | `string` | `null` | no |
+| <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | Provide an existing CBR zone ID | `string` | `null` | no |
 
 ### Outputs
 
