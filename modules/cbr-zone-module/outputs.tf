@@ -1,28 +1,28 @@
-##############################################################################
-# Outputs
-##############################################################################
+# ##############################################################################
+# # Outputs
+# ##############################################################################
 
 output "zone_names" {
-  value       = ibm_cbr_zone.cbr_zone.name
-  description = "CBR zone resource instance name"
+  value       = var.existing_zone_id == null ? ibm_cbr_zone.cbr_zone[0].name : null
+  description = "CBR zone resource name"
 }
 
 output "zone_description" {
-  value       = var.zone_description
-  description = "CBR zone resource instance description"
+  value       = var.existing_zone_id == null ? var.zone_description : null
+  description = "CBR zone resource description"
 }
 
 output "zone_id" {
-  value       = ibm_cbr_zone.cbr_zone.id
-  description = "CBR zone resource instance id"
+  value       = var.existing_zone_id == null ? ibm_cbr_zone.cbr_zone[0].id : ibm_cbr_zone_addresses.update_cbr_zone_address[0].id
+  description = "CBR zone resource id"
 }
 
 output "zone_crn" {
-  value       = ibm_cbr_zone.cbr_zone.crn
-  description = "CBR zone resource instance crn"
+  value       = var.existing_zone_id == null ? ibm_cbr_zone.cbr_zone[0].crn : null
+  description = "CBR zone resource crn"
 }
 
 output "zone_href" {
-  value       = ibm_cbr_zone.cbr_zone.href
-  description = "CBR zone resource instance link"
+  value       = var.existing_zone_id == null ? ibm_cbr_zone.cbr_zone[0].href : null
+  description = "CBR zone resource link"
 }

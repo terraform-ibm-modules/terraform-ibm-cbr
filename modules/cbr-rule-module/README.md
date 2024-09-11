@@ -81,8 +81,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule resource instance crn |
-| <a name="output_rule_description"></a> [rule\_description](#output\_rule\_description) | CBR rule resource instance description |
-| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule resource href |
-| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule resource instance id |
+| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule crn |
+| <a name="output_rule_description"></a> [rule\_description](#output\_rule\_description) | CBR rule description |
+| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule href |
+| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule id |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
