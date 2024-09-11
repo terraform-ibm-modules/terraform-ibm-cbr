@@ -285,15 +285,28 @@ variable "target_service_details" {
     enforcement_mode = string
     tags             = optional(list(string))
     region           = optional(string)
+    geography        = optional(string)
     global_deny      = optional(bool, true)
   }))
   description = "Details of the target service for which a rule is created. The key is the service name."
+
   validation {
     condition = alltrue([
       for target_service_name, _ in var.target_service_details :
       contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
+  }
+  validation {
+    condition = alltrue([
+      for target_service_name, attributes in var.target_service_details : (
+        target_service_name != "container-registry" || (
+          contains(["container-registry"], target_service_name) &&
+          !(attributes.region != null && attributes.geography != null)
+        )
+      )
+    ])
+    error_message = "Both `region` and `geography` cannot be set simultaneously for the container registry service."
   }
   validation {
     condition = alltrue([

@@ -404,6 +404,11 @@ locals {
         name     = "region",
         operator = "stringEquals",
         value    = value.region
+      } : {},
+      try(value.geography, null) != null ? {
+        name     = "geography",
+        operator = "stringEquals",
+        value    = value.geography
       } : {}
   ] }
 }

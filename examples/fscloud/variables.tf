@@ -6,7 +6,7 @@ variable "ibmcloud_api_key" {
 
 variable "prefix" {
   type        = string
-  description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
+  description = "Prefix to append to all vpc_zone_list, zone_service_ref_list and cbr_rule_description created by this submodule"
 }
 
 variable "region" {
