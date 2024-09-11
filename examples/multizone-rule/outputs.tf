@@ -4,17 +4,17 @@
 
 output "zone_id" {
   value       = module.cbr_zone[*].zone_id
-  description = "CBR zone resource instance id"
+  description = "CBR zone id"
 }
 
 output "zone_crn" {
   value       = module.cbr_zone[*].zone_crn
-  description = "CBR zone resource instance crn"
+  description = "CBR zone crn"
 }
 
 output "zone_href" {
   value       = module.cbr_zone[*].zone_href
-  description = "CBR zone resource instance href"
+  description = "CBR zone href"
 }
 
 output "cos_guid" {
@@ -34,7 +34,7 @@ output "resource_group_id" {
 
 output "rule_id" {
   value       = module.cbr_rule.rule_id
-  description = "CBR rule resource instance id"
+  description = "CBR rule id"
 }
 
 output "rule_description" {
@@ -44,10 +44,10 @@ output "rule_description" {
 
 output "rule_crn" {
   value       = module.cbr_rule.rule_crn
-  description = "CBR rule resource instance crn"
+  description = "CBR rule crn"
 }
 
 output "rule_href" {
   value       = module.cbr_rule.rule_href
-  description = "CBR rule resource instance href"
+  description = "CBR rule href"
 }

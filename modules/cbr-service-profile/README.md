@@ -71,5 +71,5 @@ module "cbr_rule_multi_service_profile" {
 | <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | CBR rule id(s) |
 | <a name="output_zone_crns"></a> [zone\_crns](#output\_zone\_crns) | CBR zone crn(s) |
 | <a name="output_zone_hrefs"></a> [zone\_hrefs](#output\_zone\_hrefs) | CBR zone href(s) |
-| <a name="output_zone_ids"></a> [zone\_ids](#output\_zone\_ids) | CBR zone resource instance id(s) |
+| <a name="output_zone_ids"></a> [zone\_ids](#output\_zone\_ids) | CBR zone id(s) |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -1,15 +1,25 @@
-##############################################################################
-# Outputs
-##############################################################################
+# # ##############################################################################
+# # # Outputs
+# # ##############################################################################
 
 output "vpc_id" {
   value       = resource.ibm_is_vpc.example_vpc.id
   description = "VPC id"
 }
 
+output "new_vpc_id" {
+  value       = resource.ibm_is_vpc.example_new_vpc.id
+  description = "New VPC id"
+}
+
 output "vpc_crn" {
   value       = resource.ibm_is_vpc.example_vpc.crn
   description = "VPC crn"
+}
+
+output "new_vpc_crn" {
+  value       = resource.ibm_is_vpc.example_new_vpc.crn
+  description = "New VPC crn"
 }
 
 output "account_id" {

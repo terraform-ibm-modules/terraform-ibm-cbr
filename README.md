@@ -25,6 +25,7 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [Multi resource rule example](./examples/multi-resource-rule)
     * [Multi-zone example](./examples/multizone-rule)
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
+    * [Zone example](./examples/update-existing-zone-addresses)
     * [Zone example](./examples/zone)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
@@ -103,7 +104,7 @@ You need the following permissions to run this module.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.65.0, < 2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.69.0, < 2.0.0 |
 
 ### Modules
 
@@ -136,12 +137,12 @@ You need the following permissions to run this module.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule resource instance crn |
-| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule resource href |
-| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule resource instance id |
-| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | cbr\_zone resource instance crn |
-| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone resource instance link |
-| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone resource instance id |
+| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule crn |
+| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule href |
+| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule id |
+| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | cbr\_zone crn |
+| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone link |
+| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone id |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->
