@@ -6,4 +6,4 @@ Example that creates a zone for context-based restrictions. This example uses th
 - Creates 2 Public Gateways.
 - Creates 2 VPC Subnets.
 - Creates a CBR Zone for the VPC.
-- Updates an existing CBR Zone created above with a new addresses containing a new VPC and a `compliance` serviceRef.
+- Updates an existing CBR Zone created above with new addresses containing another VPC created above and a `compliance` serviceRef.

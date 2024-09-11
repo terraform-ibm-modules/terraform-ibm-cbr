@@ -137,12 +137,12 @@ You need the following permissions to run this module.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule resource instance crn |
-| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule resource href |
-| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule resource instance id |
-| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | cbr\_zone resource instance crn |
-| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone resource instance link |
-| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone resource instance id |
+| <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule crn |
+| <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule href |
+| <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule id |
+| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | cbr\_zone crn |
+| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | cbr\_zone link |
+| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | cbr\_zone id |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

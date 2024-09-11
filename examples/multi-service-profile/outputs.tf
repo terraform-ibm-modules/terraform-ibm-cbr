@@ -4,7 +4,7 @@
 
 output "zone_ids" {
   value       = module.cbr_rule_multi_service_profile[*].zone_ids
-  description = "CBR zone resource instance id(s)"
+  description = "CBR zone id(s)"
 }
 
 output "zone_crns" {
@@ -24,12 +24,12 @@ output "rule_ids" {
 
 output "rule_crns" {
   value       = module.cbr_rule_multi_service_profile[*].rule_crns
-  description = "CBR rule resource instance crn(s)"
+  description = "CBR rule crn(s)"
 }
 
 output "rule_hrefs" {
   value       = module.cbr_rule_multi_service_profile[*].rule_hrefs
-  description = "CBR rule resource instance href(s)"
+  description = "CBR rule href(s)"
 }
 
 output "vpc_crn" {

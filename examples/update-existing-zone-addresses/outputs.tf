@@ -29,25 +29,25 @@ output "account_id" {
 
 output "zone_name" {
   value       = module.ibm_cbr_zone.zone_names
-  description = "cbr_zone resource instance name"
+  description = "cbr_zone name"
 }
 
 output "zone_description" {
   value       = module.ibm_cbr_zone.zone_description
-  description = "cbr_zone resource instance description"
+  description = "cbr_zone description"
 }
 
 output "zone_id" {
   value       = module.ibm_cbr_zone.zone_id
-  description = "cbr_zone resource instance id"
+  description = "cbr_zone id"
 }
 
 output "zone_crn" {
   value       = module.ibm_cbr_zone.zone_crn
-  description = "cbr_zone resource instance crn"
+  description = "cbr_zone crn"
 }
 
 output "zone_href" {
   value       = module.ibm_cbr_zone.zone_href
-  description = "cbr_zone resource instance href"
+  description = "cbr_zone href"
 }

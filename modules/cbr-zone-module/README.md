@@ -1,6 +1,6 @@
 # CBR Zone Module
 
-Creates a zone for Context Based Restrictions or updates an addresses in an existing zone.
+Creates a zone for Context Based Restrictions or updates addresses in an existing zone.
 
 ### Usage
 
@@ -17,7 +17,7 @@ module "ibm_cbr" "zone" {
 ```
 
 ```hcl
-# Updates an existing zone with a new addresses
+# Updates an existing zone with new addresses
 module "ibm_cbr" "zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
   version          = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific
@@ -53,10 +53,10 @@ No modules.
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | (Optional, String) The id of the account owning this zone | `string` | `null` | no |
 | <a name="input_addresses"></a> [addresses](#input\_addresses) | (List) The list of addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>    ref = optional(object({<br>      account_id       = string<br>      location         = optional(string)<br>      service_instance = optional(string)<br>      service_name     = optional(string)<br>      service_type     = optional(string)<br>    }))<br>  }))</pre> | `[]` | no |
 | <a name="input_excluded_addresses"></a> [excluded\_addresses](#input\_excluded\_addresses) | (Optional, List) The list of excluded addresses in the zone | <pre>list(object({<br>    type  = optional(string)<br>    value = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_existing_zone_id"></a> [existing\_zone\_id](#input\_existing\_zone\_id) | Provide an existing CBR zone ID | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | (Optional, String) The name of the zone | `string` | `null` | no |
-| <a name="input_use_existing_cbr_zone"></a> [use\_existing\_cbr\_zone](#input\_use\_existing\_cbr\_zone) | Whether to update CBR zone using existing zone ID | `bool` | `false` | no |
+| <a name="input_use_existing_cbr_zone"></a> [use\_existing\_cbr\_zone](#input\_use\_existing\_cbr\_zone) | Whether to update CBR zone using existing zone ID. This allows the inclusion of one or more addresses in an existing zone | `bool` | `false` | no |
 | <a name="input_zone_description"></a> [zone\_description](#input\_zone\_description) | (Optional, String) The description of the zone | `string` | `null` | no |
-| <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | Provide an existing CBR zone ID | `string` | `null` | no |
 
 ### Outputs
 

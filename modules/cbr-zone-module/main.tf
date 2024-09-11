@@ -8,7 +8,7 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_zone_id_values = !var.use_existing_cbr_zone && (var.account_id == null || var.name == null) ? tobool("When passing values for var.zone_id, you must set var.use_existing_cbr_zone to true.") : true
   # tflint-ignore: terraform_unused_declarations
-  validate_zone_id_vars = var.use_existing_cbr_zone && var.zone_id == null ? tobool("When setting var.use_existing_cbr_zone to true, a value must be passed for var.zone_id.") : true
+  validate_zone_id_vars = var.use_existing_cbr_zone && var.existing_zone_id == null ? tobool("When setting var.use_existing_cbr_zone to true, a value must be passed for var.zone_id.") : true
 }
 
 resource "ibm_cbr_zone" "cbr_zone" {
@@ -49,7 +49,7 @@ resource "ibm_cbr_zone" "cbr_zone" {
 resource "ibm_cbr_zone_addresses" "update_cbr_zone_address" {
   count = var.use_existing_cbr_zone ? 1 : 0
 
-  zone_id = var.zone_id
+  zone_id = var.existing_zone_id
   dynamic "addresses" {
     for_each = var.addresses
     iterator = address
