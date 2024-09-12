@@ -62,9 +62,9 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | CBR zone resource crn |
-| <a name="output_zone_description"></a> [zone\_description](#output\_zone\_description) | CBR zone resource description |
-| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | CBR zone resource link |
-| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | CBR zone resource id |
-| <a name="output_zone_names"></a> [zone\_names](#output\_zone\_names) | CBR zone resource name |
+| <a name="output_zone_crn"></a> [zone\_crn](#output\_zone\_crn) | CBR zone crn |
+| <a name="output_zone_description"></a> [zone\_description](#output\_zone\_description) | CBR zone description |
+| <a name="output_zone_href"></a> [zone\_href](#output\_zone\_href) | CBR zone link |
+| <a name="output_zone_id"></a> [zone\_id](#output\_zone\_id) | CBR zone id |
+| <a name="output_zone_names"></a> [zone\_names](#output\_zone\_names) | CBR zone name |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
