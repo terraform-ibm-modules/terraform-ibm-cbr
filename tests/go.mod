@@ -1,15 +1,15 @@
 module github.com/terraform-ibm-modules/terraform-ibm-cbr
 
-go 1.22
+go 1.22.0
 
 toolchain go1.23.1
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.17.5
-	github.com/IBM/platform-services-go-sdk v0.69.0
+	github.com/IBM/platform-services-go-sdk v0.69.1
 	github.com/gruntwork-io/terratest v0.47.1
 	github.com/stretchr/testify v1.9.0
-	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.38.2
+	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.38.3
 )
 
 require (
@@ -20,7 +20,7 @@ require (
 	cloud.google.com/go/storage v1.30.1 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/IBM-Cloud/bluemix-go v0.0.0-20240719075425-078fcb3a55be // indirect
-	github.com/IBM-Cloud/power-go-client v1.7.1 // indirect
+	github.com/IBM-Cloud/power-go-client v1.8.1 // indirect
 	github.com/IBM/cloud-databases-go-sdk v0.7.0 // indirect
 	github.com/IBM/project-go-sdk v0.3.0 // indirect
 	github.com/IBM/schematics-go-sdk v0.3.0 // indirect
