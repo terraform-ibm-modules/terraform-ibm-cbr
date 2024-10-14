@@ -246,6 +246,8 @@ locals {
   is_cbr_zone_id = local.cbr_zones["is"].zone_id
   # tflint-ignore: terraform_naming_convention
   event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  scc_cbr_zone_id = local.cbr_zones["compliance"].zone_id
 
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Event Streams (Messagehub) -> HPCS
@@ -266,7 +268,7 @@ locals {
         var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
       ])
     }] }, {
-    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS
+    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center (SCC) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
@@ -276,7 +278,8 @@ locals {
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
-        var.allow_is_to_cos ? [local.is_cbr_zone_id] : []
+        var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
+        var.allow_scc_to_cos ? [local.scc_cbr_zone_id] : [],
       ])
     }] }, {
     # VPCs -> container registry
@@ -404,6 +407,11 @@ locals {
         name     = "region",
         operator = "stringEquals",
         value    = value.region
+      } : {},
+      try(value.geography, null) != null ? {
+        name     = "geography",
+        operator = "stringEquals",
+        value    = value.geography
       } : {}
   ] }
 }
@@ -448,7 +456,17 @@ module "global_deny_cbr_rule" {
   rule_description = try(each.value.description, null) != null ? each.value.description : "${var.prefix}-${each.key}-global-deny-rule"
   enforcement_mode = each.value.enforcement_mode
   rule_contexts    = []
-
+  operations = (length(lookup(local.operations_apitype_val, each.key, [])) > 0) ? [{
+    api_types = [
+      # lookup the map for the target service name, if empty then pass default value
+      for apitype in lookup(local.operations_apitype_val, each.key, []) : {
+        api_type_id = apitype
+    }]
+    }] : [{
+    api_types = [{
+      api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+    }]
+  }]
   resources = [{
     tags = try(each.value.tags, null) != null ? [for tag in each.value.tags : {
       name  = split(":", tag)[0]

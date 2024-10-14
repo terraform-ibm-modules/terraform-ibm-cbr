@@ -4,7 +4,7 @@
 
 output "zone_ids" {
   value       = module.cbr_zone[*].zone_id
-  description = "CBR zone resource instance id(s)"
+  description = "CBR zone id(s)"
 }
 
 output "zone_crns" {

@@ -21,6 +21,7 @@ const zoneExampleTerraformDir = "examples/zone"
 const completeExampleTerraformDir = "examples/multizone-rule"
 const multiServiceExampleTerraformDir = "examples/multi-service-profile"
 const fsCloudExampleTerraformDir = "examples/fscloud"
+const updateExistingCBRZone = "examples/update-existing-zone-addresses"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
 func TestRunZoneExample(t *testing.T) {
@@ -309,6 +310,20 @@ func TestFSCloudInSchematics(t *testing.T) {
 
 	err := options.RunSchematicTest()
 	assert.Nil(t, err, "This should not have errored")
+}
+
+func TestRunUpdateCBRZone(t *testing.T) {
+	t.Parallel()
+
+	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
+		Testing:      t,
+		TerraformDir: updateExistingCBRZone,
+		Prefix:       "upd-zones",
+	})
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
 }
 
 func TestRunUpgradeExample(t *testing.T) {

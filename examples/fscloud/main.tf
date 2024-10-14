@@ -15,7 +15,7 @@ module "resource_group" {
 ##############################################################################
 module "key_protect_module" {
   source            = "terraform-ibm-modules/key-protect/ibm"
-  version           = "v2.8.4"
+  version           = "v2.8.5"
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
@@ -87,6 +87,10 @@ module "cbr_account_level" {
       "enforcement_mode" = "enabled"
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
+    "databases-for-postgresql" = {
+      "enforcement_mode" = "enabled"
+      "target_rg"        = module.resource_group.resource_group_id
+    }
     "messagehub" = {
       # As the service is scoped, a new global rule will also get created
       "enforcement_mode" = "enabled"
@@ -96,19 +100,23 @@ module "cbr_account_level" {
       "enforcement_mode" = "report"
       "global_deny"      = false
     }
+    "container-registry" : {
+      "enforcement_mode" : "enabled"
+      "geography" : "global"
+    }
   }
 
   # Demonstrates how a customized name and an optional location can be set for the CBR serviceRef zones
   zone_service_ref_list = {
     codeengine = {
-      zone_name           = "codeengine-zone-example-of-customized-zone-name"
+      zone_name           = "${var.prefix}-codeengine-zone-example-of-customized-zone-name"
       serviceRef_location = ["au", "tok"]
     },
     server-protect = {
-      serviceRef_location = ["fr"]
+      serviceRef_location = ["eu"]
     },
     cloud-object-storage = {
-      zone_name = "COS-zone-example-of-customized-zone-name"
+      zone_name = "${var.prefix}-COS-zone-example-of-customized-zone-name"
     }
   }
 
