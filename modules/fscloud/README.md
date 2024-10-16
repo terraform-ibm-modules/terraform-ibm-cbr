@@ -7,6 +7,8 @@ This module creates default coarse-grained CBR rules in a given account followin
 - All IBM Cloud Databases (ICD) services -> Hyper Protect Crypto Services (HPCS)
 - Event Streams (Messagehub) -> Hyper Protect Crypto Services (HPCS)
 - Virtual Private Clouds (VPCs) where clusters are deployed -> Cloud Object Storage (COS)
+- Virtual Private Clouds (VPCs) where clusters are deployed -> IAM groups
+- Virtual Private Clouds (VPCs) where clusters are deployed -> IAM access management
 - Activity Tracker route -> Cloud Object Storage (COS)
 - IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
 - Security and Compliance Center (SCC) -> Cloud Object Storage (COS)
@@ -125,6 +127,8 @@ module "cbr_fscloud" {
 | <a name="input_allow_scc_to_cos"></a> [allow\_scc\_to\_cos](#input\_allow\_scc\_to\_cos) | Set rule for SCC (Security and Compliance Center) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |
+| <a name="input_allow_vpcs_to_iam_access_management"></a> [allow\_vpcs\_to\_iam\_access\_management](#input\_allow\_vpcs\_to\_iam\_access\_management) | Set rule for VPCs to IAM access management, default is true | `bool` | `true` | no |
+| <a name="input_allow_vpcs_to_iam_groups"></a> [allow\_vpcs\_to\_iam\_groups](#input\_allow\_vpcs\_to\_iam\_groups) | Set rule for VPCs to IAM groups, default is true | `bool` | `true` | no |
 | <a name="input_custom_rule_contexts_by_service"></a> [custom\_rule\_contexts\_by\_service](#input\_custom\_rule\_contexts\_by\_service) | Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service\_ref\_names or add\_managed\_vpc\_zone are passed in. | <pre>map(list(object(<br/>    {<br/>      endpointType = string # "private, public or direct"<br/><br/>      # Service-name (module lookup for existing network zone) and/or CBR zone id<br/>      service_ref_names    = optional(list(string), [])<br/>      add_managed_vpc_zone = optional(bool, false)<br/>      zone_ids             = optional(list(string), [])<br/>  })))</pre> | `{}` | no |
 | <a name="input_existing_cbr_zone_vpcs"></a> [existing\_cbr\_zone\_vpcs](#input\_existing\_cbr\_zone\_vpcs) | Provide a existing zone id for VPC | <pre>object(<br/>    {<br/>      zone_id = string<br/>  })</pre> | `null` | no |
 | <a name="input_existing_serviceref_zone"></a> [existing\_serviceref\_zone](#input\_existing\_serviceref\_zone) | Provide a valid service reference and existing zone id | <pre>map(object(<br/>    {<br/>      zone_id = string<br/>  }))</pre> | `{}` | no |
