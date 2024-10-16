@@ -297,24 +297,24 @@ locals {
       ])
     }]
     },
-  #   {
-  #     # VPCs -> iam-groups
-  #     "iam-groups" : [{
-  #       endpointType : "private",
-  #       networkZoneIds : flatten([
-  #         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : [],
-  #       ])
-  #   }] },
-  #   {
-  #     # VPCs -> iam-access-management
-  #     "iam-access-management" : [{
-  #       endpointType : "private",
-  #       networkZoneIds : flatten([
-  #         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : [],
-  #       ])
-  # }]
-  # }
-  
+    {
+      # VPCs -> iam-groups
+      "iam-groups" : [{
+        endpointType : "private",
+        networkZoneIds : flatten([
+          var.allow_vpcs_to_iam_groups ? [local.cbr_zone_vpcs.zone_id] : [],
+        ])
+    }] },
+    {
+      # VPCs -> iam-access-management
+      "iam-access-management" : [{
+        endpointType : "private",
+        networkZoneIds : flatten([
+          var.allow_vpcs_to_iam_access_management ? [local.cbr_zone_vpcs.zone_id] : [],
+        ])
+      }]
+    }
+
   )
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :

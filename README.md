@@ -25,6 +25,7 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [Multi resource rule example](./examples/multi-resource-rule)
     * [Multi-zone example](./examples/multizone-rule)
     * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
+    * [SLZ-CBR testing](./examples/slz-cbr)
     * [Zone example](./examples/update-existing-zone-addresses)
     * [Zone example](./examples/zone)
 * [Contributing](#contributing)
