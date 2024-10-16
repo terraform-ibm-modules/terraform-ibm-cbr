@@ -51,6 +51,17 @@ variable "allow_vpcs_to_cos" {
   default     = true
 }
 
+variable "allow_vpcs_to_iam_groups" {
+  type        = bool
+  description = "Set rule for VPCs to IAM groups, default is true"
+  default     = true
+}
+
+variable "allow_vpcs_to_iam_access_management" {
+  type        = bool
+  description = "Set rule for VPCs to IAM access management, default is true"
+  default     = true
+}
 variable "allow_at_to_cos" {
   type        = bool
   description = "Set rule for Activity Tracker to COS, default is true"
