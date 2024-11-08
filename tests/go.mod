@@ -2,7 +2,7 @@ module github.com/terraform-ibm-modules/terraform-ibm-cbr
 
 go 1.22.0
 
-toolchain go1.23.2
+toolchain go1.23.3
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.18.1
