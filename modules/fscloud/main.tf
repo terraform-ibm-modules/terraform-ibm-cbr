@@ -119,6 +119,9 @@ locals {
     },
     "sysdig-secure" : {
       "enforcement_mode" : "report"
+    },
+    "logs" : {
+      "enforcement_mode" : "report"
     }
   }
 
