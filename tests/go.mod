@@ -6,10 +6,10 @@ toolchain go1.24.1
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.19.0
-	github.com/IBM/platform-services-go-sdk v0.78.2
+	github.com/IBM/platform-services-go-sdk v0.79.0
 	github.com/gruntwork-io/terratest v0.48.2
 	github.com/stretchr/testify v1.10.0
-	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.46.6
+	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.47.1
 )
 
 require (
@@ -38,7 +38,7 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/analysis v0.21.5 // indirect
-	github.com/go-openapi/errors v0.22.0 // indirect
+	github.com/go-openapi/errors v0.22.1 // indirect
 	github.com/go-openapi/jsonpointer v0.20.1 // indirect
 	github.com/go-openapi/jsonreference v0.20.3 // indirect
 	github.com/go-openapi/loads v0.21.3 // indirect
