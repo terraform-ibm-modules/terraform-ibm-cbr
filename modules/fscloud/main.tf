@@ -372,6 +372,10 @@ locals {
   # Some services have restrictions on the api types that can apply CBR - we codify this below
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
+
+  # Restrict Code Engine Control Plane API
+  code_engine_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane"]
+
   operations_apitype_val = {
     databases-for-enterprisedb       = local.icd_api_types,
     containers-kubernetes            = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
@@ -386,6 +390,7 @@ locals {
     messages-for-rabbitmq            = local.icd_api_types,
     databases-for-mysql              = local.icd_api_types
     mqcloud                          = local.icd_api_types
+    codeengine                       = local.code_engine_api_types
   }
 
   fake_service_names = {
