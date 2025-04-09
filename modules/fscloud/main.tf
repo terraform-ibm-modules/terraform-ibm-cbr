@@ -108,12 +108,6 @@ locals {
     "globalcatalog-collection" : {
       "enforcement_mode" : "report"
     },
-    "logdna" : {
-      "enforcement_mode" : "report"
-    },
-    "logdnaat" : {
-      "enforcement_mode" : "report"
-    },
     "sysdig-monitor" : {
       "enforcement_mode" : "report"
     },
@@ -121,6 +115,12 @@ locals {
       "enforcement_mode" : "report"
     },
     "logs" : {
+      "enforcement_mode" : "report"
+    },
+    "atracker" : {
+      "enforcement_mode" : "report"
+    }
+    "ghost-tags" : {
       "enforcement_mode" : "report"
     }
   }

@@ -49,15 +49,7 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for service_detail in var.target_service_details :
-      contains(["iam-groups", "iam-access-management", "iam-identity",
-        "user-management", "cloud-object-storage", "codeengine",
-        "container-registry", "databases-for-cassandra",
-        "databases-for-enterprisedb", "databases-for-elasticsearch",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql", "databases-for-redis",
-        "directlink", "dns-svcs", "messagehub", "kms", "containers-kubernetes",
-        "messages-for-rabbitmq", "secrets-manager", "transit", "is",
-      "schematics", "apprapp", "event-notifications", "compliance", "logdna", "logdnaat"], service_detail.target_service_name)
+      contains(["IAM", "atracker", "apprapp", "globalcatalog-collection", "logs", "sysdig-monitor", "cloud-object-storage", "codeengine", "container-registry", "context-based-restrictions", "databases-for-enterprisedb", "databases-for-elasticsearch", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "messagehub", "hs-crypto", "iam-groups", "iam-access-management", "iam-identity", "kms", "containers-kubernetes", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "compliance", "sysdig-secure", "ghost-tags", "transit", "user-management", "is"], service_detail.target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
