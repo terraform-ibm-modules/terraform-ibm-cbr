@@ -49,7 +49,7 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for service_detail in var.target_service_details :
-      contains(["IAM", "atracker", "apprapp", "globalcatalog-collection", "logs", "sysdig-monitor", "cloud-object-storage", "codeengine", "container-registry", "context-based-restrictions", "databases-for-enterprisedb", "databases-for-elasticsearch", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "messagehub", "hs-crypto", "iam-groups", "iam-access-management", "iam-identity", "kms", "containers-kubernetes", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "compliance", "sysdig-secure", "ghost-tags", "transit", "user-management", "is"], service_detail.target_service_name)
+      contains(["IAM", "apprapp", "atracker", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "context-based-restrictions", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "ghost-tags", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_detail.target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
