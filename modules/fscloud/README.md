@@ -34,6 +34,8 @@ Important: In order to avoid unexpected breakage in the account against which th
 
 **Note on `Security and Compliance Center (SCC) scan`**: Compliance can only be claimed after all the enforcement mode have been set to enabled.
 
+**Note on `Code Engine`**: Code Engine service does not support restrictions on the `public` endpoint of the `data-plane' API type. To make sure both Contol Plane and Data Plane APIs are restricted, public endpoint in Code Engine CBR context has been added to allow public requests.
+
 ## Note
 The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support restriction per location.
 

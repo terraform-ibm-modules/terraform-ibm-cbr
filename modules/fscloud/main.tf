@@ -25,7 +25,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "codeengine" : {
-      "enforcement_mode" : "report"
+      "enforcement_mode" : "disabled"
     },
     "container-registry" : {
       "enforcement_mode" : "report"
@@ -314,16 +314,21 @@ locals {
         var.allow_vpcs_to_iam_access_management ? [local.cbr_zone_vpcs.zone_id] : [],
       ])
     }]
+    },
+    # Code Engine doesn't support CBR restrictions on data plane public endpoints, so public endpoint must be added to restrict data plane API as well to allow public requests.
+    {
+      "codeengine" : [{
+        endpointType : "public"
+      }]
     }
   )
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
       for rule in value :
-      rule if length(rule.networkZoneIds) > 0
+      rule if(try(length(rule.networkZoneIds), 0) > 0 || rule.endpointType != null)
     ]
   }
-
   ## define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
     target_service_name => []
@@ -357,16 +362,20 @@ locals {
   }
 
   allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
-    target_service_name => [for context in contexts : { attributes = [
-      {
-        "name" : "endpointType",
-        "value" : context.endpointType
-      },
-      {
-        "name" : "networkZoneId",
-        "value" : join(",", context.networkZoneIds)
-      }
-    ] }]
+    target_service_name => [for context in contexts : { attributes = concat(
+      [
+        {
+          "name" : "endpointType",
+          "value" : context.endpointType
+        }
+      ],
+      try(length(context.networkZoneIds) > 0, false) ? [
+        {
+          "name" : "networkZoneId",
+          "value" : join(",", context.networkZoneIds)
+        }
+      ] : []
+    ) }]
   }
 
   # Some services have restrictions on the api types that can apply CBR - we codify this below
