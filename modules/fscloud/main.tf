@@ -21,10 +21,10 @@ locals {
     "codeengine" : {
       "enforcement_mode" : "report"
     },
-    "codeengine-service-control-plane" : {
+    "codeengine-platform" : {
       "enforcement_mode" : "report"
     },
-    "codeengine-platform" : {
+    "codeengine-service-control-plane" : {
       "enforcement_mode" : "report"
     },
     "compliance" : {
@@ -32,6 +32,9 @@ locals {
     },
     "container-registry" : {
       "enforcement_mode" : "report"
+    },
+    "containers-kubernetes" : {
+      "enforcement_mode" : "disabled"
     },
     "containers-kubernetes-cluster" : {
       "enforcement_mode" : "disabled"
@@ -80,9 +83,6 @@ locals {
     },
     "hs-crypto" : {
       "enforcement_mode" : "report"
-    },
-    "containers-kubernetes" : {
-      "enforcement_mode" : "disabled"
     },
     "IAM" : {
       "enforcement_mode" : "report"
