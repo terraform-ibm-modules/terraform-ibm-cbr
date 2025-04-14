@@ -27,6 +27,12 @@ locals {
     "codeengine" : {
       "enforcement_mode" : "report"
     },
+    "codeengine-service-control-plane" : {
+      "enforcement_mode" : "report"
+    },
+    "codeengine-platform" : {
+      "enforcement_mode" : "report"
+    },
     "container-registry" : {
       "enforcement_mode" : "report"
     },
@@ -68,6 +74,9 @@ locals {
     },
     "hs-crypto" : {
       "enforcement_mode" : "report"
+    },
+    "containers-kubernetes" : {
+      "enforcement_mode" : "disabled"
     },
     "containers-kubernetes-management" : {
       "enforcement_mode" : "disabled"
@@ -386,11 +395,16 @@ locals {
     messages-for-rabbitmq            = local.icd_api_types,
     databases-for-mysql              = local.icd_api_types
     mqcloud                          = local.icd_api_types
+    codeengine                       = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane", "crn:v1:bluemix:public:context-based-restrictions::::platform-api-type:"]
+    codeengine-service-control-plane = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane"]
+    codeengine-platform              = ["crn:v1:bluemix:public:context-based-restrictions::::platform-api-type:"]
   }
 
   fake_service_names = {
     "containers-kubernetes-cluster"    = "containers-kubernetes",
     "containers-kubernetes-management" = "containers-kubernetes"
+    "codeengine-service-control-plane" = "codeengine"
+    "codeengine-platform"              = "codeengine"
   }
 }
 
