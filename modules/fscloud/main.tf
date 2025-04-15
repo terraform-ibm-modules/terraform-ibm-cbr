@@ -9,16 +9,10 @@ locals {
   service_group_ids = ["IAM"] # List of pseudo services for which service_group_id is required
 
   target_service_details_default = {
-    "iam-groups" : {
+    "apprapp" : {
       "enforcement_mode" : "report"
     },
-    "iam-access-management" : {
-      "enforcement_mode" : "report"
-    },
-    "iam-identity" : {
-      "enforcement_mode" : "report"
-    },
-    "user-management" : {
+    "atracker" : {
       "enforcement_mode" : "report"
     },
     "cloud-object-storage" : {
@@ -27,16 +21,34 @@ locals {
     "codeengine" : {
       "enforcement_mode" : "report"
     },
+    "codeengine-platform" : {
+      "enforcement_mode" : "report"
+    },
+    "codeengine-service-control-plane" : {
+      "enforcement_mode" : "report"
+    },
+    "compliance" : {
+      "enforcement_mode" : "report"
+    },
     "container-registry" : {
       "enforcement_mode" : "report"
     },
-    "databases-for-cassandra" : {
+    "containers-kubernetes" : {
+      "enforcement_mode" : "disabled"
+    },
+    "containers-kubernetes-cluster" : {
+      "enforcement_mode" : "disabled"
+    },
+    "containers-kubernetes-management" : {
+      "enforcement_mode" : "disabled"
+    },
+    "context-based-restrictions" : {
+      "enforcement_mode" : "report"
+    },
+    "databases-for-elasticsearch" : {
       "enforcement_mode" : "disabled"
     },
     "databases-for-enterprisedb" : {
-      "enforcement_mode" : "disabled"
-    },
-    "databases-for-elasticsearch" : {
       "enforcement_mode" : "disabled"
     },
     "databases-for-etcd" : {
@@ -60,58 +72,49 @@ locals {
     "dns-svcs" : {
       "enforcement_mode" : "report"
     },
-    "messagehub" : {
-      "enforcement_mode" : "report"
-    },
-    "kms" : {
-      "enforcement_mode" : "report"
-    },
-    "hs-crypto" : {
-      "enforcement_mode" : "report"
-    },
-    "containers-kubernetes-management" : {
-      "enforcement_mode" : "disabled"
-    },
-    "containers-kubernetes-cluster" : {
-      "enforcement_mode" : "disabled"
-    },
-    "messages-for-rabbitmq" : {
-      "enforcement_mode" : "disabled"
-    },
-    "secrets-manager" : {
-      "enforcement_mode" : "report"
-    },
-    "transit" : {
-      "enforcement_mode" : "report"
-    },
-    "is" : {
-      "enforcement_mode" : "report"
-    },
-    "schematics" : {
-      "enforcement_mode" : "report"
-    },
-    "apprapp" : {
-      "enforcement_mode" : "report"
-    },
     "event-notifications" : {
       "enforcement_mode" : "disabled"
     },
-    "compliance" : {
-      "enforcement_mode" : "report"
-    },
-    "IAM" : {
-      "enforcement_mode" : "report"
-    },
-    "context-based-restrictions" : {
+    "ghost-tags" : {
       "enforcement_mode" : "report"
     },
     "globalcatalog-collection" : {
       "enforcement_mode" : "report"
     },
-    "logdna" : {
+    "hs-crypto" : {
       "enforcement_mode" : "report"
     },
-    "logdnaat" : {
+    "IAM" : {
+      "enforcement_mode" : "report"
+    },
+    "iam-access-management" : {
+      "enforcement_mode" : "report"
+    },
+    "iam-groups" : {
+      "enforcement_mode" : "report"
+    },
+    "iam-identity" : {
+      "enforcement_mode" : "report"
+    },
+    "is" : {
+      "enforcement_mode" : "report"
+    },
+    "kms" : {
+      "enforcement_mode" : "report"
+    },
+    "logs" : {
+      "enforcement_mode" : "report"
+    },
+    "messagehub" : {
+      "enforcement_mode" : "report"
+    },
+    "messages-for-rabbitmq" : {
+      "enforcement_mode" : "disabled"
+    },
+    "schematics" : {
+      "enforcement_mode" : "report"
+    },
+    "secrets-manager" : {
       "enforcement_mode" : "report"
     },
     "sysdig-monitor" : {
@@ -120,7 +123,10 @@ locals {
     "sysdig-secure" : {
       "enforcement_mode" : "report"
     },
-    "logs" : {
+    "transit" : {
+      "enforcement_mode" : "report"
+    },
+    "user-management" : {
       "enforcement_mode" : "report"
     }
   }
@@ -374,7 +380,6 @@ locals {
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
   operations_apitype_val = {
     databases-for-enterprisedb       = local.icd_api_types,
-    containers-kubernetes            = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster", "crn:v1:bluemix:public:containers-kubernetes::::api-type:management"],
     containers-kubernetes-cluster    = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:cluster"],
     containers-kubernetes-management = ["crn:v1:bluemix:public:containers-kubernetes::::api-type:management"]
     databases-for-cassandra          = local.icd_api_types,
@@ -386,11 +391,16 @@ locals {
     messages-for-rabbitmq            = local.icd_api_types,
     databases-for-mysql              = local.icd_api_types
     mqcloud                          = local.icd_api_types
+    codeengine                       = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane", "crn:v1:bluemix:public:context-based-restrictions::::platform-api-type:"]
+    codeengine-service-control-plane = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:control-plane"]
+    codeengine-platform              = ["crn:v1:bluemix:public:context-based-restrictions::::platform-api-type:"]
   }
 
   fake_service_names = {
     "containers-kubernetes-cluster"    = "containers-kubernetes",
     "containers-kubernetes-management" = "containers-kubernetes"
+    "codeengine-service-control-plane" = "codeengine"
+    "codeengine-platform"              = "codeengine"
   }
 }
 
