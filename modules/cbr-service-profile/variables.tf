@@ -12,6 +12,13 @@ variable "zone_vpc_crn_list" {
   type        = list(string)
   default     = []
   description = "(List) VPC CRN for the zones"
+  validation {
+    condition = (
+      length(var.zone_vpc_crn_list) > 0 || length(var.zone_service_ref_list) > 0
+    )
+    error_message = "Error: Provide at least one of zone_vpc_crn_list or zone_service_ref_list."
+  }
+
 }
 
 variable "zone_service_ref_list" {
@@ -34,6 +41,16 @@ variable "zone_service_ref_list" {
       "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions."
+  }
+
+  validation {
+    condition = alltrue([
+      for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
+      contains(keys(var.zone_service_ref_list), item) ?
+      try(length(var.zone_service_ref_list[item].serviceRef_location), 0) :
+      true
+    ])
+    error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', and 'user-management' must not specify a serviceRef_location."
   }
 }
 

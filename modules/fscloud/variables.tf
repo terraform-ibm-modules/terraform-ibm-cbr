@@ -240,6 +240,17 @@ variable "zone_service_ref_list" {
 
   })
 
+  validation {
+    condition = alltrue([
+      for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
+      contains(keys(var.zone_service_ref_list), item) ?
+      (var.zone_service_ref_list[item] == null ||
+        (var.zone_service_ref_list[item] != null ? (var.zone_service_ref_list[item].serviceRef_location == null || try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 ? true : false) : true) ||
+      contains(var.skip_specific_services_for_zone_creation, item)) :
+      true
+    ])
+    error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', and 'user-management' must not specify a serviceRef_location."
+  }
   description = "(Optional) Provide a valid service reference with the customized name of the zone and location where the context-based restriction zones are created. If no value is specified for `serviceRef_location`, the zones are not scoped to any location and if no value is specified for `zone_name` default zone name with the prefix will be created."
 
   default = {}

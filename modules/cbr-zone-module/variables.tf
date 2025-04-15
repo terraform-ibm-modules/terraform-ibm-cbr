@@ -231,4 +231,14 @@ variable "use_existing_cbr_zone" {
   type        = bool
   description = "Whether to update CBR zone using existing zone ID. This allows the inclusion of one or more addresses in an existing zone"
   default     = false
+  validation {
+    condition     = !var.use_existing_cbr_zone || var.existing_zone_id != null
+    error_message = "When setting use_existing_cbr_zone to true, a value must be passed for existing_zone_id."
+  }
+
+  validation {
+    condition     = var.use_existing_cbr_zone || (var.account_id != null && var.name != null)
+    error_message = "When setting use_existing_cbr_zone to false, a value must be passed for account_id and name."
+  }
+
 }
