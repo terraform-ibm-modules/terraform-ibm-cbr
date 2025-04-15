@@ -310,7 +310,7 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for target_service_name, _ in var.target_service_details :
-      contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
+      contains(["apprapp", "atracker", "cloud-object-storage", "codeengine", "codeengine-platform", "codeengine-service-control-plane", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "ghost-tags", "globalcatalog-collection", "hs-crypto", "IAM", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
@@ -328,7 +328,7 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for target_service_name, attributes in var.target_service_details :
-      contains(["cloud-object-storage", "codeengine", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "event-notifications", "hs-crypto", "iam-identity", "is", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "secrets-manager", "sysdig-monitor", "sysdig-secure"], target_service_name) if attributes.region != null
+      contains(["atracker", "cloud-object-storage", "codeengine", "codeengine-platform", "codeengine-service-control-plane", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "event-notifications", "hs-crypto", "iam-identity", "is", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "secrets-manager", "sysdig-monitor", "sysdig-secure"], target_service_name) if attributes.region != null
     ])
     error_message = "Provide a valid target service name that supports region attribute."
   }
