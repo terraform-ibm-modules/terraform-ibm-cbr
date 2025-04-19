@@ -153,11 +153,6 @@ locals {
 
 locals {
 
-  # tflint-ignore: terraform_unused_declarations
-  validate_location_and_service_name = [
-    for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
-    contains(keys(local.zone_final_service_ref_list), item) ? length(local.zone_final_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
-  ]
   service_ref_zone_list = (length(local.zone_final_service_ref_list) > 0) ? {
     for service_ref, service_ref_details in local.zone_final_service_ref_list : service_ref => {
       name             = service_ref_details.zone_name == null ? "${var.prefix}-${service_ref}-service-zone" : service_ref_details.zone_name
