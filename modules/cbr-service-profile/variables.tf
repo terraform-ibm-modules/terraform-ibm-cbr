@@ -45,12 +45,12 @@ variable "zone_service_ref_list" {
 
   validation {
     condition = alltrue([
-      for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
+      for item in ["directlink", "globalcatalog-collection", "iam-groups", "platform_service", "user-management"] :
       contains(keys(var.zone_service_ref_list), item) ?
       try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 :
       true
     ])
-    error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', and 'user-management' must not specify a serviceRef_location."
+    error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', 'platform_service' and 'user-management' must not specify a serviceRef_location."
   }
 }
 
