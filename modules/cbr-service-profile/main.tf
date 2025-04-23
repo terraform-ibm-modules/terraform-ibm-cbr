@@ -9,14 +9,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 # CBR Rule for a list of target services
 ##############################################################################
 locals {
-  # tflint-ignore: terraform_unused_declarations
-  validate_zone_inputs = ((length(var.zone_vpc_crn_list) == 0) && (length(var.zone_service_ref_list) == 0)) ? tobool("Error: Provide a valid zone vpc and/or service references") : true
 
-  # tflint-ignore: terraform_unused_declarations
-  validate_location_and_service_name = [
-    for item in ["directlink", "globalcatalog-collection", "iam-groups", "user-management"] :
-    contains(keys(var.zone_service_ref_list), item) ? length(var.zone_service_ref_list[item].serviceRef_location) == 0 ? true : tobool("Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups' and 'user-management' do not support location") : true
-  ]
 
   # Restrict and allow the api types as per the target service
   icd_api_types = ["crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"]
