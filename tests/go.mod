@@ -2,14 +2,14 @@ module github.com/terraform-ibm-modules/terraform-ibm-cbr
 
 go 1.23.0
 
-toolchain go1.24.3
+toolchain go1.24.4
 
 require (
-	github.com/IBM/go-sdk-core/v5 v5.19.1
-	github.com/IBM/platform-services-go-sdk v0.81.1
-	github.com/gruntwork-io/terratest v0.49.0
+	github.com/IBM/go-sdk-core/v5 v5.20.1
+	github.com/IBM/platform-services-go-sdk v0.83.2
+	github.com/gruntwork-io/terratest v0.50.0
 	github.com/stretchr/testify v1.10.0
-	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.50.1
+	github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper v1.51.1
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	github.com/cyphar/filepath-securejoin v0.4.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.9 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.6.2 // indirect
@@ -84,13 +84,13 @@ require (
 	github.com/ulikunitz/xz v0.5.11 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/zclconf/go-cty v1.16.2 // indirect
-	go.mongodb.org/mongo-driver v1.17.2 // indirect
+	go.mongodb.org/mongo-driver v1.17.3 // indirect
 	go.opentelemetry.io/otel v1.29.0 // indirect
 	go.opentelemetry.io/otel/metric v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
 	golang.org/x/crypto v0.38.0 // indirect
 	golang.org/x/mod v0.18.0 // indirect
-	golang.org/x/net v0.39.0 // indirect
+	golang.org/x/net v0.40.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
