@@ -73,28 +73,27 @@ module "cbr_rule" {
 # Access policy to view CBRs
 ##############################################################################
 
-# data "ibm_iam_access_group" "service_id_access_group" {
-#   access_group_name = var.cabin_service_id_access_group
-# }
+data "ibm_iam_access_group" "service_id_access_group" {
+  access_group_name = var.cabin_service_id_access_group
+}
 
-# resource "ibm_iam_access_group_policy" "network_zone_access_policy" {
-#   for_each = module.cbr_zone
+resource "ibm_iam_access_group_policy" "network_zone_access_policy" {
+  for_each        = var.cabin_service_id_access_group != null ? module.cbr_zone : {}
+  access_group_id = data.ibm_iam_access_group.service_id_access_group.groups[0].id
+  roles           = ["Administrator"]
 
-#   access_group_id = data.ibm_iam_access_group.service_id_access_group.groups[0].id
-#   roles           = ["Administrator"]
+  resource_attributes {
+    name  = "resource"
+    value = each.value.zone_id
+  }
 
-#   resource_attributes {
-#     name  = "resource"
-#     value = each.value.zone_id
-#   }
+  resource_attributes {
+    name  = "resourceType"
+    value = "zone"
+  }
 
-#   resource_attributes {
-#     name  = "resourceType"
-#     value = "zone"
-#   }
-
-#   resource_attributes {
-#     name  = "serviceName"
-#     value = "context-based-restrictions"
-#   }
-# }
+  resource_attributes {
+    name  = "serviceName"
+    value = "context-based-restrictions"
+  }
+}
