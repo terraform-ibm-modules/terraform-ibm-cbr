@@ -44,31 +44,33 @@ This variable enables you to define reusable network zone definitions, which can
 
 ```hcl
 cbr_zones = {
-  "vpc_zone" = {
-    name        = "VPC Zone"
-    account_id  = "1234567890abcdef" # pragma: allowlist secret
-    zone_description = "Allow access from specific VPC"
+    zone1 = {
+      name        = "vpc-zone"
+      zone_description = "Zone for VPCs"
+      addresses = [
+        {
+          type  = "vpc"
+          value = "crn:v1:bluemix:public:is:us-south:a/123456:vpc:abc123"
+        }
+      ]
+    }
+  zone2 = {
+    name       = "ip-zone2"
+    zone_description = "Zone for restricted IPs"
     addresses = [
       {
-        type  = "vpc"
-        value = "crn:v1:bluemix:public:is:us-south:a/123456:vpc:abcde12345"
+        type  = "ipAddress"
+        value = "203.x.xxx.5"
       }
     ]
-  },
-  "ip_zone" = {
-    name        = "IP Zone"
-    account_id  = "1234567890abcdef" # pragma: allowlist secret
-    zone_description = "Allow access from specific IP address"
+  }
+  zone3 = {
+    name       = "ip-zone3"
+    # zone_description = "Zone for restricted IPs"
     addresses = [
       {
         type  = "ipAddress"
-        value = "203.x.xxx.0/24"
-      }
-    ],
-    excluded_addresses = [
-      {
-        type  = "ipAddress"
-        value = "203.x.xxx.50"
+        value = "203.x.xxx.6"
       }
     ]
   }
@@ -132,31 +134,78 @@ This variable enables fine-grained access control across IBM Cloud resources by 
 
 ```hcl
   cbr_rules = {
-    "limit_cos_1" = {
-      name             = "Restrict Access to cos-instance-id-1"
-      description      = "Allow request to COS from vpc_zone and ip_zone only"
-      enforcement_mode = "enabled"
-      zone_keys        = ["vpc_zone", "zone_2"] # Refer zone keys from cbr_zone variable
-      resources = [
-        {
-          service_name         = "cloud-object-storage"
-          resource_instance_id = "cos-instance-id-1"
-        }
-      ]
-    },
-    "limit_cos_2" = {
-      name             = "Restrict Access to cos-instance-id-2"
-      description      = "Allow request to COS from vpc_zone only"
-      enforcement_mode = "enabled"
-      zone_keys        = ["vpc_zone"]
-      resources = [
-        {
-          service_name         = "cloud-object-storage"
-          resource_instance_id = "cos-instance-id-2"
-        }
-      ]
-    }
+  rule1 = {
+    rule_description = "Restrict redis to specific IP address only"
+    enforcement_mode = "enabled"
+    resources = [
+      {
+        attributes = [
+          {
+            name     = "accountId"
+            operator = "stringEquals"
+            value    = "d5xxxxxd5" # pragma: allowlist secret
+          },
+          {
+            name     = "serviceName"
+            operator = "stringEquals"
+            value    = "databases-for-redis"
+          },
+          {
+            name     = "resourceGroupId"
+            operator = "stringEquals"
+            value    = "be19xxxxx0c7d" # pragma: allowlist secret
+          }
+        ],
+
+      }
+    ]
+    operations = [
+      {
+        api_types = [
+          {
+            api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"
+          }
+        ]
+      }
+    ]
+    zone_keys = ["zone3", "zone2"] # mapping specific zones
+  },
+  rule2 = {
+    rule_description = "Restrict Postgresql to VPC zone only"
+    enforcement_mode = "disabled"
+    resources = [
+      {
+        attributes = [
+          {
+            name     = "accountId"
+            operator = "stringEquals"
+            value    = "d5xxxxxd5" # pragma: allowlist secret
+          },
+          {
+            name     = "serviceName"
+            operator = "stringEquals"
+            value    = "databases-for-postgresql"
+          },
+          {
+            name     = "resourceGroupId"
+            operator = "stringEquals"
+            value    = "be19xxxxx0c7d" # pragma: allowlist secret
+          }
+        ]
+      }
+    ]
+    operations = [
+      {
+        api_types = [
+          {
+            api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"
+          }
+        ]
+      }
+    ]
+    zone_keys = ["zone1"]
   }
+}
 ```
 
 For more information, refer to the [IBM Cloud Context-Based Restrictions documentation](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-whatis) and the [IBM Cloud Terraform Provider documentation for CBR Rules](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/cbr_rule).
