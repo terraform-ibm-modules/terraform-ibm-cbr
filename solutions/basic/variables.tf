@@ -50,39 +50,7 @@ variable "cabin_service_id_access_group" {
 ##############################################################################
 
 variable "cbr_zones" {
-  description = <<EOT
-  Map of CBR zones to be created. Key is a unique zone identifier.
-  These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules.
-  Note: The keys used here must match the values listed under `zone_keys` in the `cbr_rules` input. This design allows flexible, reusable zones that can be bound to one or more rules.
-
-  Example:
-  cbr_zones = {
-    "vpc_zone" = {
-      name        = "VPC Zone"
-      account_id  = "12345"
-      description = "Allow access from VPC"
-      addresses = [
-        { type = "vpc",
-        value = "...."
-        }
-      ]
-    },
-    "zone_2" = {
-      name        = "Zone 2"
-      account_id  = "12345"
-      description = "Allow access from Zone 2"
-      addresses = [
-        { type = "ipAddress",
-        value = "...."
-        },
-        { type = "subnet",
-        value = "...."
-        }
-
-      ]
-    }
-  }
-  EOT
+  description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
   type = map(object({
     # By default account id is populated using data block where the CBR is created, else it can be passed if required
     account_id = optional(string, null)
@@ -120,36 +88,7 @@ variable "cbr_zones" {
 ##############################################################################
 
 variable "cbr_rules" {
-  description = <<EOT
-  Map of CBR rules to be created. Each rule includes mapping to zone keys.
-  Example:
-  cbr_rules = {
-    "limit_cos_1" = {
-      name             = "Restrict Access to cos-instance-id-1"
-      description      = "Allow request to COS from vpc_zone and ip_zone only"
-      enforcement_mode = "enabled"
-      zone_keys        = ["vpc_zone", "zone_2"]
-      resources = [
-        {
-          service_name         = "cloud-object-storage"
-          resource_instance_id = "cos-instance-id-1"
-        }
-      ]
-    },
-    "limit_cos_2" = {
-      name             = "Restrict Access to cos-instance-id-2"
-      description      = "Allow request to COS from vpc_zone only"
-      enforcement_mode = "enabled"
-      zone_keys        = ["vpc_zone"]
-      resources = [
-        {
-          service_name         = "cloud-object-storage"
-          resource_instance_id = "cos-instance-id-2"
-        }
-      ]
-    }
-  }
-  EOT
+  description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
   type = map(object({
     # By default, rule_description is null if not passed
     rule_description = optional(string, null)
