@@ -119,72 +119,76 @@ variable "cbr_zones" {
 # Rule Related Input Variable
 ##############################################################################
 
-# variable "cbr_rules" {
-#   description = <<EOT
-#   Map of CBR rules to be created. Each rule includes mapping to zone keys.
-#   Example:
-#   cbr_rules = {
-#     "limit_cos_1" = {
-#       name             = "Restrict COS Access"
-#       description      = "Allow request to COS only from vpc_zone and ip_zone"
-#       enforcement_mode = "enabled"
-#       zone_keys        = ["vpc_zone", "zone_2"]
-#       resources = [
-#         {
-#           service_name         = "cloud-object-storage"
-#           resource_instance_id = "cos-instance-id-1"
-#         }
-#       ]
-#     },
-#     "limit_cos_1" = {
-#       name             = "Restrict COS Access"
-#       description      = "Allow request to COS from vpc_zone only"
-#       enforcement_mode = "enabled"
-#       zone_keys        = ["vpc_zone"]
-#       resources = [
-#         {
-#           service_name         = "cloud-object-storage"
-#           resource_instance_id = "cos-instance-id-2"
-#         }
-#       ]
-#     }
-#   }
-#   EOT
-#   type = map(object({
-#     # By default, rule_description is null if not passed
-#     rule_description = optional(string)
-#     # By default, rule_contexts is empty list if not passed
-#     rule_contexts = optional(list(object({
-#       attributes = list(object({
-#         name  = string
-#         value = string
-#       }))
-#       # check if attributes has to be made optional because it is already optional in variable definiton
-#     })))
-#     # Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'
-#     enforcement_mode = string
-#     resources = list(object({
-#       attributes = optional(list(object({
-#         name     = string
-#         value    = string
-#         operator = optional(string)
-#       })))
-#       tags = optional(list(object({
-#         name     = string
-#         value    = string
-#         operator = optional(string)
-#       })))
-#     }))
-#     # By default it will protect all of the service and platform APIs the target service supports,
-#     # For more information: check the default value of operations variable in modules/cbr-rule-module/variables.tf
-#     operations = optional(list(object({
-#       api_types = list(object({
-#         api_type_id = string
-#       }))
-#     })))
-#     # references keys from var.cbr_zones.
-#     zone_keys = list(string)
-#   }))
-#   default = {}
-#   # Validation happens in the rule module
-# }
+variable "cbr_rules" {
+  description = <<EOT
+  Map of CBR rules to be created. Each rule includes mapping to zone keys.
+  Example:
+  cbr_rules = {
+    "limit_cos_1" = {
+      name             = "Restrict Access to cos-instance-id-1"
+      description      = "Allow request to COS from vpc_zone and ip_zone only"
+      enforcement_mode = "enabled"
+      zone_keys        = ["vpc_zone", "zone_2"]
+      resources = [
+        {
+          service_name         = "cloud-object-storage"
+          resource_instance_id = "cos-instance-id-1"
+        }
+      ]
+    },
+    "limit_cos_2" = {
+      name             = "Restrict Access to cos-instance-id-2"
+      description      = "Allow request to COS from vpc_zone only"
+      enforcement_mode = "enabled"
+      zone_keys        = ["vpc_zone"]
+      resources = [
+        {
+          service_name         = "cloud-object-storage"
+          resource_instance_id = "cos-instance-id-2"
+        }
+      ]
+    }
+  }
+  EOT
+  type = map(object({
+    # By default, rule_description is null if not passed
+    rule_description = optional(string, null)
+    # By default, rule_contexts is empty list if not passed
+    rule_contexts = optional(list(object({
+      attributes = optional(list(object({
+        name  = string
+        value = string
+      })))
+    })), [])
+    # Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'
+    enforcement_mode = optional(string, "report")
+    resources = list(object({
+      attributes = optional(list(object({
+        name     = string
+        value    = string
+        operator = optional(string)
+      })))
+      tags = optional(list(object({
+        name     = string
+        value    = string
+        operator = optional(string)
+      })))
+    }))
+    operations = optional(list(object({
+      api_types = list(object({
+        api_type_id = string
+      }))
+      })), [
+      {
+        api_types = [
+          {
+            api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
+          }
+        ]
+      }
+    ])
+    zone_keys = list(string)
+  }))
+  default = {}
+  # Validation happens in the rule module
+}
