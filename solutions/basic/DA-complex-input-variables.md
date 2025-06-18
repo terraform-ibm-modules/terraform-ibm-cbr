@@ -66,7 +66,7 @@ cbr_zones = {
   }
   zone3 = {
     name       = "ip-zone3"
-    # zone_description = "Zone for restricted IPs"
+    zone_description = "Zone for restricted IPs"
     addresses = [
       {
         type  = "ipAddress"
