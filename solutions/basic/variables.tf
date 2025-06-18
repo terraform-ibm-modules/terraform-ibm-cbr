@@ -52,12 +52,9 @@ variable "cabin_service_id_access_group" {
 variable "cbr_zones" {
   description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
   type = map(object({
-    # By default account id is populated using data block where the CBR is created, else it can be passed if required
-    account_id = optional(string, null)
-    name       = string
-    # By default, the description is null
+    account_id       = optional(string, null)
+    name             = string
     zone_description = optional(string, null)
-    # By default, the addresses is empty list
     addresses = optional(list(object({
       type  = optional(string)
       value = optional(string)
@@ -69,15 +66,12 @@ variable "cbr_zones" {
         service_type     = optional(string)
       }))
     })), [])
-    # By default, the excluded_addresses is empty list
     excluded_addresses = optional(list(object({
       type  = optional(string)
       value = optional(string)
     })), [])
-    # To update an existing CBR zone using `existing_zone_id`. By default, it is false
     use_existing_cbr_zone = optional(bool, false)
-    # By default, it is null
-    existing_zone_id = optional(string, null)
+    existing_zone_id      = optional(string, null)
   }))
   default = {}
   # Validation happens in the rule module
@@ -90,16 +84,13 @@ variable "cbr_zones" {
 variable "cbr_rules" {
   description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
   type = map(object({
-    # By default, rule_description is null if not passed
     rule_description = optional(string, null)
-    # By default, rule_contexts is empty list if not passed
     rule_contexts = optional(list(object({
       attributes = optional(list(object({
         name  = string
         value = string
       })))
     })), [])
-    # Valid values for enforcement mode can be 'enabled', 'disabled' and 'report'
     enforcement_mode = optional(string, "report")
     resources = list(object({
       attributes = optional(list(object({
