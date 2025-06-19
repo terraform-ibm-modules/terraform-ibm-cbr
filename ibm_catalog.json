@@ -25,7 +25,7 @@
       "short_description": "Creates and configures Context Based Restriction Network Zones and Rules.",
       "long_description": "This deployable architecture is used to provision and configure [IBM Context Based Restriction Network Zones](https://cloud.ibm.com/context-based-restrictions/zones) and [IBM Context Based Restriction Rules](https://cloud.ibm.com/context-based-restrictions/rules).\n\n\n💡 This Terraform-based automation is part of a broader suite of IBM-maintained Infrastructure as Code (IaC) asset collection, each following the naming pattern \"Cloud automation for *servicename*\" and focusing on single IBM Cloud service. These single-service deployable architectures can be used on their own to streamline and automate service deployments through an [IaC approach](https://cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-understanding-projects), or assembled together into a broader [automated IaC stack](https://cloud.ibm.com/docs/secure-enterprise?topic=secure-enterprise-config-stack) to automate the deployment of an end-to-end solution architecture.",
       "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic//README.md",
-      "offering_icon_url": "",
+      "offering_icon_url": "https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/images/cbr_icon.svg",
       "provider_name": "IBM",
       "features": [
         {
@@ -93,7 +93,7 @@
               {
                 "diagram": {
                   "caption": "Context Based Restrictions",
-                  "url": "",
+                  "url": "https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/reference-architecture/cbr.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture supports creating and configuring Context Based Restrictions rules and network zones."
