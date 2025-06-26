@@ -2,6 +2,7 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
@@ -23,6 +24,7 @@ const multiServiceExampleTerraformDir = "examples/multi-service-profile"
 const fsCloudExampleTerraformDir = "examples/fscloud"
 const updateExistingCBRZone = "examples/update-existing-zone-addresses"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
+const basicDADir = "solutions/basic"
 
 func TestRunZoneExample(t *testing.T) {
 	t.Parallel()
@@ -339,5 +341,81 @@ func TestRunUpgradeExample(t *testing.T) {
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
 		assert.NotNil(t, output, "Expected some output")
+	}
+}
+
+func TestBasicDAInSchematics(t *testing.T) {
+	t.Parallel()
+
+	cbrZones := map[string]interface{}{
+		"zone1": map[string]interface{}{
+			"name": "test-zone",
+			"addresses": []map[string]interface{}{
+				{
+					"type":  "ipAddress",
+					"value": "192.168.99.99",
+				},
+			},
+		},
+	}
+
+	cbrZonesJSON, err := json.Marshal(cbrZones)
+	if err != nil {
+		t.Fatalf("Failed to marshal cbr_zones: %v", err)
+	}
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		Prefix:  "cbr-da",
+		TarIncludePatterns: []string{
+			"*.tf",
+			"modules/cbr-zone-module/*.tf",
+			"modules/cbr-rule-module/*.tf",
+			basicDADir + "/*.tf",
+		},
+		TemplateFolder:         basicDADir,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "cbr_zones", Value: string(cbrZonesJSON), DataType: "map(object{})"},
+		{Name: "cbr_rules", Value: "{}", DataType: "map(object{})"},
+	}
+
+	err = options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
+}
+
+func TestRunUpgradeBasicDAInSchematics(t *testing.T) {
+	t.Parallel()
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		TarIncludePatterns: []string{
+			"*.tf",
+			"modules/cbr-zone-module/*.tf",
+			"modules/cbr-rule-module/*.tf",
+			basicDADir + "/*.tf",
+		},
+		TemplateFolder:         basicDADir,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "cbr_zones", Value: "{}", DataType: "map(object{})"},
+		{Name: "cbr_rules", Value: "{}", DataType: "map(object{})"},
+	}
+
+	err := options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
 	}
 }
