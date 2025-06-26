@@ -2,10 +2,11 @@
 
 Several input variables in the IBM Cloud [Context Based Restriction deployable architecture](https://cloud.ibm.com/catalog#deployable_architecture) use complex object types. You specify these inputs when you configure deployable architecture.
 
-* Context-Based Restrictions Zones (`cbr_zones`)
-* Context-Based Restrictions Rules (`cbr_rules`)
+* [Context-Based Restrictions Zones](#cbr-zones) (`cbr_zones`)
+* [Context-Based Restrictions Rules](#cbr-rules) (`cbr_rules`)
 
-## Context-Based Restrictions Zones <a name="cbr_zones"></a>
+
+## Context-Based Restrictions Zones <a name="cbr-zones"></a>
 
 The `cbr_zones` input variable allows you to define one or more Context-Based Restriction (CBR) network zones in IBM Cloud. These zones represent trusted sources of network traffic, such as IP addresses, subnets, or VPCs, which can later be referenced in CBR rules to restrict access to IBM Cloud services.
 
@@ -43,7 +44,7 @@ This variable enables you to define reusable network zone definitions, which can
 ### Example Context-Based Restrictions Zone Configuration
 
 ```hcl
-cbr_zones = {
+{
     zone1 = {
       name        = "vpc-zone"
       zone_description = "Zone for VPCs"
@@ -79,7 +80,7 @@ cbr_zones = {
 
 For more information, refer to the [IBM Cloud Context-Based Restrictions documentation](https://cloud.ibm.com/docs/account?topic=account-context-restrictions-whatis) and the [IBM Cloud Terraform Provider documentation for CBR Zones](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/cbr_zone).
 
-## Context-Based Restrictions Rules <a name="cbr_rules"></a>
+## Context-Based Restrictions Rules <a name="cbr-rules"></a>
 
 The `cbr_rules` input variable allows you to define one or more Context-Based Restriction (CBR) rules in IBM Cloud. These rules determine who can access which services based on predefined trusted zones or dynamic context attributes.
 
@@ -133,7 +134,7 @@ This variable enables fine-grained access control across IBM Cloud resources by 
 ### Example for Context-Based Restrictions Rule Configuration
 
 ```hcl
-  cbr_rules = {
+{
   rule1 = {
     rule_description = "Restrict redis to specific IP address only"
     enforcement_mode = "enabled"

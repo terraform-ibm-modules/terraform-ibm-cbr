@@ -4,14 +4,14 @@
 
 variable "ibmcloud_api_key" {
   type        = string
-  description = "The IBM Cloud API Key"
+  description = "The IBM Cloud API Key."
   sensitive   = true
 }
 
 variable "prefix" {
   type        = string
-  default     = null
-  description = "The prefix to be added to all resources created by this solution. To skip using a prefix, set this value to null or an empty string. The prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and can not contain consecutive hyphens ('--'). Example: prod-0205-cbr. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/prefix.md)."
+  nullable    = true
+  description = "The prefix to be added to all resources created by this solution. To skip using a prefix, set this value to null or an empty string. The prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and can not contain consecutive hyphens ('--'). Example: prod-cbr. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/prefix.md)."
 
   validation {
     # - null and empty string is allowed
@@ -35,12 +35,13 @@ variable "prefix" {
   }
 }
 
+
 ##############################################################################
 # Cabin IAM Access Group Name
 ##############################################################################
 
 variable "cabin_service_id_access_group" {
-  description = "The name of the service id access group for the cabin.  Format: <cabin-name>_service_id where <cabin-name> is from the cabin config 'cabin_data.name'"
+  description = "The name of the service id access group for the cabin. Format: <cabin-name>_service_id where <cabin-name> is from the cabin config 'cabin_data.name'."
   type        = string
   default     = null
 }
@@ -50,7 +51,7 @@ variable "cabin_service_id_access_group" {
 ##############################################################################
 
 variable "cbr_zones" {
-  description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
+  description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md#cbr-zones)."
   type = map(object({
     account_id       = optional(string, null)
     name             = string
@@ -82,7 +83,7 @@ variable "cbr_zones" {
 ##############################################################################
 
 variable "cbr_rules" {
-  description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md)"
+  description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md#cbr-rules)."
   type = map(object({
     rule_description = optional(string, null)
     rule_contexts = optional(list(object({
