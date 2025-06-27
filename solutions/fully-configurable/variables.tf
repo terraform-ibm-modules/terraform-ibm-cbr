@@ -51,7 +51,7 @@ variable "cabin_service_id_access_group" {
 ##############################################################################
 
 variable "cbr_zones" {
-  description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md#cbr-zones)."
+  description = "Map of CBR zones to be created. Key is a unique zone identifier. These zones are referenced by `zone_keys` inside `cbr_rules` to explicitly control which zones apply to which rules. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/fully-configurable/DA-complex-input-variables.md#cbr-zones)."
   type = map(object({
     account_id       = optional(string, null)
     name             = string
@@ -83,7 +83,7 @@ variable "cbr_zones" {
 ##############################################################################
 
 variable "cbr_rules" {
-  description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/basic/DA-complex-input-variables.md#cbr-rules)."
+  description = "Map of CBR rules to be created. Each rule includes mapping to zone keys. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/fully-configurable/DA-complex-input-variables.md#cbr-rules)."
   type = map(object({
     rule_description = optional(string, null)
     rule_contexts = optional(list(object({

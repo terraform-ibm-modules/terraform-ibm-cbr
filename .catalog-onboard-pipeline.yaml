@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+offerings:
+  - name: deploy-arch-ibm-code-engine
+    kind: solution
+    catalog id: 7df1e4ca-d54c-4fd0-82ce-3d13247308cd
+    offering id: dba24f56-79ac-411a-8e3c-08af0171d3dd
+    variations:
+      - name: fully-configurable
+        mark_ready: true
+        install_type: fullstack

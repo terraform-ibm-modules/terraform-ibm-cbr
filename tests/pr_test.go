@@ -26,7 +26,7 @@ const multiServiceExampleTerraformDir = "examples/multi-service-profile"
 const fsCloudExampleTerraformDir = "examples/fscloud"
 const updateExistingCBRZone = "examples/update-existing-zone-addresses"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
-const basicDADir = "solutions/basic"
+const fullyConfigurableDADir = "solutions/fully-configurable"
 
 var (
 	permanentResources map[string]interface{}
@@ -362,7 +362,7 @@ func TestRunUpgradeExample(t *testing.T) {
 	}
 }
 
-func TestBasicDAInSchematics(t *testing.T) {
+func TestFullyConfigurableDAInSchematics(t *testing.T) {
 	t.Parallel()
 
 	// Sample data for cbr_zones
@@ -463,9 +463,9 @@ func TestBasicDAInSchematics(t *testing.T) {
 			"*.tf",
 			"modules/cbr-zone-module/*.tf",
 			"modules/cbr-rule-module/*.tf",
-			basicDADir + "/*.tf",
+			fullyConfigurableDADir + "/*.tf",
 		},
-		TemplateFolder:         basicDADir,
+		TemplateFolder:         fullyConfigurableDADir,
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
@@ -482,7 +482,7 @@ func TestBasicDAInSchematics(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 }
 
-func TestRunUpgradeBasicDAInSchematics(t *testing.T) {
+func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 	t.Parallel()
 
 	// Sample data for cbr_zones
@@ -583,9 +583,9 @@ func TestRunUpgradeBasicDAInSchematics(t *testing.T) {
 			"*.tf",
 			"modules/cbr-zone-module/*.tf",
 			"modules/cbr-rule-module/*.tf",
-			basicDADir + "/*.tf",
+			fullyConfigurableDADir + "/*.tf",
 		},
-		TemplateFolder:         basicDADir,
+		TemplateFolder:         fullyConfigurableDADir,
 		Tags:                   []string{"test-schematic"},
 		DeleteWorkspaceOnFail:  false,
 		WaitJobCompleteMinutes: 60,
