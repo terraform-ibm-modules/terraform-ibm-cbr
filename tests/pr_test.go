@@ -2,7 +2,10 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"os"
 	"strings"
 	"testing"
 
@@ -23,6 +26,23 @@ const multiServiceExampleTerraformDir = "examples/multi-service-profile"
 const fsCloudExampleTerraformDir = "examples/fscloud"
 const updateExistingCBRZone = "examples/update-existing-zone-addresses"
 const permanentResourcesYaml = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
+const fullyConfigurableDADir = "solutions/fully-configurable"
+
+var (
+	permanentResources map[string]interface{}
+)
+
+// TestMain will be run before any parallel tests, used to set up permanentResources object
+func TestMain(m *testing.M) {
+
+	var err error
+	permanentResources, err = common.LoadMapFromYaml(permanentResourcesYaml)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(m.Run())
+}
 
 func TestRunZoneExample(t *testing.T) {
 	t.Parallel()
@@ -339,5 +359,247 @@ func TestRunUpgradeExample(t *testing.T) {
 	if !options.UpgradeTestSkipped {
 		assert.Nil(t, err, "This should not have errored")
 		assert.NotNil(t, output, "Expected some output")
+	}
+}
+
+func TestFullyConfigurableDAInSchematics(t *testing.T) {
+	t.Parallel()
+
+	// Sample data for cbr_zones
+	cbrZones := map[string]interface{}{
+		"zone1": map[string]interface{}{
+			"name": "test-zone-1",
+			"addresses": []map[string]interface{}{
+				{
+					"type":  "ipAddress",
+					"value": "192.168.99.99",
+				},
+			},
+		},
+		"zone2": map[string]interface{}{
+			"name": "test-zone-2",
+			"addresses": []map[string]interface{}{
+				{
+					"type":  "ipAddress",
+					"value": "192.168.98.98",
+				},
+			},
+		},
+	}
+
+	cbrZonesJSON, err := json.Marshal(cbrZones)
+	if err != nil {
+		t.Fatalf("Failed to marshal cbr_zones: %v", err)
+	}
+
+	// Sample data for cbr_rules
+	cbrRules := map[string]interface{}{
+		"rule1": map[string]interface{}{
+			"rule_description": "Only allow Redis access from zone1 with ipAddress 192.168.99.99 and zone2 with ipAddress 192.168.98.98",
+			"enforcement_mode": "disabled",
+			"resources": []map[string]interface{}{
+				{
+					"attributes": []map[string]interface{}{
+						{
+							"name":  "accountId",
+							"value": permanentResources["ge_dev_account_id"],
+						},
+						{
+							"name":  "serviceName",
+							"value": "databases-for-redis",
+						},
+					},
+				},
+			},
+			"operations": []map[string]interface{}{
+				{
+					"api_types": []map[string]interface{}{
+						{
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane",
+						},
+					},
+				},
+			},
+			"zone_keys": []string{"zone1", "zone2"},
+		},
+		"rule2": map[string]interface{}{
+			"rule_description": "Only allow Postgres access from zone2 with ipAddress 192.168.98.98",
+			"resources": []map[string]interface{}{
+				{
+					"attributes": []map[string]interface{}{
+						{
+							"name":  "accountId",
+							"value": permanentResources["ge_dev_account_id"],
+						},
+						{
+							"name":  "serviceName",
+							"value": "databases-for-postgresql",
+						},
+					},
+				},
+			},
+			"operations": []map[string]interface{}{
+				{
+					"api_types": []map[string]interface{}{
+						{
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane",
+						},
+					},
+				},
+			},
+			"zone_keys": []string{"zone2"},
+		},
+	}
+
+	cbrRulesJSON, err := json.Marshal(cbrRules)
+	if err != nil {
+		t.Fatalf("Failed to marshal cbr_rules: %v", err)
+	}
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		Prefix:  "cbr-da",
+		TarIncludePatterns: []string{
+			"*.tf",
+			"modules/cbr-zone-module/*.tf",
+			"modules/cbr-rule-module/*.tf",
+			fullyConfigurableDADir + "/*.tf",
+		},
+		TemplateFolder:         fullyConfigurableDADir,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "cbr_zones", Value: string(cbrZonesJSON), DataType: "map(object{})"},
+		{Name: "cbr_rules", Value: string(cbrRulesJSON), DataType: "map(object{})"},
+	}
+
+	err = options.RunSchematicTest()
+	assert.Nil(t, err, "This should not have errored")
+}
+
+func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
+	t.Parallel()
+
+	// Sample data for cbr_zones
+	cbrZones := map[string]interface{}{
+		"zone1": map[string]interface{}{
+			"name": "test-zone-1",
+			"addresses": []map[string]interface{}{
+				{
+					"type":  "ipAddress",
+					"value": "192.168.99.99",
+				},
+			},
+		},
+		"zone2": map[string]interface{}{
+			"name": "test-zone-2",
+			"addresses": []map[string]interface{}{
+				{
+					"type":  "ipAddress",
+					"value": "192.168.98.98",
+				},
+			},
+		},
+	}
+
+	cbrZonesJSON, err := json.Marshal(cbrZones)
+	if err != nil {
+		t.Fatalf("Failed to marshal cbr_zones: %v", err)
+	}
+
+	// Sample data for cbr_rules
+	cbrRules := map[string]interface{}{
+		"rule1": map[string]interface{}{
+			"rule_description": "Only allow Redis access from zone1 with ipAddress 192.168.99.99 and zone2 with ipAddress 192.168.98.98",
+			"enforcement_mode": "disabled",
+			"resources": []map[string]interface{}{
+				{
+					"attributes": []map[string]interface{}{
+						{
+							"name":  "accountId",
+							"value": permanentResources["ge_dev_account_id"],
+						},
+						{
+							"name":  "serviceName",
+							"value": "databases-for-redis",
+						},
+					},
+				},
+			},
+			"operations": []map[string]interface{}{
+				{
+					"api_types": []map[string]interface{}{
+						{
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane",
+						},
+					},
+				},
+			},
+			"zone_keys": []string{"zone1", "zone2"},
+		},
+		"rule2": map[string]interface{}{
+			"rule_description": "Only allow Postgres access from zone2 with ipAddress 192.168.98.98",
+			"resources": []map[string]interface{}{
+				{
+					"attributes": []map[string]interface{}{
+						{
+							"name":  "accountId",
+							"value": permanentResources["ge_dev_account_id"],
+						},
+						{
+							"name":  "serviceName",
+							"value": "databases-for-postgresql",
+						},
+					},
+				},
+			},
+			"operations": []map[string]interface{}{
+				{
+					"api_types": []map[string]interface{}{
+						{
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane",
+						},
+					},
+				},
+			},
+			"zone_keys": []string{"zone2"},
+		},
+	}
+
+	cbrRulesJSON, err := json.Marshal(cbrRules)
+	if err != nil {
+		t.Fatalf("Failed to marshal cbr_rules: %v", err)
+	}
+
+	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+		Testing: t,
+		Prefix:  "cbr-da",
+		TarIncludePatterns: []string{
+			"*.tf",
+			"modules/cbr-zone-module/*.tf",
+			"modules/cbr-rule-module/*.tf",
+			fullyConfigurableDADir + "/*.tf",
+		},
+		TemplateFolder:         fullyConfigurableDADir,
+		Tags:                   []string{"test-schematic"},
+		DeleteWorkspaceOnFail:  false,
+		WaitJobCompleteMinutes: 60,
+	})
+
+	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+		{Name: "prefix", Value: options.Prefix, DataType: "string"},
+		{Name: "cbr_zones", Value: string(cbrZonesJSON), DataType: "map(object{})"},
+		{Name: "cbr_rules", Value: string(cbrRulesJSON), DataType: "map(object{})"},
+	}
+
+	err = options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
 	}
 }
