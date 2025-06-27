@@ -80,16 +80,8 @@
           "architecture": {
             "features": [
               {
-                "title": "Creates and configures Context Based Restrictions Network Zones",
-                "description": "Creates and configures Context Based Restrictions Network Zones"
-              },
-              {
-                "title": "Creates and configures Context Based Restrictions Rules",
-                "description": "Creates and configures Context Based Restrictions Rules"
-              },
-              {
-                "title": "Creates and configures IAM Access policy",
-                "description": "Creates and configures IAM Access policy added to a specific Access Group to view/update CBR zones"
+                "title": " ",
+                "description": "Configured to use IBM secure by default standards, but can be edited to fit your use case."
               }
             ],
             "diagrams": [
