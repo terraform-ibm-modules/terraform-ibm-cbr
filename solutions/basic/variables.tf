@@ -92,7 +92,7 @@ variable "cbr_rules" {
         value = string
       })))
     })), [])
-    enforcement_mode = optional(string, "report")
+    enforcement_mode = optional(string, "disabled")
     resources = list(object({
       attributes = optional(list(object({
         name     = string
