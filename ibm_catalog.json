@@ -60,10 +60,6 @@
               "required": true
             },
             {
-              "key": "cabin_service_id_access_group",
-              "required": false
-            },
-            {
               "key": "cbr_zones",
               "required": true
             },

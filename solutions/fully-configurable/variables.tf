@@ -35,17 +35,6 @@ variable "prefix" {
   }
 }
 
-
-##############################################################################
-# Cabin IAM Access Group Name
-##############################################################################
-
-variable "cabin_service_id_access_group" {
-  description = "The name of the service id access group for the cabin. Format: <cabin-name>_service_id where <cabin-name> is from the cabin config 'cabin_data.name'."
-  type        = string
-  default     = null
-}
-
 ##############################################################################
 # Zone Related Input Variable
 ##############################################################################
