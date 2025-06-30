@@ -62,8 +62,7 @@ module "cbr_rule" {
   for_each         = var.cbr_rules
   source           = "../../modules/cbr-rule-module"
   rule_description = each.value.rule_description
-  # rule_contexts    = concat(local.rule_zone_contexts[each.key], each.value.rule_contexts)
-  rule_contexts    = local.rule_zone_contexts[each.key]
+  rule_contexts    = concat(local.rule_zone_contexts[each.key], each.value.rule_contexts)
   enforcement_mode = each.value.enforcement_mode
   resources        = each.value.resources
   operations       = each.value.operations
