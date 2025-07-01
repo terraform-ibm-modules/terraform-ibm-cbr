@@ -515,7 +515,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 	// Sample data for cbr_rules
 	cbrRules := map[string]interface{}{
 		"rule1": map[string]interface{}{
-			"rule_description": "Only allow Redis access from zone1 with ipAddress 192.168.99.99 and zone2 with ipAddress 192.168.98.98",
+			"rule_description": "Only allow Redis access from zone3 with ipAddress 192.168.99.99 and zone4 with ipAddress 192.168.98.98",
 			"enforcement_mode": "disabled",
 			"resources": []map[string]interface{}{
 				{
@@ -543,7 +543,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 			"zone_keys": []string{"zone3", "zone4"},
 		},
 		"rule2": map[string]interface{}{
-			"rule_description": "Only allow Postgres access from zone2 with ipAddress 192.168.98.98",
+			"rule_description": "Only allow Postgres access from zone3 with ipAddress 192.168.98.98",
 			"resources": []map[string]interface{}{
 				{
 					"attributes": []map[string]interface{}{
