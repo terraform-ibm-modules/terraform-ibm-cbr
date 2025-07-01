@@ -363,6 +363,7 @@ func TestRunUpgradeExample(t *testing.T) {
 }
 
 func TestFullyConfigurableDAInSchematics(t *testing.T) {
+	t.Parallel()
 
 	// Sample data for cbr_zones
 	cbrZones := map[string]interface{}{
@@ -486,8 +487,8 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 
 	// Sample data for cbr_zones
 	cbrZones := map[string]interface{}{
-		"zone1": map[string]interface{}{
-			"name": "test-zone-1",
+		"zone3": map[string]interface{}{
+			"name": "test-zone-3",
 			"addresses": []map[string]interface{}{
 				{
 					"type":  "ipAddress",
@@ -495,8 +496,8 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 				},
 			},
 		},
-		"zone2": map[string]interface{}{
-			"name": "test-zone-2",
+		"zone4": map[string]interface{}{
+			"name": "test-zone-4",
 			"addresses": []map[string]interface{}{
 				{
 					"type":  "ipAddress",
@@ -514,7 +515,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 	// Sample data for cbr_rules
 	cbrRules := map[string]interface{}{
 		"rule1": map[string]interface{}{
-			"rule_description": "Only allow Redis access from zone1 with ipAddress 192.168.99.99 and zone2 with ipAddress 192.168.98.98",
+			"rule_description": "Only allow App Configuration access from zone1 with ipAddress 192.168.99.99 and zone2 with ipAddress 192.168.98.98",
 			"enforcement_mode": "disabled",
 			"resources": []map[string]interface{}{
 				{
@@ -525,7 +526,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 						},
 						{
 							"name":  "serviceName",
-							"value": "databases-for-redis",
+							"value": "apprapp",
 						},
 					},
 				},
@@ -539,10 +540,10 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 					},
 				},
 			},
-			"zone_keys": []string{"zone1", "zone2"},
+			"zone_keys": []string{"zone3", "zone4"},
 		},
 		"rule2": map[string]interface{}{
-			"rule_description": "Only allow Postgres access from zone2 with ipAddress 192.168.98.98",
+			"rule_description": "Only allow Code Engine access from zone2 with ipAddress 192.168.98.98",
 			"resources": []map[string]interface{}{
 				{
 					"attributes": []map[string]interface{}{
@@ -552,7 +553,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 						},
 						{
 							"name":  "serviceName",
-							"value": "databases-for-postgresql",
+							"value": "codeengine",
 						},
 					},
 				},
@@ -566,7 +567,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 					},
 				},
 			},
-			"zone_keys": []string{"zone2"},
+			"zone_keys": []string{"zone4"},
 		},
 	}
 
