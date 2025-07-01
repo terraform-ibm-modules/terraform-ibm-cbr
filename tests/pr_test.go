@@ -483,7 +483,6 @@ func TestFullyConfigurableDAInSchematics(t *testing.T) {
 }
 
 func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
-	t.Parallel()
 
 	// Sample data for cbr_zones
 	cbrZones := map[string]interface{}{
