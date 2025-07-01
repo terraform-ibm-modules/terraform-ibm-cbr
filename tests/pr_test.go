@@ -535,7 +535,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 				{
 					"api_types": []map[string]interface{}{
 						{
-							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane",
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:",
 						},
 					},
 				},
@@ -543,7 +543,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 			"zone_keys": []string{"zone3", "zone4"},
 		},
 		"rule2": map[string]interface{}{
-			"rule_description": "Only allow Code Engine access from zone2 with ipAddress 192.168.98.98",
+			"rule_description": "Only allow Container Registry access from zone2 with ipAddress 192.168.98.98",
 			"resources": []map[string]interface{}{
 				{
 					"attributes": []map[string]interface{}{
@@ -553,7 +553,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 						},
 						{
 							"name":  "serviceName",
-							"value": "codeengine",
+							"value": "container-registry",
 						},
 					},
 				},
