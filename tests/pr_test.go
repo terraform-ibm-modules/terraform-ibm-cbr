@@ -562,7 +562,7 @@ func TestRunUpgradeFullyConfigurableDAInSchematics(t *testing.T) {
 				{
 					"api_types": []map[string]interface{}{
 						{
-							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type",
+							"api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:",
 						},
 					},
 				},
