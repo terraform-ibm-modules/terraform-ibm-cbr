@@ -426,3 +426,44 @@ variable "kms_service_targeted_by_prewired_rules" {
     error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS"
   }
 }
+
+variable "allow_wp_to_appconfig" {
+  description = "Enable WP to AppConfig flow"
+  type        = bool
+  default     = true
+}
+
+variable "appconfig_aggregator_services" {
+  description = "List of services AppConfig can aggregate"
+  type        = list(string)
+  default = [
+    "cloud-object-storage",
+    "event-notifications",
+    "secrets-manager",
+  ]
+}
+
+variable "enable_appconfig_aggregator_flows" {
+  description = "Map of bools to enable/disable AppConfig flows per service"
+  type        = map(bool)
+  default = {
+    cloud-object-storage      = true
+    event-notifications       = true
+    functions                 = true
+    secrets-manager           = true
+    resource-controller       = true
+    resource-manager          = true
+    resource-group            = true
+    resource-service-instance = true
+    resource-service-binding  = true
+    resource-service-key      = true
+    resource-alias            = true
+    resource-tag              = true
+    resource-lock             = true
+    resource-quota            = true
+    resource-usage            = true
+    resource-instances        = true
+    resource-bindings         = true
+    resource-keys             = true
+  }
+}

@@ -252,6 +252,8 @@ locals {
   event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
   # tflint-ignore: terraform_naming_convention
   scc_cbr_zone_id = local.cbr_zones["compliance"].zone_id
+  # tflint-ignore: terraform_naming_convention
+  scc_wp_cbr_zone_id = local.cbr_zones["sysdig-secure"].zone_id
 
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Event Streams (Messagehub) -> HPCS
@@ -315,6 +317,25 @@ locals {
         var.allow_vpcs_to_iam_access_management ? [local.cbr_zone_vpcs.zone_id] : [],
       ])
     }]
+    }, {
+    # WP -> AppConfig
+    "apprapp" : flatten(concat(
+      [{
+        endpointType : "private",
+        networkZoneIds : flatten([
+          var.allow_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
+        ])
+      }],
+      [
+        for svc in var.appconfig_aggregator_services :
+        var.enable_appconfig_aggregator_flows[svc] ? [{
+          endpointType : "private",
+          networkZoneIds : flatten([
+            local.cbr_zones[svc].zone_id
+          ])
+        }] : []
+      ])
+    )
     }
   )
 

@@ -118,6 +118,10 @@ module "cbr_account_level" {
     cloud-object-storage = {
       zone_name = "${var.prefix}-COS-zone-example-of-customized-zone-name"
     }
+    apprapp = {},
+    event-notifications = {
+      zone_name = "${var.prefix}-event-notifications-zone"
+    },
   }
 
   # Demonstrates how additional context to the rules created by this module can be added.
@@ -149,6 +153,8 @@ module "cbr_account_level" {
       zone_ids = [module.cbr_zone_operator_ips.zone_id]
     }]
   })
+
+  allow_wp_to_appconfig = true
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
