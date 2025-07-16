@@ -30,11 +30,6 @@ locals {
     "sysdig-monitor",
     "sysdig-secure",
     "toolchain",
-    "container-registry",
-    "hs-crypto",
-    "appid",
-    "project",
-    "pm-20",
     "logs",
   ]
 }
@@ -275,31 +270,6 @@ variable "zone_service_ref_list" {
     }))
 
     toolchain = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    pm-20 = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    container-registry = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    hs-crypto = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    appid = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    project = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
     }))
