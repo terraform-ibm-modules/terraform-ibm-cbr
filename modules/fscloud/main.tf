@@ -328,10 +328,10 @@ locals {
       }],
       [
         for svc in var.appconfig_aggregator_services :
-        var.enable_appconfig_aggregator_flows[svc] ? [{
+        var.enable_appconfig_aggregator_flows[svc] && lookup(local.cbr_zones, svc, null) != null ? [{
           endpointType : "private",
           networkZoneIds : flatten([
-            local.cbr_zones[svc].zone_id
+            lookup(local.cbr_zones, svc, { zone_id = null }).zone_id
           ])
         }] : []
       ])

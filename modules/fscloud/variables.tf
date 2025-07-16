@@ -1,3 +1,44 @@
+locals {
+  supported_service_refs = [
+    "cloud-object-storage",
+    "codeengine",
+    "containers-kubernetes",
+    "databases-for-cassandra",
+    "databases-for-elasticsearch",
+    "databases-for-enterprisedb",
+    "databases-for-etcd",
+    "databases-for-mongodb",
+    "databases-for-mysql",
+    "databases-for-postgresql",
+    "databases-for-redis",
+    "directlink",
+    "iam-groups",
+    "is",
+    "messagehub",
+    "messages-for-rabbitmq",
+    "schematics",
+    "secrets-manager",
+    "server-protect",
+    "user-management",
+    "apprapp",
+    "compliance",
+    "event-notifications",
+    "logdna",
+    "logdnaat",
+    "cloudantnosqldb",
+    "globalcatalog-collection",
+    "sysdig-monitor",
+    "sysdig-secure",
+    "toolchain",
+    "container-registry",
+    "hs-crypto",
+    "appid",
+    "project",
+    "pm-20",
+    "logs",
+  ]
+}
+
 variable "prefix" {
   type        = string
   description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
@@ -238,6 +279,36 @@ variable "zone_service_ref_list" {
       serviceRef_location = optional(list(string))
     }))
 
+    pm-20 = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    container-registry = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    hs-crypto = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    appid = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    project = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    logs = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
   })
 
   validation {
@@ -278,19 +349,12 @@ variable "custom_rule_contexts_by_service" {
 
   validation {
     condition = alltrue(flatten([
-      for key, val in var.custom_rule_contexts_by_service :
-      [for rule in val : [
-        for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-          "containers-kubernetes-cluster", "containers-kubernetes-management",
-          "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-          "databases-for-etcd", "databases-for-mongodb",
-          "databases-for-mysql", "databases-for-postgresql",
-          "databases-for-redis", "directlink",
-          "iam-groups", "is", "messagehub",
-          "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-          "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"],
-      ref)]]
+      for key, val in var.custom_rule_contexts_by_service : [
+        for rule in val : [
+          for ref in rule.service_ref_names :
+          contains(local.supported_service_refs, ref)
+        ]
+      ]
     ]))
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -363,18 +427,12 @@ variable "existing_serviceref_zone" {
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
   validation {
-    condition = alltrue([
-      for key, _ in var.existing_serviceref_zone :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], key)
-    ])
+    condition = alltrue(
+      [
+        for key, _ in var.existing_serviceref_zone :
+        contains(local.supported_service_refs, key)
+      ]
+    )
     error_message = "Provide a valid service reference"
   }
   description = "Provide a valid service reference and existing zone id"
@@ -399,15 +457,7 @@ variable "skip_specific_services_for_zone_creation" {
   validation {
     condition = alltrue([
       for service_ref in var.skip_specific_services_for_zone_creation :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
+      contains(local.supported_service_refs, service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -438,8 +488,32 @@ variable "appconfig_aggregator_services" {
   type        = list(string)
   default = [
     "cloud-object-storage",
-    "event-notifications",
+    "containers-kubernetes",
+    "is",
     "secrets-manager",
+    "databases-for-postgresql",
+    "databases-for-redis",
+    "databases-for-elasticsearch",
+    "databases-for-enterprisedb",
+    "databases-for-etcd",
+    "databases-for-mongodb",
+    "databases-for-mysql",
+    "container-registry",
+    "codeengine",
+    "messagehub",
+    "toolchain",
+    "cloudantnosqldb",
+    "schematics",
+    "sysdig-monitor",
+    "compliance",
+    "hs-crypto",
+    "appid",
+    "apprapp",
+    "event-notifications",
+    "messages-for-rabbitmq",
+    "project",
+    "pm-20",
+    "logs",
   ]
 }
 
@@ -447,23 +521,32 @@ variable "enable_appconfig_aggregator_flows" {
   description = "Map of bools to enable/disable AppConfig flows per service"
   type        = map(bool)
   default = {
-    cloud-object-storage      = true
-    event-notifications       = true
-    functions                 = true
-    secrets-manager           = true
-    resource-controller       = true
-    resource-manager          = true
-    resource-group            = true
-    resource-service-instance = true
-    resource-service-binding  = true
-    resource-service-key      = true
-    resource-alias            = true
-    resource-tag              = true
-    resource-lock             = true
-    resource-quota            = true
-    resource-usage            = true
-    resource-instances        = true
-    resource-bindings         = true
-    resource-keys             = true
+    cloud-object-storage        = true
+    containers-kubernetes       = true
+    is                          = true
+    secrets-manager             = true
+    databases-for-postgresql    = true
+    databases-for-redis         = true
+    databases-for-elasticsearch = true
+    databases-for-enterprisedb  = true
+    databases-for-etcd          = true
+    databases-for-mongodb       = true
+    databases-for-mysql         = true
+    container-registry          = true
+    codeengine                  = true
+    messagehub                  = true
+    toolchain                   = true
+    cloudantnosqldb             = true
+    schematics                  = true
+    sysdig-monitor              = true
+    compliance                  = true
+    hs-crypto                   = true
+    appid                       = true
+    apprapp                     = true
+    event-notifications         = true
+    messages-for-rabbitmq       = true
+    project                     = true
+    pm-20                       = true
+    logs                        = true
   }
 }
