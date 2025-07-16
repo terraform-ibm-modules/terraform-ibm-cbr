@@ -154,7 +154,8 @@ module "cbr_account_level" {
     }]
   })
 
-  allow_wp_to_appconfig = true
+  allow_wp_to_appconfig             = true
+  enable_appconfig_aggregator_flows = var.enable_appconfig_aggregator_flows
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.

@@ -454,7 +454,7 @@ variable "allow_wp_to_appconfig" {
 }
 
 variable "appconfig_aggregator_services" {
-  description = "List of services AppConfig can aggregate"
+  description = "List of services AppConfig can aggregate. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). Service references are not supported for databases."
   type        = list(string)
   default = [
     "cloud-object-storage",
@@ -481,28 +481,28 @@ variable "appconfig_aggregator_services" {
 }
 
 variable "enable_appconfig_aggregator_flows" {
-  description = "Map of bools to enable/disable AppConfig flows per service"
+  description = "Map of bools to enable/disable AppConfig flows per service."
   type        = map(bool)
   default = {
-    cloud-object-storage  = true
-    containers-kubernetes = true
-    is                    = true
-    secrets-manager       = true
-    container-registry    = true
-    codeengine            = true
-    messagehub            = true
-    toolchain             = true
-    cloudantnosqldb       = true
-    schematics            = true
-    sysdig-monitor        = true
-    compliance            = true
-    hs-crypto             = true
-    appid                 = true
-    apprapp               = true
-    event-notifications   = true
-    messages-for-rabbitmq = true
-    project               = true
-    pm-20                 = true
-    logs                  = true
+    cloud-object-storage  = false
+    containers-kubernetes = false
+    is                    = false
+    secrets-manager       = false
+    container-registry    = false
+    codeengine            = false
+    messagehub            = false
+    toolchain             = false
+    cloudantnosqldb       = false
+    schematics            = false
+    sysdig-monitor        = false
+    compliance            = false
+    hs-crypto             = false
+    appid                 = false
+    apprapp               = false
+    event-notifications   = false
+    messages-for-rabbitmq = false
+    project               = false
+    pm-20                 = false
+    logs                  = false
   }
 }
