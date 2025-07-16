@@ -318,7 +318,7 @@ locals {
       ])
     }]
     }, {
-    # WP -> AppConfig, AppConfig -> AppConfig Aggregator Services
+    # WP -> AppConfig
     "apprapp" : [{
       endpointType : "private",
       networkZoneIds : flatten([
@@ -327,7 +327,7 @@ locals {
     }]
     },
     {
-      # AppConfig -> Aggregator Services (AppConfig is the source, aggregator service is the target)
+      # AppConfig -> Aggregator Services
       for svc in var.appconfig_aggregator_services :
       svc => [{
         endpointType : "private",
