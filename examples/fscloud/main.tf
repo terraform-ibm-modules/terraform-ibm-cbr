@@ -122,9 +122,9 @@ module "cbr_account_level" {
     event-notifications = {
       zone_name = "${var.prefix}-event-notifications-zone"
     },
-    # pm-20 = {
-    #   zone_name = "${var.prefix}-pm-20-zone"
-    # },
+    pm-20 = {
+      zone_name = "${var.prefix}-pm-20-zone"
+    },
   }
 
   # Demonstrates how additional context to the rules created by this module can be added.
