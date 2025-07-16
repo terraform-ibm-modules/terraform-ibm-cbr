@@ -458,7 +458,6 @@ variable "appconfig_aggregator_services" {
   type        = list(string)
   default = [
     "cloud-object-storage",
-    "containers-kubernetes",
     "is",
     "secrets-manager",
     "container-registry",
@@ -473,7 +472,6 @@ variable "appconfig_aggregator_services" {
     "appid",
     "apprapp",
     "event-notifications",
-    "messages-for-rabbitmq",
     "project",
     "pm-20",
     "logs",
@@ -484,25 +482,23 @@ variable "enable_appconfig_aggregator_flows" {
   description = "Map of bools to enable/disable AppConfig flows per service."
   type        = map(bool)
   default = {
-    cloud-object-storage  = false
-    containers-kubernetes = false
-    is                    = false
-    secrets-manager       = false
-    container-registry    = false
-    codeengine            = false
-    messagehub            = false
-    toolchain             = false
-    cloudantnosqldb       = false
-    schematics            = false
-    sysdig-monitor        = false
-    compliance            = false
-    hs-crypto             = false
-    appid                 = false
-    apprapp               = false
-    event-notifications   = false
-    messages-for-rabbitmq = false
-    project               = false
-    pm-20                 = false
-    logs                  = false
+    cloud-object-storage = false
+    is                   = false
+    secrets-manager      = false
+    container-registry   = false
+    codeengine           = false
+    messagehub           = false
+    toolchain            = false
+    cloudantnosqldb      = false
+    schematics           = false
+    sysdig-monitor       = false
+    compliance           = false
+    hs-crypto            = false
+    appid                = false
+    apprapp              = false
+    event-notifications  = false
+    project              = false
+    pm-20                = false
+    logs                 = false
   }
 }
