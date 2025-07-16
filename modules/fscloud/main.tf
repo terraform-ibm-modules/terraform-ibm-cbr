@@ -318,24 +318,22 @@ locals {
       ])
     }]
     }, {
-    # WP -> AppConfig
-    "apprapp" : flatten(concat(
-      [{
-        endpointType : "private",
-        networkZoneIds : flatten([
-          var.allow_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
-        ])
-      }],
-      [
-        for svc in var.appconfig_aggregator_services :
-        var.enable_appconfig_aggregator_flows[svc] && lookup(local.cbr_zones, svc, null) != null ? [{
-          endpointType : "private",
-          networkZoneIds : flatten([
-            lookup(local.cbr_zones, svc, { zone_id = null }).zone_id
-          ])
-        }] : []
+    # WP -> AppConfig, AppConfig -> AppConfig Aggregator Services
+    "apprapp" : [{
+      endpointType : "private",
+      networkZoneIds : flatten([
+        var.allow_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
       ])
-    )
+    }]
+    },
+    {
+      # AppConfig -> Aggregator Services (AppConfig is the source, aggregator service is the target)
+      for svc in var.appconfig_aggregator_services :
+      svc => [{
+        endpointType : "private",
+        networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
+      }]
+      if var.enable_appconfig_aggregator_flows[svc] && lookup(local.cbr_zones, "apprapp", null) != null
     }
   )
 
