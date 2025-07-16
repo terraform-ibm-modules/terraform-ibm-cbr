@@ -461,13 +461,6 @@ variable "appconfig_aggregator_services" {
     "containers-kubernetes",
     "is",
     "secrets-manager",
-    "databases-for-postgresql",
-    "databases-for-redis",
-    "databases-for-elasticsearch",
-    "databases-for-enterprisedb",
-    "databases-for-etcd",
-    "databases-for-mongodb",
-    "databases-for-mysql",
     "container-registry",
     "codeengine",
     "messagehub",
@@ -491,32 +484,25 @@ variable "enable_appconfig_aggregator_flows" {
   description = "Map of bools to enable/disable AppConfig flows per service"
   type        = map(bool)
   default = {
-    cloud-object-storage        = true
-    containers-kubernetes       = true
-    is                          = true
-    secrets-manager             = true
-    databases-for-postgresql    = true
-    databases-for-redis         = true
-    databases-for-elasticsearch = true
-    databases-for-enterprisedb  = true
-    databases-for-etcd          = true
-    databases-for-mongodb       = true
-    databases-for-mysql         = true
-    container-registry          = true
-    codeengine                  = true
-    messagehub                  = true
-    toolchain                   = true
-    cloudantnosqldb             = true
-    schematics                  = true
-    sysdig-monitor              = true
-    compliance                  = true
-    hs-crypto                   = true
-    appid                       = true
-    apprapp                     = true
-    event-notifications         = true
-    messages-for-rabbitmq       = true
-    project                     = true
-    pm-20                       = true
-    logs                        = true
+    cloud-object-storage  = true
+    containers-kubernetes = true
+    is                    = true
+    secrets-manager       = true
+    container-registry    = true
+    codeengine            = true
+    messagehub            = true
+    toolchain             = true
+    cloudantnosqldb       = true
+    schematics            = true
+    sysdig-monitor        = true
+    compliance            = true
+    hs-crypto             = true
+    appid                 = true
+    apprapp               = true
+    event-notifications   = true
+    messages-for-rabbitmq = true
+    project               = true
+    pm-20                 = true
+    logs                  = true
   }
 }
