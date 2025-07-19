@@ -1,3 +1,39 @@
+locals {
+  supported_service_refs = [
+    "cloud-object-storage",
+    "codeengine",
+    "containers-kubernetes",
+    "databases-for-cassandra",
+    "databases-for-elasticsearch",
+    "databases-for-enterprisedb",
+    "databases-for-etcd",
+    "databases-for-mongodb",
+    "databases-for-mysql",
+    "databases-for-postgresql",
+    "databases-for-redis",
+    "directlink",
+    "iam-groups",
+    "is",
+    "messagehub",
+    "messages-for-rabbitmq",
+    "schematics",
+    "secrets-manager",
+    "server-protect",
+    "user-management",
+    "apprapp",
+    "compliance",
+    "event-notifications",
+    "logdna",
+    "logdnaat",
+    "cloudantnosqldb",
+    "globalcatalog-collection",
+    "sysdig-monitor",
+    "sysdig-secure",
+    "toolchain",
+    "logs",
+  ]
+}
+
 variable "prefix" {
   type        = string
   description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
@@ -238,6 +274,11 @@ variable "zone_service_ref_list" {
       serviceRef_location = optional(list(string))
     }))
 
+    logs = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
   })
 
   validation {
@@ -278,19 +319,12 @@ variable "custom_rule_contexts_by_service" {
 
   validation {
     condition = alltrue(flatten([
-      for key, val in var.custom_rule_contexts_by_service :
-      [for rule in val : [
-        for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-          "containers-kubernetes-cluster", "containers-kubernetes-management",
-          "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-          "databases-for-etcd", "databases-for-mongodb",
-          "databases-for-mysql", "databases-for-postgresql",
-          "databases-for-redis", "directlink",
-          "iam-groups", "is", "messagehub",
-          "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-          "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"],
-      ref)]]
+      for key, val in var.custom_rule_contexts_by_service : [
+        for rule in val : [
+          for ref in rule.service_ref_names :
+          contains(local.supported_service_refs, ref)
+        ]
+      ]
     ]))
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -363,18 +397,12 @@ variable "existing_serviceref_zone" {
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
   validation {
-    condition = alltrue([
-      for key, _ in var.existing_serviceref_zone :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], key)
-    ])
+    condition = alltrue(
+      [
+        for key, _ in var.existing_serviceref_zone :
+        contains(local.supported_service_refs, key)
+      ]
+    )
     error_message = "Provide a valid service reference"
   }
   description = "Provide a valid service reference and existing zone id"
@@ -399,15 +427,7 @@ variable "skip_specific_services_for_zone_creation" {
   validation {
     condition = alltrue([
       for service_ref in var.skip_specific_services_for_zone_creation :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
+      contains(local.supported_service_refs, service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -424,5 +444,61 @@ variable "kms_service_targeted_by_prewired_rules" {
       for key_protect_val in var.kms_service_targeted_by_prewired_rules : can(regex("^(key-protect|hs-crypto)$", key_protect_val))
     ])
     error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS"
+  }
+}
+
+variable "allow_wp_to_appconfig" {
+  description = "Enable WP to AppConfig flow"
+  type        = bool
+  default     = true
+}
+
+variable "appconfig_aggregator_services" {
+  description = "List of services AppConfig can aggregate. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). Service references are not supported for databases."
+  type        = list(string)
+  default = [
+    "cloud-object-storage",
+    "is",
+    "secrets-manager",
+    "container-registry",
+    "codeengine",
+    "messagehub",
+    "toolchain",
+    "cloudantnosqldb",
+    "schematics",
+    "sysdig-monitor",
+    "compliance",
+    "hs-crypto",
+    "appid",
+    "apprapp",
+    "event-notifications",
+    "project",
+    "pm-20",
+    "logs",
+  ]
+}
+
+variable "enable_appconfig_aggregator_flows" {
+  description = "Map of bools to enable/disable AppConfig flows per service."
+  type        = map(bool)
+  default = {
+    cloud-object-storage = false
+    is                   = false
+    secrets-manager      = false
+    container-registry   = false
+    codeengine           = false
+    messagehub           = false
+    toolchain            = false
+    cloudantnosqldb      = false
+    schematics           = false
+    sysdig-monitor       = false
+    compliance           = false
+    hs-crypto            = false
+    appid                = false
+    apprapp              = false
+    event-notifications  = false
+    project              = false
+    pm-20                = false
+    logs                 = false
   }
 }
