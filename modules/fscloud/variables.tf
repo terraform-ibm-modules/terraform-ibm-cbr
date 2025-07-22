@@ -472,8 +472,6 @@ variable "appconfig_aggregator_services" {
     "appid",
     "apprapp",
     "event-notifications",
-    "project",
-    "pm-20",
     "logs",
   ]
 }
@@ -497,8 +495,6 @@ variable "enable_appconfig_aggregator_flows" {
     appid                = false
     apprapp              = false
     event-notifications  = false
-    project              = false
-    pm-20                = false
     logs                 = false
   }
 }

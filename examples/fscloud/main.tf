@@ -19,7 +19,7 @@ module "key_protect_module" {
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
-  allowed_network   = "private-only"
+  allowed_network   = "public-and-private"
   plan              = "tiered-pricing"
 }
 
