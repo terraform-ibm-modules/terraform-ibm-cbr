@@ -7,13 +7,11 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all vpc_zone_list, zone_service_ref_list and cbr_rule_description created by this submodule"
-  default     = "jor-test"
 }
 
 variable "region" {
   description = "Name of the region to deploy into"
   type        = string
-  default     = "us-south"
 }
 
 variable "resource_group" {
