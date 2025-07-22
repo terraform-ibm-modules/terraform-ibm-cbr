@@ -95,9 +95,8 @@ This variable enables fine-grained access control across IBM Cloud resources by 
 
 - `enforcement_mode` (optional): Specifies how the rule is enforced. Valid values are:
   - `enabled`: Actively blocks requests not matching the rule.
-  - `disabled`: Rule is inactive.
+  - `disabled`: Rule is inactive. Defaults to `"disabled"`.
   - `report`: Logs but does not block requests.
-  Defaults to `"report"`.
 
 - `zone_keys` (required): A list of keys referencing zones defined in the `cbr_zones` map. Required if `rule_contexts` is not provided.
 
