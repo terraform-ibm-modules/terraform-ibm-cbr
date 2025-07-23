@@ -326,15 +326,14 @@ locals {
         lookup(var.allow_appconfig_to_appconfig_aggregator_services, "apprapp", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }]
-    },
-    {
-      # App Configuration -> Aggregator Services
-      for svc, enabled in var.allow_appconfig_to_appconfig_aggregator_services :
-      svc => [{
-        endpointType : "private",
-        networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
-      }]
-      if enabled && !contains(["kms", "hs-crypto", "cloud-object-storage", "container-registry", "is", "apprapp"], svc)
+    }, {
+    # App Configuration -> Aggregator Services
+    for svc, enabled in var.allow_appconfig_to_appconfig_aggregator_services :
+    svc => [{
+      endpointType : "private",
+      networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
+    }]
+    if enabled && !contains(["kms", "hs-crypto", "cloud-object-storage", "container-registry", "is", "apprapp"], svc)
     }
   )
 
