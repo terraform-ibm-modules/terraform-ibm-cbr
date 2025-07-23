@@ -27,9 +27,6 @@ locals {
     "codeengine-service-control-plane" : {
       "enforcement_mode" : "report"
     },
-    "compliance" : {
-      "enforcement_mode" : "report"
-    },
     "container-registry" : {
       "enforcement_mode" : "report"
     },
@@ -251,8 +248,6 @@ locals {
   # tflint-ignore: terraform_naming_convention
   event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
   # tflint-ignore: terraform_naming_convention
-  scc_cbr_zone_id = local.cbr_zones["compliance"].zone_id
-  # tflint-ignore: terraform_naming_convention
   scc_wp_cbr_zone_id = local.cbr_zones["sysdig-secure"].zone_id
 
   prewired_rule_contexts_by_service = merge({
@@ -271,35 +266,40 @@ locals {
           local.databases-for-mysql_cbr_zone_id,
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : [],
-        var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
+        var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "kms", false) ? [local.cbr_zones["apprapp"].zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "hs-crypto", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
-    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center (SCC) -> COS
+    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_vpcs_to_cos ? [local.cbr_zone_vpcs.zone_id] : []
       ])
       }, {
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
-        var.allow_scc_to_cos ? [local.scc_cbr_zone_id] : [],
+        var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "cloud-object-storage", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
     # VPCs -> container registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
+        var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "container-registry", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
     # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
+        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "is", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }]
     }, {
@@ -307,33 +307,34 @@ locals {
     "iam-groups" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_iam_groups ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_vpcs_to_iam_groups ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }] }, {
     # VPCs -> iam-access-management
     "iam-access-management" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_iam_access_management ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_vpcs_to_iam_access_management ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }]
     }, {
-    # WP -> AppConfig
+    # Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
     "apprapp" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
+        var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
+        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "apprapp", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }]
     },
     {
-      # AppConfig -> Aggregator Services
-      for svc in var.appconfig_aggregator_services :
+      # App Configuration -> Aggregator Services
+      for svc, enabled in var.allow_appconfig_to_appconfig_aggregator_services :
       svc => [{
         endpointType : "private",
         networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
       }]
-      if var.enable_appconfig_aggregator_flows[svc] && lookup(local.cbr_zones, "apprapp", null) != null
+      if enabled && !contains(["kms", "hs-crypto", "cloud-object-storage", "container-registry", "is", "apprapp"], svc)
     }
   )
 
@@ -352,7 +353,6 @@ locals {
   global_deny_target_service_details = { for target_service_name, attributes in local.target_service_details :
     target_service_name => attributes if try(attributes.global_deny, false) == true
   }
-
 
   ## define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
@@ -417,6 +417,10 @@ locals {
     "codeengine-platform"              = "codeengine"
   }
 }
+
+# output "prewired_rule_contexts_by_service" {
+#   value = local.prewired_rule_contexts_by_service
+# }
 
 locals {
 

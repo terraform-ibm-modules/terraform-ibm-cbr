@@ -19,7 +19,7 @@ module "key_protect_module" {
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
-  allowed_network   = "private-only" # or "public-and-private"
+  allowed_network   = "public-and-private"
   plan              = "tiered-pricing"
 }
 
@@ -78,7 +78,7 @@ module "cbr_account_level" {
     "kms" = {
       # Demonstrates how a customized CBR description (also seen as being the rule name) can be set
       "description"      = "kms-rule-example-of-customized-description"
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "report"
       "instance_id"      = module.key_protect_module.key_protect_guid
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false # opting out from creating a new global rule
@@ -154,8 +154,29 @@ module "cbr_account_level" {
     }]
   })
 
-  allow_wp_to_appconfig             = true
-  enable_appconfig_aggregator_flows = var.enable_appconfig_aggregator_flows
+  allow_appconfig_to_appconfig_aggregator_services = {
+    cloud-object-storage     = true
+    containers-kubernetes    = false
+    is                       = false
+    secrets-manager          = false
+    IAM                      = true
+    kms                      = true
+    container-registry       = false
+    codeengine               = false
+    dns-svcs                 = true
+    messagehub               = false
+    transit                  = false
+    schematics               = false
+    sysdig-monitor           = false
+    sysdig-secure            = false
+    hs-crypto                = false
+    apprapp                  = false
+    globalcatalog-collection = false
+    event-notifications      = false
+    messages-for-rabbitmq    = false
+    atracker                 = false
+    logs                     = true
+  }
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.

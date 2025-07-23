@@ -25,7 +25,6 @@ locals {
     "event-notifications",
     "logdna",
     "logdnaat",
-    "cloudantnosqldb",
     "globalcatalog-collection",
     "sysdig-monitor",
     "sysdig-secure",
@@ -44,6 +43,10 @@ variable "zone_vpc_crn_list" {
   description = "(List) VPC CRN for the zones"
   default     = []
 }
+
+##############################################################
+# Allow x_to_x rule boolean variables
+##############################################################
 
 variable "allow_cos_to_kms" {
   type        = bool
@@ -116,10 +119,44 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "allow_scc_to_cos" {
+variable "allow_scc_wp_to_cos" {
   type        = bool
-  description = "Set rule for SCC (Security and Compliance Center) to COS, default is true"
+  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to COS, default is true"
   default     = true
+}
+
+variable "allow_scc_wp_to_appconfig" {
+  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to App Configuration, default is true"
+  type        = bool
+  default     = true
+}
+
+variable "allow_appconfig_to_appconfig_aggregator_services" {
+  description = "Set rule for App Configuration to list of services supported by configuration aggregator, default is true. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). Service references are not supported for databases."
+  type        = map(bool)
+  default = {
+    cloud-object-storage     = true
+    containers-kubernetes    = true
+    is                       = true
+    secrets-manager          = true
+    IAM                      = true
+    kms                      = true
+    container-registry       = true
+    codeengine               = true
+    dns-svcs                 = true
+    messagehub               = true
+    transit                  = true
+    schematics               = true
+    sysdig-monitor           = true
+    sysdig-secure            = true
+    hs-crypto                = true
+    apprapp                  = true
+    globalcatalog-collection = true
+    event-notifications      = true
+    messages-for-rabbitmq    = true
+    atracker                 = true
+    logs                     = true
+  }
 }
 
 variable "zone_service_ref_list" {
@@ -245,11 +282,6 @@ variable "zone_service_ref_list" {
     }))
 
     logdnaat = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    cloudantnosqldb = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
     }))
@@ -444,57 +476,5 @@ variable "kms_service_targeted_by_prewired_rules" {
       for key_protect_val in var.kms_service_targeted_by_prewired_rules : can(regex("^(key-protect|hs-crypto)$", key_protect_val))
     ])
     error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS"
-  }
-}
-
-variable "allow_wp_to_appconfig" {
-  description = "Enable WP to AppConfig flow"
-  type        = bool
-  default     = true
-}
-
-variable "appconfig_aggregator_services" {
-  description = "List of services AppConfig can aggregate. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). Service references are not supported for databases."
-  type        = list(string)
-  default = [
-    "cloud-object-storage",
-    "is",
-    "secrets-manager",
-    "container-registry",
-    "codeengine",
-    "messagehub",
-    "toolchain",
-    "cloudantnosqldb",
-    "schematics",
-    "sysdig-monitor",
-    "compliance",
-    "hs-crypto",
-    "appid",
-    "apprapp",
-    "event-notifications",
-    "logs",
-  ]
-}
-
-variable "enable_appconfig_aggregator_flows" {
-  description = "Map of bools to enable/disable AppConfig flows per service."
-  type        = map(bool)
-  default = {
-    cloud-object-storage = false
-    is                   = false
-    secrets-manager      = false
-    container-registry   = false
-    codeengine           = false
-    messagehub           = false
-    toolchain            = false
-    cloudantnosqldb      = false
-    schematics           = false
-    sysdig-monitor       = false
-    compliance           = false
-    hs-crypto            = false
-    appid                = false
-    apprapp              = false
-    event-notifications  = false
-    logs                 = false
   }
 }
