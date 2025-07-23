@@ -250,6 +250,12 @@ locals {
   # tflint-ignore: terraform_naming_convention
   scc_wp_cbr_zone_id = local.cbr_zones["sysdig-secure"].zone_id
 
+  # App Configuration aggregator services list
+  prewired_rule_for_aggregator_services = flatten([
+    local.kms_values,
+    ["cloud-object-storage", "container-registry", "is", "apprapp"]
+  ])
+
   prewired_rule_contexts_by_service = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Event Streams (Messagehub) -> HPCS
     for key in local.kms_values : key => [{
@@ -333,7 +339,7 @@ locals {
       endpointType : "private",
       networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
     }]
-    if enabled && !contains(["kms", "hs-crypto", "cloud-object-storage", "container-registry", "is", "apprapp"], svc)
+    if enabled && !contains(local.prewired_rule_for_aggregator_services, svc)
     }
   )
 
