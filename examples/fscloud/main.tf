@@ -155,15 +155,15 @@ module "cbr_account_level" {
   })
 
   allow_appconfig_to_appconfig_aggregator_services = {
-    cloud-object-storage     = true
+    cloud-object-storage     = true # Enable flow from App Configuration -> Cloud Object Storage
     containers-kubernetes    = false
     is                       = false
     secrets-manager          = false
-    IAM                      = true
-    kms                      = true
+    IAM                      = true # Enable flow from App Configuration -> All IAM Account Management services
+    kms                      = true # Enable flow from App Configuration -> Key Protect
     container-registry       = false
     codeengine               = false
-    dns-svcs                 = true
+    dns-svcs                 = true # Enable flow from App Configuration -> DNS services
     messagehub               = false
     transit                  = false
     schematics               = false
@@ -175,7 +175,7 @@ module "cbr_account_level" {
     event-notifications      = false
     messages-for-rabbitmq    = false
     atracker                 = false
-    logs                     = true
+    logs                     = true # Enable flow from App Configuration -> Cloud Logs
   }
 }
 
