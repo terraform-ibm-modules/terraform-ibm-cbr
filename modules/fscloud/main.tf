@@ -417,11 +417,6 @@ locals {
     "codeengine-platform"              = "codeengine"
   }
 }
-
-# output "prewired_rule_contexts_by_service" {
-#   value = local.prewired_rule_contexts_by_service
-# }
-
 locals {
 
   target_service_details_attributes = { for key, value in local.target_service_details :
