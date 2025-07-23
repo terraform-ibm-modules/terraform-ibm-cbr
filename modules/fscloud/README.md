@@ -15,6 +15,7 @@ This module creates default coarse-grained CBR rules in a given account followin
 - Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
 - IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
 - Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
+- App Configuration -> List of services supported by configuration aggregator services
 
 **Note on KMS**: the module supports setting up rules for Key Protect, and Hyper Protect Crypto Services. By default the modules set rules for Hyper Protect Crypto Services, but this can be modified to use Key Protect, Hyper Protect, or both Key Protect and Hyper Protect Crypto Services using the input variable `kms_service_targeted_by_prewired_rules`.
 
