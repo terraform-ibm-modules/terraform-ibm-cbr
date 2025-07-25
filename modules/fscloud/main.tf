@@ -266,7 +266,7 @@ locals {
           local.databases-for-mysql_cbr_zone_id,
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : [],
-        var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : [],
+        var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
       ])
     }] }, {
     # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
@@ -280,21 +280,21 @@ locals {
       networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
-        var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : [],
+        var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : []
       ])
     }] }, {
-    # VPCs -> container registry
+    # VPCs -> Container Registry
     "container-registry" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : [],
+        var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : []
       ])
     }] }, {
     # IKS -> IS (VPC Infrastructure Services)
     "is" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : [],
+        var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : []
       ])
     }]
     }, {
@@ -317,7 +317,7 @@ locals {
     "apprapp" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
+        var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : []
       ])
     }]
     }
