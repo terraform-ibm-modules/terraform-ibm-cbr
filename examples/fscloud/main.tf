@@ -19,7 +19,7 @@ module "key_protect_module" {
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
-  allowed_network   = "public-and-private"
+  allowed_network   = "private-only" # or "public-and-private"
   plan              = "tiered-pricing"
 }
 
@@ -154,9 +154,8 @@ module "cbr_account_level" {
     }]
   })
 
-  allow_appconfig_to_appconfig_aggregator_services = {
+  appconfig_aggregator_service_access = {
     cloud-object-storage     = true # Enable flow from App Configuration -> Cloud Object Storage
-    containers-kubernetes    = false
     is                       = false
     secrets-manager          = false
     IAM                      = true # Enable flow from App Configuration -> All IAM Account Management services
@@ -173,7 +172,6 @@ module "cbr_account_level" {
     apprapp                  = false
     globalcatalog-collection = false
     event-notifications      = false
-    messages-for-rabbitmq    = false
     atracker                 = false
     logs                     = true # Enable flow from App Configuration -> Cloud Logs
   }

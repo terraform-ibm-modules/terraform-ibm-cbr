@@ -250,13 +250,7 @@ locals {
   # tflint-ignore: terraform_naming_convention
   scc_wp_cbr_zone_id = local.cbr_zones["sysdig-secure"].zone_id
 
-  # App Configuration aggregator services list
-  prewired_rule_for_aggregator_services = flatten([
-    local.kms_values,
-    ["cloud-object-storage", "container-registry", "is", "apprapp"]
-  ])
-
-  prewired_rule_contexts_by_service = merge({
+  base_prewired_configs = merge({
     # COS -> HPCS, Block storage -> HPCS, ROKS -> HPCS, ICD -> HPCS, Event Streams (Messagehub) -> HPCS
     for key in local.kms_values : key => [{
       endpointType : "private",
@@ -273,8 +267,6 @@ locals {
           local.databases-for-postgresql_cbr_zone_id,
         local.databases-for-redis_cbr_zone_id] : [],
         var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "kms", false) ? [local.cbr_zones["apprapp"].zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "hs-crypto", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
     # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
@@ -289,7 +281,6 @@ locals {
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
         var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "cloud-object-storage", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
     # VPCs -> container registry
@@ -297,7 +288,6 @@ locals {
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_vpcs_to_container_registry ? [local.cbr_zone_vpcs.zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "container-registry", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }] }, {
     # IKS -> IS (VPC Infrastructure Services)
@@ -305,7 +295,6 @@ locals {
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_iks_to_is ? [local.containers-kubernetes_cbr_zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "is", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }]
     }, {
@@ -329,19 +318,39 @@ locals {
       endpointType : "private",
       networkZoneIds : flatten([
         var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : [],
-        lookup(var.allow_appconfig_to_appconfig_aggregator_services, "apprapp", false) ? [local.cbr_zones["apprapp"].zone_id] : []
       ])
     }]
-    }, {
-    # App Configuration -> Aggregator Services
-    for svc, enabled in var.allow_appconfig_to_appconfig_aggregator_services :
+    }
+  )
+
+  # App Configuration -> Aggregator Services if set to `true`
+  appconfig_aggregator_configs = {
+    for svc, enabled in var.appconfig_aggregator_service_access :
     svc => [{
       endpointType : "private",
       networkZoneIds : [local.cbr_zones["apprapp"].zone_id]
     }]
-    if enabled && !contains(local.prewired_rule_for_aggregator_services, svc)
-    }
-  )
+    if enabled
+  }
+
+  # This will merge the CBR pre-wired rule config with matching endpoint and zone merging with aggregator services
+  prewired_rule_contexts_by_service = {
+    for service_name in distinct(flatten([keys(local.base_prewired_configs), keys(local.appconfig_aggregator_configs)])) :
+    service_name => flatten([
+      [
+        for base_rule in lookup(local.base_prewired_configs, service_name, []) : {
+          endpointType = base_rule.endpointType
+          networkZoneIds = distinct(flatten([
+            base_rule.networkZoneIds,
+            lookup(var.appconfig_aggregator_service_access, service_name, false) && base_rule.endpointType == "private" ?
+            [local.cbr_zones["apprapp"].zone_id] : []
+          ]))
+        }
+      ],
+      lookup(local.base_prewired_configs, service_name, null) == null ?
+      lookup(local.appconfig_aggregator_configs, service_name, []) : []
+    ])
+  }
 
   prewired_rule_contexts_by_service_check = { for key, value in local.prewired_rule_contexts_by_service :
     key => [
@@ -350,7 +359,7 @@ locals {
     ]
   }
 
-  ## define default 'deny' rule context
+  # Define default 'deny' rule context
   deny_rule_context_by_service = { for target_service_name in keys(local.target_service_details) :
     target_service_name => []
   }
@@ -359,7 +368,7 @@ locals {
     target_service_name => attributes if try(attributes.global_deny, false) == true
   }
 
-  ## define context for any custom rules
+  # Define context for any custom rules
   custom_rule_contexts_by_service = { for target_service_name, custom_rule_contexts in var.custom_rule_contexts_by_service :
     target_service_name => [for custom_rule_context in custom_rule_contexts :
       custom_rule_context.add_managed_vpc_zone == true ?
@@ -422,6 +431,7 @@ locals {
     "codeengine-platform"              = "codeengine"
   }
 }
+
 locals {
 
   target_service_details_attributes = { for key, value in local.target_service_details :

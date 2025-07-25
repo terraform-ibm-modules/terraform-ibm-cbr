@@ -130,31 +130,29 @@ variable "allow_scc_wp_to_appconfig" {
   default     = true
 }
 
-variable "allow_appconfig_to_appconfig_aggregator_services" {
-  description = "Set rule for App Configuration to list of services supported by configuration aggregator, default is true. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). Service references are not supported for databases."
+variable "appconfig_aggregator_service_access" {
+  description = "Set rule for App Configuration to list of services supported by configuration aggregator, default is true. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator) but CBR rule will only be created for the CBR supported services and service references in cbr zone are not supported for databases."
   type        = map(bool)
   default = {
-    cloud-object-storage     = true
-    containers-kubernetes    = true
-    is                       = true
-    secrets-manager          = true
-    IAM                      = true
-    kms                      = true
-    container-registry       = true
-    codeengine               = true
-    dns-svcs                 = true
-    messagehub               = true
-    transit                  = true
-    schematics               = true
-    sysdig-monitor           = true
-    sysdig-secure            = true
-    hs-crypto                = true
-    apprapp                  = true
-    globalcatalog-collection = true
-    event-notifications      = true
-    messages-for-rabbitmq    = true
-    atracker                 = true
-    logs                     = true
+    cloud-object-storage     = false
+    is                       = false
+    secrets-manager          = false
+    IAM                      = false
+    kms                      = false
+    container-registry       = false
+    codeengine               = false
+    dns-svcs                 = false
+    messagehub               = false
+    transit                  = false
+    schematics               = false
+    sysdig-monitor           = false
+    sysdig-secure            = false
+    hs-crypto                = false
+    apprapp                  = false
+    globalcatalog-collection = false
+    event-notifications      = false
+    atracker                 = false
+    logs                     = false
   }
 }
 
