@@ -1,37 +1,3 @@
-locals {
-  supported_service_refs = [
-    "cloud-object-storage",
-    "codeengine",
-    "containers-kubernetes",
-    "databases-for-cassandra",
-    "databases-for-elasticsearch",
-    "databases-for-enterprisedb",
-    "databases-for-etcd",
-    "databases-for-mongodb",
-    "databases-for-mysql",
-    "databases-for-postgresql",
-    "databases-for-redis",
-    "directlink",
-    "iam-groups",
-    "is",
-    "messagehub",
-    "messages-for-rabbitmq",
-    "schematics",
-    "secrets-manager",
-    "server-protect",
-    "user-management",
-    "apprapp",
-    "event-notifications",
-    "logdna",
-    "logdnaat",
-    "globalcatalog-collection",
-    "sysdig-monitor",
-    "sysdig-secure",
-    "toolchain",
-    "logs",
-  ]
-}
-
 variable "prefix" {
   type        = string
   description = "Prefix to append to all vpc_zone_list, service_ref_zone_list and cbr_rule_description created by this submodule"
@@ -309,9 +275,7 @@ variable "zone_service_ref_list" {
     condition = alltrue([
       for item in ["directlink", "globalcatalog-collection", "iam-groups", "platform_service", "user-management"] :
       contains(keys(var.zone_service_ref_list), item) ?
-      (var.zone_service_ref_list[item] == null ||
-        (var.zone_service_ref_list[item] != null ? (var.zone_service_ref_list[item].serviceRef_location == null || try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 ? true : false) : true) ||
-      contains(var.skip_specific_services_for_zone_creation, item)) :
+      ((var.zone_service_ref_list[item] != null ? (var.zone_service_ref_list[item].serviceRef_location == null || try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 ? true : false) : true)) :
       true
     ])
     error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', 'platform_service' and 'user-management' must not specify a serviceRef_location."
@@ -346,7 +310,7 @@ variable "custom_rule_contexts_by_service" {
       for key, val in var.custom_rule_contexts_by_service : [
         for rule in val : [
           for ref in rule.service_ref_names :
-          contains(local.supported_service_refs, ref)
+          contains(keys(var.zone_service_ref_list), ref)
         ]
       ]
     ]))
@@ -424,7 +388,7 @@ variable "existing_serviceref_zone" {
     condition = alltrue(
       [
         for key, _ in var.existing_serviceref_zone :
-        contains(local.supported_service_refs, key)
+        contains(keys(var.zone_service_ref_list), key)
       ]
     )
     error_message = "Provide a valid service reference"
@@ -451,7 +415,7 @@ variable "skip_specific_services_for_zone_creation" {
   validation {
     condition = alltrue([
       for service_ref in var.skip_specific_services_for_zone_creation :
-      contains(local.supported_service_refs, service_ref)
+      contains(keys(var.zone_service_ref_list), service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
