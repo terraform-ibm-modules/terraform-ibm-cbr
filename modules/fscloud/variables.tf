@@ -9,6 +9,10 @@ variable "zone_vpc_crn_list" {
   default     = []
 }
 
+##############################################################
+# Allow x_to_x rule boolean variables
+##############################################################
+
 variable "allow_cos_to_kms" {
   type        = bool
   description = "Set rule for COS to KMS, default is true"
@@ -80,10 +84,42 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
-variable "allow_scc_to_cos" {
+variable "allow_scc_wp_to_cos" {
   type        = bool
-  description = "Set rule for SCC (Security and Compliance Center) to COS, default is true"
+  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to COS, default is true"
   default     = true
+}
+
+variable "allow_scc_wp_to_appconfig" {
+  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to App Configuration, default is true"
+  type        = bool
+  default     = true
+}
+
+variable "appconfig_aggregator_service_access" {
+  description = "Set rule for App Configuration to list of services supported by configuration aggregator, default is true. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator) but CBR rule will only be created for the CBR supported services and service references in cbr zone are not supported for databases."
+  type        = map(bool)
+  default = {
+    cloud-object-storage     = true
+    is                       = true
+    secrets-manager          = true
+    IAM                      = true
+    kms                      = true
+    container-registry       = true
+    codeengine               = true
+    dns-svcs                 = true
+    messagehub               = true
+    transit                  = true
+    schematics               = true
+    sysdig-monitor           = true
+    sysdig-secure            = true
+    hs-crypto                = true
+    apprapp                  = true
+    globalcatalog-collection = true
+    event-notifications      = true
+    atracker                 = true
+    logs                     = true
+  }
 }
 
 variable "zone_service_ref_list" {
@@ -193,11 +229,6 @@ variable "zone_service_ref_list" {
       serviceRef_location = optional(list(string))
     }))
 
-    compliance = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
     event-notifications = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
@@ -209,11 +240,6 @@ variable "zone_service_ref_list" {
     }))
 
     logdnaat = optional(object({
-      zone_name           = optional(string)
-      serviceRef_location = optional(list(string))
-    }))
-
-    cloudantnosqldb = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
     }))
@@ -238,15 +264,18 @@ variable "zone_service_ref_list" {
       serviceRef_location = optional(list(string))
     }))
 
+    logs = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
   })
 
   validation {
     condition = alltrue([
       for item in ["directlink", "globalcatalog-collection", "iam-groups", "platform_service", "user-management"] :
       contains(keys(var.zone_service_ref_list), item) ?
-      (var.zone_service_ref_list[item] == null ||
-        (var.zone_service_ref_list[item] != null ? (var.zone_service_ref_list[item].serviceRef_location == null || try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 ? true : false) : true) ||
-      contains(var.skip_specific_services_for_zone_creation, item)) :
+      ((var.zone_service_ref_list[item] != null ? (var.zone_service_ref_list[item].serviceRef_location == null || try(length(var.zone_service_ref_list[item].serviceRef_location), 0) == 0 ? true : false) : true)) :
       true
     ])
     error_message = "Error: The services 'directlink', 'globalcatalog-collection', 'iam-groups', 'platform_service' and 'user-management' must not specify a serviceRef_location."
@@ -271,26 +300,19 @@ variable "custom_rule_contexts_by_service" {
 
   validation {
     condition = alltrue([
-      for service_target in keys(var.custom_rule_contexts_by_service) : contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_target)
+      for service_target in keys(var.custom_rule_contexts_by_service) : contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_target)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
 
   validation {
     condition = alltrue(flatten([
-      for key, val in var.custom_rule_contexts_by_service :
-      [for rule in val : [
-        for ref in rule.service_ref_names : contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-          "containers-kubernetes-cluster", "containers-kubernetes-management",
-          "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-          "databases-for-etcd", "databases-for-mongodb",
-          "databases-for-mysql", "databases-for-postgresql",
-          "databases-for-redis", "directlink",
-          "iam-groups", "is", "messagehub",
-          "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-          "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-          "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"],
-      ref)]]
+      for key, val in var.custom_rule_contexts_by_service : [
+        for rule in val : [
+          for ref in rule.service_ref_names :
+          contains(keys(var.zone_service_ref_list), ref)
+        ]
+      ]
     ]))
     error_message = "Provide a valid service reference for zone creation"
   }
@@ -321,7 +343,7 @@ variable "target_service_details" {
   validation {
     condition = alltrue([
       for target_service_name, _ in var.target_service_details :
-      contains(["apprapp", "atracker", "cloud-object-storage", "codeengine", "codeengine-platform", "codeengine-service-control-plane", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "ghost-tags", "globalcatalog-collection", "hs-crypto", "IAM", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
+      contains(["apprapp", "atracker", "cloud-object-storage", "codeengine", "codeengine-platform", "codeengine-service-control-plane", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "ghost-tags", "globalcatalog-collection", "hs-crypto", "IAM", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], target_service_name)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
@@ -363,18 +385,12 @@ variable "existing_serviceref_zone" {
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
   validation {
-    condition = alltrue([
-      for key, _ in var.existing_serviceref_zone :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], key)
-    ])
+    condition = alltrue(
+      [
+        for key, _ in var.existing_serviceref_zone :
+        contains(keys(var.zone_service_ref_list), key)
+      ]
+    )
     error_message = "Provide a valid service reference"
   }
   description = "Provide a valid service reference and existing zone id"
@@ -399,15 +415,7 @@ variable "skip_specific_services_for_zone_creation" {
   validation {
     condition = alltrue([
       for service_ref in var.skip_specific_services_for_zone_creation :
-      contains(["cloud-object-storage", "codeengine", "containers-kubernetes",
-        "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb",
-        "databases-for-etcd", "databases-for-mongodb",
-        "databases-for-mysql", "databases-for-postgresql",
-        "databases-for-redis", "directlink",
-        "iam-groups", "is", "messagehub",
-        "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
-      "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
+      contains(keys(var.zone_service_ref_list), service_ref)
     ])
     error_message = "Provide a valid service reference for zone creation"
   }
