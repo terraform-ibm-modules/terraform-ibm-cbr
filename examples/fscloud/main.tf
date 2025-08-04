@@ -154,6 +154,7 @@ module "cbr_account_level" {
     }]
   })
 
+  # The full list of services can be found here- https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator
   appconfig_aggregator_service_access = {
     cloud-object-storage     = true # Enable flow from App Configuration -> Cloud Object Storage
     is                       = false
