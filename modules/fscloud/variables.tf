@@ -97,7 +97,7 @@ variable "allow_scc_wp_to_appconfig" {
 }
 
 variable "appconfig_aggregator_service_access" {
-  description = "Set rule for App Configuration to list of services supported by configuration aggregator, default is true. Full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator) but CBR rule will only be created for the CBR supported services and service references in cbr zone are not supported for databases."
+  description = "Set rule for App Configuration to a list of services supported by the configuration aggregator. The default is true. The full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). However, CBR rules will only be created for the CBR-supported services. Service references in the CBR zone are not supported for databases."
   type        = map(bool)
   default = {
     cloud-object-storage     = true
