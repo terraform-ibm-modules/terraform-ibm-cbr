@@ -37,7 +37,7 @@ variable "zone_service_ref_list" {
         "databases-for-redis", "directlink",
         "iam-groups", "is", "messagehub",
         "messages-for-rabbitmq", "schematics", "secrets-manager", "server-protect", "user-management",
-        "apprapp", "event-notifications", "logdna", "logdnaat",
+        "apprapp", "compliance", "event-notifications", "logdna", "logdnaat",
       "cloudantnosqldb", "globalcatalog-collection", "sysdig-monitor", "sysdig-secure", "toolchain"], service_ref)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions."

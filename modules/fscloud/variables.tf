@@ -84,14 +84,26 @@ variable "allow_is_to_cos" {
   default     = true
 }
 
+variable "allow_scc_to_cos" {
+  type        = bool
+  description = "Set rule for SCC (Security and Compliance Center) to COS, default is true"
+  default     = true
+}
+
 variable "allow_scc_wp_to_cos" {
   type        = bool
-  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to COS, default is true"
+  description = "Set rule for (SCC-WP) Security and Compliance Center Workload Protection to COS, default is true"
+  default     = true
+}
+
+variable "allow_scc_to_appconfig" {
+  description = "Set rule for SCC (Security and Compliance Center) to App Configuration, default is true"
+  type        = bool
   default     = true
 }
 
 variable "allow_scc_wp_to_appconfig" {
-  description = "Set rule for Security and Compliance Center Workload Protection (SCC-WP) to App Configuration, default is true"
+  description = "Set rule for (SCC-WP) Security and Compliance Center Workload Protection to App Configuration, default is true"
   type        = bool
   default     = true
 }
@@ -229,6 +241,11 @@ variable "zone_service_ref_list" {
       serviceRef_location = optional(list(string))
     }))
 
+    compliance = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
     event-notifications = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
@@ -240,6 +257,11 @@ variable "zone_service_ref_list" {
     }))
 
     logdnaat = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
+    cloudantnosqldb = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
     }))

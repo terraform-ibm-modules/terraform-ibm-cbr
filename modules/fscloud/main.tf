@@ -27,6 +27,9 @@ locals {
     "codeengine-service-control-plane" : {
       "enforcement_mode" : "report"
     },
+    "compliance" : {
+      "enforcement_mode" : "report"
+    },
     "container-registry" : {
       "enforcement_mode" : "report"
     },
@@ -248,6 +251,8 @@ locals {
   # tflint-ignore: terraform_naming_convention
   event_streams_cbr_zone_id = local.cbr_zones["messagehub"].zone_id
   # tflint-ignore: terraform_naming_convention
+  scc_cbr_zone_id = local.cbr_zones["compliance"].zone_id
+  # tflint-ignore: terraform_naming_convention
   scc_wp_cbr_zone_id = local.cbr_zones["sysdig-secure"].zone_id
 
   base_prewired_configs = merge({
@@ -269,7 +274,7 @@ locals {
         var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
       ])
     }] }, {
-    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
+    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center (SCC) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
@@ -280,6 +285,7 @@ locals {
       networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
+        var.allow_scc_to_cos ? [local.scc_cbr_zone_id] : [],
         var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : []
       ])
     }] }, {
@@ -313,10 +319,11 @@ locals {
       ])
     }]
     }, {
-    # Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
+    # Security and Compliance Center (SCC) -> App Configuration, Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
     "apprapp" : [{
       endpointType : "private",
       networkZoneIds : flatten([
+        var.allow_scc_to_appconfig ? [local.scc_cbr_zone_id] : [],
         var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : []
       ])
     }]
