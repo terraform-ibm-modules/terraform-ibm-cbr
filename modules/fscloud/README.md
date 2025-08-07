@@ -12,7 +12,6 @@ This module creates default coarse-grained CBR rules in a given account followin
 - Activity Tracker route -> Cloud Object Storage (COS)
 - IBM Cloud VPC Infrastructure Services (IS) -> Cloud Object Storage (COS)
 - Security and Compliance Center (SCC) -> Cloud Object Storage (COS)
-- Security and Compliance Center Workload Protection (SCC-WP) -> Cloud Object Storage (COS)
 - Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
 - IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
 - Security and Compliance Center (SCC) -> App Configuration
@@ -130,7 +129,6 @@ module "cbr_fscloud" {
 | <a name="input_allow_scc_to_appconfig"></a> [allow\_scc\_to\_appconfig](#input\_allow\_scc\_to\_appconfig) | Set rule for SCC (Security and Compliance Center) to App Configuration, default is true | `bool` | `true` | no |
 | <a name="input_allow_scc_to_cos"></a> [allow\_scc\_to\_cos](#input\_allow\_scc\_to\_cos) | Set rule for SCC (Security and Compliance Center) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_scc_wp_to_appconfig"></a> [allow\_scc\_wp\_to\_appconfig](#input\_allow\_scc\_wp\_to\_appconfig) | Set rule for (SCC-WP) Security and Compliance Center Workload Protection to App Configuration, default is true | `bool` | `true` | no |
-| <a name="input_allow_scc_wp_to_cos"></a> [allow\_scc\_wp\_to\_cos](#input\_allow\_scc\_wp\_to\_cos) | Set rule for (SCC-WP) Security and Compliance Center Workload Protection to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_iam_access_management"></a> [allow\_vpcs\_to\_iam\_access\_management](#input\_allow\_vpcs\_to\_iam\_access\_management) | Set rule for VPCs to IAM access management, default is true | `bool` | `true` | no |

@@ -90,12 +90,6 @@ variable "allow_scc_to_cos" {
   default     = true
 }
 
-variable "allow_scc_wp_to_cos" {
-  type        = bool
-  description = "Set rule for (SCC-WP) Security and Compliance Center Workload Protection to COS, default is true"
-  default     = true
-}
-
 variable "allow_scc_to_appconfig" {
   description = "Set rule for SCC (Security and Compliance Center) to App Configuration, default is true"
   type        = bool

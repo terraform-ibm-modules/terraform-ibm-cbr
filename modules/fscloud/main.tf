@@ -285,8 +285,7 @@ locals {
       networkZoneIds : flatten([
         var.allow_at_to_cos ? [local.logdnaat_cbr_zone_id] : [],
         var.allow_is_to_cos ? [local.is_cbr_zone_id] : [],
-        var.allow_scc_to_cos ? [local.scc_cbr_zone_id] : [],
-        var.allow_scc_wp_to_cos ? [local.scc_wp_cbr_zone_id] : []
+        var.allow_scc_to_cos ? [local.scc_cbr_zone_id] : []
       ])
     }] }, {
     # VPCs -> Container Registry
