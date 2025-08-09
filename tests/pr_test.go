@@ -328,7 +328,7 @@ func TestFSCloudInSchematics(t *testing.T) {
 		{Name: "region", Value: options.Region, DataType: "string"},
 	}
 
-	err := options.RunSchematicTest()
+	err := options.RunSchematicUpgradeTest()
 	assert.Nil(t, err, "This should not have errored")
 }
 
