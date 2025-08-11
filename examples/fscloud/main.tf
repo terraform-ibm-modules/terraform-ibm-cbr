@@ -19,7 +19,7 @@ module "key_protect_module" {
   key_protect_name  = "${var.prefix}-key-protect-instance"
   resource_group_id = module.resource_group.resource_group_id
   region            = var.region
-  allowed_network   = "private-only" # or "public-and-private"
+  allowed_network   = "private-only"
   plan              = "tiered-pricing"
 }
 
@@ -88,7 +88,7 @@ module "cbr_account_level" {
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
     "databases-for-postgresql" = {
-      "enforcement_mode" = "disabled"
+      "enforcement_mode" = "disabled" # Report-only is not available for Cloud Databases.
       "target_rg"        = module.resource_group.resource_group_id
     }
     "messagehub" = {
@@ -118,7 +118,6 @@ module "cbr_account_level" {
     cloud-object-storage = {
       zone_name = "${var.prefix}-COS-zone-example-of-customized-zone-name"
     }
-    apprapp = {},
     event-notifications = {
       zone_name = "${var.prefix}-event-notifications-zone"
     },

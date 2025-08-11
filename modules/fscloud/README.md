@@ -14,8 +14,8 @@ This module creates default coarse-grained CBR rules in a given account followin
 - Security and Compliance Center (SCC) -> Cloud Object Storage (COS)
 - Virtual Private Clouds (VPCs) workload (eg: Kubernetes worker nodes) -> IBM Cloud Container Registry
 - IBM Cloud Kubernetes Service (IKS) -> VPC Infrastructure Services (IS)
-- Security and Compliance Center (SCC) -> App Configuration
 - Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
+- Security and Compliance Center Workload Protection (SCC-WP) -> Cloud Monitoring
 - App Configuration -> List of services supported by configuration aggregator services
 
 **Note on KMS**: the module supports setting up rules for Key Protect, and Hyper Protect Crypto Services. By default the modules set rules for Hyper Protect Crypto Services, but this can be modified to use Key Protect, Hyper Protect, or both Key Protect and Hyper Protect Crypto Services using the input variable `kms_service_targeted_by_prewired_rules`.
@@ -126,9 +126,9 @@ module "cbr_fscloud" {
 | <a name="input_allow_iks_to_is"></a> [allow\_iks\_to\_is](#input\_allow\_iks\_to\_is) | Set rule for IKS to IS (VPC Infrastructure Services), default is true | `bool` | `true` | no |
 | <a name="input_allow_is_to_cos"></a> [allow\_is\_to\_cos](#input\_allow\_is\_to\_cos) | Set rule for IS (VPC Infrastructure Services) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_roks_to_kms"></a> [allow\_roks\_to\_kms](#input\_allow\_roks\_to\_kms) | Set rule for ROKS to KMS, default is true | `bool` | `true` | no |
-| <a name="input_allow_scc_to_appconfig"></a> [allow\_scc\_to\_appconfig](#input\_allow\_scc\_to\_appconfig) | Set rule for SCC (Security and Compliance Center) to App Configuration, default is true | `bool` | `true` | no |
 | <a name="input_allow_scc_to_cos"></a> [allow\_scc\_to\_cos](#input\_allow\_scc\_to\_cos) | Set rule for SCC (Security and Compliance Center) to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_scc_wp_to_appconfig"></a> [allow\_scc\_wp\_to\_appconfig](#input\_allow\_scc\_wp\_to\_appconfig) | Set rule for (SCC-WP) Security and Compliance Center Workload Protection to App Configuration, default is true | `bool` | `true` | no |
+| <a name="input_allow_scc_wp_to_cloud_monitoring"></a> [allow\_scc\_wp\_to\_cloud\_monitoring](#input\_allow\_scc\_wp\_to\_cloud\_monitoring) | Set rule for (SCC-WP) Security and Compliance Center Workload Protection to Cloud Monitoring, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_container_registry"></a> [allow\_vpcs\_to\_container\_registry](#input\_allow\_vpcs\_to\_container\_registry) | Set rule for VPCs to container registry, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_cos"></a> [allow\_vpcs\_to\_cos](#input\_allow\_vpcs\_to\_cos) | Set rule for VPCs to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_vpcs_to_iam_access_management"></a> [allow\_vpcs\_to\_iam\_access\_management](#input\_allow\_vpcs\_to\_iam\_access\_management) | Set rule for VPCs to IAM access management, default is true | `bool` | `true` | no |

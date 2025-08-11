@@ -274,7 +274,7 @@ locals {
         var.allow_event_streams_to_kms ? [local.event_streams_cbr_zone_id] : []
       ])
     }] }, {
-    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center (SCC) -> COS, Security and Compliance Center Workload Protection (SCC-WP) -> COS
+    # Fs VPCs -> COS, AT -> COS, VPC Infrastructure Services (IS) -> COS, Security and Compliance Center (SCC) -> COS
     "cloud-object-storage" : [{
       endpointType : "direct",
       networkZoneIds : flatten([
@@ -318,12 +318,19 @@ locals {
       ])
     }]
     }, {
-    # Security and Compliance Center (SCC) -> App Configuration, Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
+    # Security and Compliance Center Workload Protection (SCC-WP) -> App Configuration
     "apprapp" : [{
       endpointType : "private",
       networkZoneIds : flatten([
-        var.allow_scc_to_appconfig ? [local.scc_cbr_zone_id] : [],
         var.allow_scc_wp_to_appconfig ? [local.scc_wp_cbr_zone_id] : []
+      ])
+    }]
+    }, {
+    # Security and Compliance Center Workload Protection (SCC-WP) -> Cloud Monitoring
+    "sysdig-monitor" : [{
+      endpointType : "private",
+      networkZoneIds : flatten([
+        var.allow_scc_wp_to_cloud_monitoring ? [local.scc_wp_cbr_zone_id] : []
       ])
     }]
     }

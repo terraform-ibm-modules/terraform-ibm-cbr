@@ -89,18 +89,18 @@ variable "allow_scc_to_cos" {
   description = "Set rule for SCC (Security and Compliance Center) to COS, default is true"
   default     = true
 }
-
-variable "allow_scc_to_appconfig" {
-  description = "Set rule for SCC (Security and Compliance Center) to App Configuration, default is true"
-  type        = bool
-  default     = true
-}
-
 variable "allow_scc_wp_to_appconfig" {
   description = "Set rule for (SCC-WP) Security and Compliance Center Workload Protection to App Configuration, default is true"
   type        = bool
   default     = true
 }
+
+variable "allow_scc_wp_to_cloud_monitoring" {
+  description = "Set rule for (SCC-WP) Security and Compliance Center Workload Protection to Cloud Monitoring, default is true"
+  type        = bool
+  default     = true
+}
+
 
 variable "appconfig_aggregator_service_access" {
   description = "Set rule for App Configuration to a list of services supported by the configuration aggregator. The default is true. The full list of services can be found [here](https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator). However, CBR rules will only be created for the CBR-supported services. Service references in the CBR zone are not supported for databases."
