@@ -328,8 +328,10 @@ func TestFSCloudInSchematics(t *testing.T) {
 		{Name: "region", Value: options.Region, DataType: "string"},
 	}
 
-	err := options.RunSchematicTest()
-	assert.Nil(t, err, "This should not have errored")
+	err := options.RunSchematicUpgradeTest()
+	if !options.UpgradeTestSkipped {
+		assert.Nil(t, err, "This should not have errored")
+	}
 }
 
 func TestRunUpdateCBRZone(t *testing.T) {
@@ -344,22 +346,6 @@ func TestRunUpdateCBRZone(t *testing.T) {
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
-}
-
-func TestRunUpgradeExample(t *testing.T) {
-	t.Parallel()
-
-	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:      t,
-		TerraformDir: zoneExampleTerraformDir,
-		Prefix:       "cbr-upg",
-	})
-
-	output, err := options.RunTestUpgrade()
-	if !options.UpgradeTestSkipped {
-		assert.Nil(t, err, "This should not have errored")
-		assert.NotNil(t, output, "Expected some output")
-	}
 }
 
 func TestFullyConfigurableDAInSchematics(t *testing.T) {

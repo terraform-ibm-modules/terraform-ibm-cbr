@@ -78,22 +78,22 @@ module "cbr_account_level" {
     "kms" = {
       # Demonstrates how a customized CBR description (also seen as being the rule name) can be set
       "description"      = "kms-rule-example-of-customized-description"
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "report"
       "instance_id"      = module.key_protect_module.key_protect_guid
       "target_rg"        = module.resource_group.resource_group_id
       "global_deny"      = false # opting out from creating a new global rule
     }
     "cloud-object-storage" = {
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "report"
       "global_deny"      = false # mandatory to set 'global_deny = false' when no scope is defined
     }
     "databases-for-postgresql" = {
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "disabled" # Report-only is not available for Cloud Databases.
       "target_rg"        = module.resource_group.resource_group_id
     }
     "messagehub" = {
       # As the service is scoped, a new global rule will also get created
-      "enforcement_mode" = "enabled"
+      "enforcement_mode" = "report"
       "target_rg"        = module.resource_group.resource_group_id
     }
     "IAM" : {
@@ -101,7 +101,7 @@ module "cbr_account_level" {
       "global_deny"      = false
     }
     "container-registry" : {
-      "enforcement_mode" : "enabled"
+      "enforcement_mode" : "report"
       "geography" : "global"
     }
   }
@@ -118,6 +118,9 @@ module "cbr_account_level" {
     cloud-object-storage = {
       zone_name = "${var.prefix}-COS-zone-example-of-customized-zone-name"
     }
+    event-notifications = {
+      zone_name = "${var.prefix}-event-notifications-zone"
+    },
   }
 
   # Demonstrates how additional context to the rules created by this module can be added.
@@ -149,6 +152,29 @@ module "cbr_account_level" {
       zone_ids = [module.cbr_zone_operator_ips.zone_id]
     }]
   })
+
+  # The full list of services can be found here- https://cloud.ibm.com/docs/app-configuration?topic=app-configuration-ac-configuration-aggregator#ac-list-of-services-configaggregator
+  appconfig_aggregator_service_access = {
+    cloud-object-storage     = true # Enable flow from App Configuration -> Cloud Object Storage
+    is                       = false
+    secrets-manager          = false
+    IAM                      = true # Enable flow from App Configuration -> All IAM Account Management services
+    kms                      = true # Enable flow from App Configuration -> Key Protect
+    container-registry       = false
+    codeengine               = false
+    dns-svcs                 = true # Enable flow from App Configuration -> DNS services
+    messagehub               = false
+    transit                  = false
+    schematics               = false
+    sysdig-monitor           = false
+    sysdig-secure            = false
+    hs-crypto                = false
+    apprapp                  = false
+    globalcatalog-collection = false
+    event-notifications      = false
+    atracker                 = false
+    logs                     = true # Enable flow from App Configuration -> Cloud Logs
+  }
 }
 
 ## Example of zone using ip addresses, and reference in one of the zone created by the cbr_account_level above.
