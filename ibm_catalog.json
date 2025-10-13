@@ -89,7 +89,7 @@
               {
                 "diagram": {
                   "caption": "Context Based Restrictions",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cbr/refs/heads/main/reference-architecture/cbr.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-cbr/refs/heads/main/reference-architectures/cbr.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture supports creating and configuring Context Based Restrictions rules and network zones."
