@@ -21,12 +21,12 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
     * [cbr-zone-module](./modules/cbr-zone-module)
     * [fscloud](./modules/fscloud)
 * [Examples](./examples)
-    * [CBR multi service profile](./examples/multi-service-profile)
-    * [Multi resource rule example](./examples/multi-resource-rule)
-    * [Multi-zone example](./examples/multizone-rule)
-    * [Pre-wired CBR configuration for FS Cloud example](./examples/fscloud)
-    * [Zone example](./examples/update-existing-zone-addresses)
-    * [Zone example](./examples/zone)
+    * <div style="display: inline-block;"><a href="./examples/fscloud">Pre-wired CBR configuration for FS Cloud example</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-fscloud-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/fscloud" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
+    * <div style="display: inline-block;"><a href="./examples/multi-resource-rule">Multi resource rule example</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-multi-resource-rule-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-resource-rule" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
+    * <div style="display: inline-block;"><a href="./examples/multi-service-profile">CBR multi service profile</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-multi-service-profile-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-service-profile" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
+    * <div style="display: inline-block;"><a href="./examples/multizone-rule">Multi-zone example</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-multizone-rule-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multizone-rule" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
+    * <div style="display: inline-block;"><a href="./examples/update-existing-zone-addresses">Zone example</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-update-existing-zone-addresses-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/update-existing-zone-addresses" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
+    * <div style="display: inline-block;"><a href="./examples/zone">Zone example</a></div> <div style="display: inline-block; vertical-align: middle;"><a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=c-zone-example&repository=github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/zone" target="_blank"><img src="https://cloud.ibm.com/media/docs/images/icons/Deploy_to_cloud.svg" alt="Deploy to IBM Cloud button"></a></div>
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
