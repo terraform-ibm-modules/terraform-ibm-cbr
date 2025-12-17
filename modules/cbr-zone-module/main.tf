@@ -32,10 +32,10 @@ resource "ibm_cbr_zone" "cbr_zone" {
 
   dynamic "excluded" {
     for_each = var.excluded_addresses
-    iterator = excluded_addres
+    iterator = excluded_address
     content {
-      type  = excluded_addres.value["type"]
-      value = excluded_addres.value["value"]
+      type  = excluded_address.value["type"]
+      value = excluded_address.value["value"]
     }
   }
 }

@@ -53,6 +53,7 @@
         {
           "label": "Fully configurable",
           "name": "fully-configurable",
+          "short_description": "Ideal for users looking to automate the configuration of Context Based Restrictions Network Zones and Rules.",
           "index": 1,
           "install_type": "fullstack",
           "working_directory": "solutions/fully-configurable",
@@ -76,12 +77,32 @@
               ]
             },
             {
-              "key": "cbr_zones",
-              "required": true
+              "key": "cbr_rules",
+              "type": "array",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
             },
             {
-              "key": "cbr_rules",
-              "required": true
+              "key": "cbr_zones",
+              "type": "array",
+              "custom_config": {
+                "type": "code_editor",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
+                }
+              }
             }
           ],
           "iam_permissions": [
