@@ -191,7 +191,7 @@ module "cbr_zone_operator_ips" {
 }
 
 ## Examples of data lookup on objects (zone, rule) created by the fscloud profile module
-## Get rule targetting "event-notification"
+## Get rule targeting "event-notification"
 data "ibm_cbr_rule" "event_notification_rule" {
   rule_id = module.cbr_account_level.map_target_service_rule_ids["event-notifications"].rule_id
 }
