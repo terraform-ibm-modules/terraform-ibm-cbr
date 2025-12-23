@@ -340,7 +340,7 @@ variable "custom_rule_contexts_by_service" {
     ]))
     error_message = "Value should be a valid zone id with 32 alphanumeric characters"
   }
-  description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targetting the service passed as a key. The module looks up the zone id when service_ref_names or add_managed_vpc_zone are passed in."
+  description = "Any additional context to add to the CBR rules created by this module. The context are added to the CBR rule targeting the service passed as a key. The module looks up the zone id when service_ref_names or add_managed_vpc_zone are passed in."
   default     = {}
 }
 variable "target_service_details" {
