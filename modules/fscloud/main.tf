@@ -403,17 +403,26 @@ locals {
     service_name => flatten([lookup(local.deny_rule_context_by_service, service_name, []), lookup(local.prewired_rule_contexts_by_service_check, service_name, []), lookup(local.custom_rule_contexts_by_service, service_name, [])])
   }
 
-  allow_rules_by_service = { for target_service_name, contexts in local.allow_rules_by_service_intermediary :
-    target_service_name => [for context in contexts : { attributes = [
-      {
-        "name" : "endpointType",
-        "value" : context.endpointType
-      },
-      {
-        "name" : "networkZoneId",
-        "value" : join(",", context.networkZoneIds)
+  allow_rules_by_service = {
+    for target_service_name, contexts in local.allow_rules_by_service_intermediary :
+    target_service_name => [
+      for context in contexts : {
+        attributes = flatten([
+          [
+            {
+              "name" : "endpointType",
+              "value" : context.endpointType
+            }
+          ],
+          length(context.networkZoneIds) > 0 ? [
+            {
+              "name" : "networkZoneId",
+              "value" : join(",", context.networkZoneIds)
+            }
+          ] : []
+        ])
       }
-    ] }]
+    ]
   }
 
   # Some services have restrictions on the api types that can apply CBR - we codify this below
