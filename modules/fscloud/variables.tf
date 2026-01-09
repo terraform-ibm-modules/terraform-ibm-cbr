@@ -130,6 +130,11 @@ variable "appconfig_aggregator_service_access" {
 
 variable "zone_service_ref_list" {
   type = object({
+    atracker = optional(object({
+      zone_name           = optional(string)
+      serviceRef_location = optional(list(string))
+    }))
+
     cloud-object-storage = optional(object({
       zone_name           = optional(string)
       serviceRef_location = optional(list(string))
@@ -316,7 +321,7 @@ variable "custom_rule_contexts_by_service" {
 
   validation {
     condition = alltrue([
-      for service_target in keys(var.custom_rule_contexts_by_service) : contains(["IAM", "apprapp", "cloud-object-storage", "codeengine", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-cassandra", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "globalcatalog-collection", "hs-crypto", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logdna", "logdnaat", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_target)
+      for service_target in keys(var.custom_rule_contexts_by_service) : contains(["apprapp", "atracker", "cloud-object-storage", "codeengine", "codeengine-platform", "codeengine-service-control-plane", "compliance", "container-registry", "containers-kubernetes", "containers-kubernetes-cluster", "containers-kubernetes-management", "context-based-restrictions", "databases-for-elasticsearch", "databases-for-enterprisedb", "databases-for-etcd", "databases-for-mongodb", "databases-for-mysql", "databases-for-postgresql", "databases-for-redis", "directlink", "dns-svcs", "event-notifications", "ghost-tags", "globalcatalog-collection", "hs-crypto", "IAM", "iam-access-management", "iam-groups", "iam-identity", "is", "kms", "logs", "messagehub", "messages-for-rabbitmq", "mqcloud", "schematics", "secrets-manager", "sysdig-monitor", "sysdig-secure", "transit", "user-management"], service_target)
     ])
     error_message = "Provide a valid target service name that is supported by context-based restrictions"
   }
