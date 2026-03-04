@@ -79,7 +79,6 @@
             },
             {
               "key": "cbr_rules",
-              "type": "array",
               "custom_config": {
                 "type": "code_editor",
                 "grouping": "deployment",
@@ -93,7 +92,6 @@
             },
             {
               "key": "cbr_zones",
-              "type": "array",
               "custom_config": {
                 "type": "code_editor",
                 "grouping": "deployment",
