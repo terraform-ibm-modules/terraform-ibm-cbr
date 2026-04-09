@@ -1,12 +1,10 @@
 package test
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
-)
-
-import (
-	"testing"
 )
 
 const multiResourceTerraformDir = "examples/multi-resource-rule"
