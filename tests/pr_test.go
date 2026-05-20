@@ -2,6 +2,7 @@
 package test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -59,7 +60,7 @@ func TestRunZoneExample(t *testing.T) {
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
 
-	outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+	outputs := terraform.OutputAllContext(options.Testing, context.Background(), options.TerraformOptions)
 
 	zone, err := cloudInfoSvc.GetCBRZoneByID(outputs["zone_id"].(string))
 	assert.Nilf(t, err, "This should not have errored, could not get zone")
@@ -117,7 +118,7 @@ func TestRunCompleteExample(t *testing.T) {
 		if assert.Nil(t, err, "This should not have errored") &&
 			assert.NotNil(t, output, "Expected some output") {
 
-			outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+			outputs := terraform.OutputAllContext(options.Testing, context.Background(), options.TerraformOptions)
 			expectedOutputs := []string{"rule_id", "zone_id", "account_id", "cos_guid", "resource_group_id"}
 			_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 			if assert.NoErrorf(t, outputErr, "Some outputs not found or nil") {
@@ -221,7 +222,7 @@ func TestMultiServiceProfileExample(t *testing.T) {
 	if assert.Nil(t, err, "This should not have errored") &&
 		assert.NotNil(t, output, "Expected some output") {
 
-		outputs := terraform.OutputAll(options.Testing, options.TerraformOptions)
+		outputs := terraform.OutputAllContext(options.Testing, context.Background(), options.TerraformOptions)
 		expectedOutputs := []string{"rule_ids", "zone_ids", "account_id"}
 		_, outputErr := testhelper.ValidateTerraformOutputs(outputs, expectedOutputs...)
 		if assert.NoErrorf(t, outputErr, "Some outputs not found or nil") {
