@@ -17,46 +17,46 @@ See in particular the [fscloud module](./modules/fscloud/) that enables creating
 ## Overview
 <ul>
   <li><a href="#terraform-ibm-cbr">terraform-ibm-cbr</a></li>
-  <li><a href="./modules">Submodules</a>
+  <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/modules">Submodules</a>
     <ul>
-      <li><a href="./modules/cbr-rule-module">cbr-rule-module</a></li>
-      <li><a href="./modules/cbr-service-profile">cbr-service-profile</a></li>
-      <li><a href="./modules/cbr-zone-module">cbr-zone-module</a></li>
-      <li><a href="./modules/fscloud">fscloud</a></li>
+      <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/modules/cbr-rule-module">cbr-rule-module</a></li>
+      <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/modules/cbr-service-profile">cbr-service-profile</a></li>
+      <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/modules/cbr-zone-module">cbr-zone-module</a></li>
+      <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/modules/fscloud">fscloud</a></li>
     </ul>
   </li>
-  <li><a href="./examples">Examples</a>
+  <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples">Examples</a>
     <ul>
       <li>
-        <a href="./examples/fscloud">Pre-wired CBR configuration for FS Cloud example</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/fscloud">Pre-wired CBR configuration for FS Cloud example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-fscloud-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/fscloud"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="./examples/multi-resource-rule">Multi resource rule example</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-resource-rule">Multi resource rule example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-multi-resource-rule-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-resource-rule"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="./examples/multi-service-profile">CBR multi service profile</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-service-profile">CBR multi service profile</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-multi-service-profile-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multi-service-profile"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="./examples/multizone-rule">Multi-zone example</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multizone-rule">Multi-zone example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-multizone-rule-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/multizone-rule"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="./examples/update-existing-zone-addresses">Zone example</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/update-existing-zone-addresses">Zone example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-update-existing-zone-addresses-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/update-existing-zone-addresses"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
       <li>
-        <a href="./examples/zone">Zone example</a>
+        <a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/zone">Zone example</a>
         <a href="https://cloud.ibm.com/schematics/workspaces/create?workspace_name=cbr-zone-example&repository=https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/examples/zone"><img src="https://img.shields.io/badge/Deploy%20with%20IBM%20Cloud%20Schematics-0f62fe?style=flat&logo=ibm&logoColor=white&labelColor=0f62fe" alt="Deploy with IBM Cloud Schematics" style="height: 16px; vertical-align: text-bottom; margin-left: 5px;"></a>
       </li>
     </ul>
     ℹ️ Ctrl/Cmd+Click or right-click on the Schematics deploy button to open in a new tab.
   </li>
-  <li><a href="./solutions">Deployable Architectures</a>
+  <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions">Deployable Architectures</a>
     <ul>
-      <li><a href="./solutions/fully-configurable">Cloud automation for Context Based Restrictions (Fully configurable)</a></li>
+      <li><a href="https://github.com/terraform-ibm-modules/terraform-ibm-cbr/tree/main/solutions/fully-configurable">Cloud automation for Context Based Restrictions (Fully configurable)</a></li>
     </ul>
   </li>
   <li><a href="#contributing">Contributing</a></li>
