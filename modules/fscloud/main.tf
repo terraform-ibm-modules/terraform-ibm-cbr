@@ -81,9 +81,6 @@ locals {
     "globalcatalog-collection" : {
       "enforcement_mode" : "report"
     },
-    "hs-crypto" : {
-      "enforcement_mode" : "report"
-    },
     "IAM" : {
       "enforcement_mode" : "report"
     },
@@ -145,6 +142,26 @@ locals {
     ) if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
 
+}
+
+###############################################################################
+# HPCS deprecation warnings
+# check blocks emit a WARNING (not an error) and allow the module to continue,
+# so existing HPCS users can proceed while being prompted to migrate to KP.
+###############################################################################
+
+check "hpcs_kms_service_targeted_deprecation_warning" {
+  assert {
+    condition     = !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto")
+    error_message = "WARNING: 'hs-crypto' (Hyper Protect Crypto Services) is deprecated in 'kms_service_targeted_by_prewired_rules'. Please migrate to Key Protect ('key-protect'). HPCS support will be removed in a future release."
+  }
+}
+
+check "hpcs_appconfig_aggregator_deprecation_warning" {
+  assert {
+    condition     = !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
+    error_message = "WARNING: 'hs-crypto' is enabled in 'appconfig_aggregator_service_access'. Hyper Protect Crypto Services is deprecated. Please set 'hs-crypto' to false and use Key Protect ('kms') instead. HPCS support will be removed in a future release."
+  }
 }
 
 ###############################################################################

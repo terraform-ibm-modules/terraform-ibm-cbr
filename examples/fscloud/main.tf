@@ -62,8 +62,9 @@ module "cbr_account_level" {
   source            = "../../modules/fscloud"
   prefix            = var.prefix
   zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
-  # Demonstrates how to target either key-protect, hpcs, or both. Both in this fictional example.
-  kms_service_targeted_by_prewired_rules = ["key-protect", "hs-crypto"]
+  # Targets Key Protect for prewired CBR rules (default). Pass ["hs-crypto"] or ["key-protect", "hs-crypto"]
+  # if HPCS is required — a deprecation warning will be emitted but the module will continue.
+  kms_service_targeted_by_prewired_rules = ["key-protect"]
 
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
   skip_specific_services_for_zone_creation = ["user-management", "iam-groups"]
@@ -168,7 +169,7 @@ module "cbr_account_level" {
     schematics               = false
     sysdig-monitor           = false
     sysdig-secure            = false
-    hs-crypto                = false
+    hs-crypto                = false # deprecated — set to true only if HPCS is still required (emits a deprecation warning)
     apprapp                  = false
     globalcatalog-collection = false
     event-notifications      = false

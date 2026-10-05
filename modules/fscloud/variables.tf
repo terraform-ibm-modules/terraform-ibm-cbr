@@ -119,7 +119,6 @@ variable "appconfig_aggregator_service_access" {
     schematics               = true
     sysdig-monitor           = true
     sysdig-secure            = true
-    hs-crypto                = true
     apprapp                  = true
     globalcatalog-collection = true
     event-notifications      = true
@@ -446,12 +445,12 @@ variable "skip_specific_services_for_zone_creation" {
 
 variable "kms_service_targeted_by_prewired_rules" {
   type        = list(string)
-  description = "IBM Cloud offers two distinct Key Management Services (KMS): Key Protect and Hyper Protect Crypto Services (HPCS). This variable determines the specific KMS service to which the pre-configured rules will be applied. Use the value 'key-protect' to specify the Key Protect service, and 'hs-crypto' for the Hyper Protect Crypto Services (HPCS)."
-  default     = ["hs-crypto"]
+  description = "IBM Cloud offers two distinct Key Management Services (KMS): Key Protect and Hyper Protect Crypto Services (HPCS). This variable determines the specific KMS service to which the pre-configured rules will be applied. Use the value 'key-protect' to specify the Key Protect service, and 'hs-crypto' for the Hyper Protect Crypto Services (HPCS). Note: HPCS ('hs-crypto') is deprecated. If 'hs-crypto' is provided, a warning is emitted but the module continues."
+  default     = ["key-protect"]
   validation {
     condition = alltrue([
       for key_protect_val in var.kms_service_targeted_by_prewired_rules : can(regex("^(key-protect|hs-crypto)$", key_protect_val))
     ])
-    error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS"
+    error_message = "Valid values for kms are 'key-protect' for Key Protect and 'hs-crypto' for HPCS."
   }
 }
