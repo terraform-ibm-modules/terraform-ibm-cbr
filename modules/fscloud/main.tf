@@ -81,6 +81,9 @@ locals {
     "globalcatalog-collection" : {
       "enforcement_mode" : "report"
     },
+    "hs-crypto" : {
+      "enforcement_mode" : "report"
+    },
     "IAM" : {
       "enforcement_mode" : "report"
     },
@@ -145,22 +148,20 @@ locals {
 }
 
 ###############################################################################
-# HPCS deprecation warnings
-# check blocks emit a WARNING (not an error) and allow the module to continue,
-# so existing HPCS users can proceed while being prompted to migrate to KP.
+# HPCS Deprecation Warning Check
 ###############################################################################
 
-check "hpcs_kms_service_targeted_deprecation_warning" {
+check "warn_hs_crypto_kms_service" {
   assert {
     condition     = !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto")
-    error_message = "WARNING: 'hs-crypto' (Hyper Protect Crypto Services) is deprecated in 'kms_service_targeted_by_prewired_rules'. Please migrate to Key Protect ('key-protect'). HPCS support will be removed in a future release."
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) service was provided in 'kms_service_targeted_by_prewired_rules'. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
   }
 }
 
-check "hpcs_appconfig_aggregator_deprecation_warning" {
+check "warn_hs_crypto_appconfig" {
   assert {
     condition     = !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
-    error_message = "WARNING: 'hs-crypto' is enabled in 'appconfig_aggregator_service_access'. Hyper Protect Crypto Services is deprecated. Please set 'hs-crypto' to false and use Key Protect ('kms') instead. HPCS support will be removed in a future release."
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) service was provided in 'appconfig_aggregator_service_access'. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
   }
 }
 
