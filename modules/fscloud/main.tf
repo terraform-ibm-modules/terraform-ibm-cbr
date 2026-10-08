@@ -106,7 +106,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "messagehub" : {
-      "enforcement_mode" : "report"
+      "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {
       "enforcement_mode" : "disabled"

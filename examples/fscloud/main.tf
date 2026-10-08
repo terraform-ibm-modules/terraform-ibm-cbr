@@ -93,7 +93,7 @@ module "cbr_account_level" {
     }
     "messagehub" = {
       # As the service is scoped, a new global rule will also get created
-      "enforcement_mode" = "report"
+      "enforcement_mode" = "disabled"
       "target_rg"        = module.resource_group.resource_group_id
     }
     "IAM" : {
