@@ -106,7 +106,7 @@ locals {
       "enforcement_mode" : "report"
     },
     "messagehub" : {
-      "enforcement_mode" : "report"
+      "enforcement_mode" : "disabled"
     },
     "messages-for-rabbitmq" : {
       "enforcement_mode" : "disabled"
@@ -145,6 +145,20 @@ locals {
     ) if !contains(var.skip_specific_services_for_zone_creation, service_ref)
   }
 
+}
+
+###############################################################################
+# HPCS Deprecation Warning Check
+###############################################################################
+
+check "warn_hpcs_deprecation" {
+  assert {
+    condition = (
+      !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto") &&
+      !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
+    )
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) instance or key CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
+  }
 }
 
 ###############################################################################
