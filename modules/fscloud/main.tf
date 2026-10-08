@@ -151,17 +151,13 @@ locals {
 # HPCS Deprecation Warning Check
 ###############################################################################
 
-check "warn_hs_crypto_kms_service" {
+check "warn_hpcs_deprecation" {
   assert {
-    condition     = !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto")
-    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) service was provided in 'kms_service_targeted_by_prewired_rules'. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
-  }
-}
-
-check "warn_hs_crypto_appconfig" {
-  assert {
-    condition     = !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
-    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) service was provided in 'appconfig_aggregator_service_access'. Note that IBM Cloud Hyper Protect Crypto Services is set to be deprecated soon. Consider migrating to a supported alternative."
+    condition = (
+      !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto") &&
+      !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
+    )
+    error_message = "WARNING (Non-fatal, execution will continue): An IBM Cloud Hyper Protect Crypto Services (hs-crypto) instance or key CRN was provided. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
   }
 }
 
