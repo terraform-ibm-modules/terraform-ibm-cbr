@@ -53,7 +53,7 @@ module "ibm_cbr" "rule" {
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.0, < 3.0.0 |
 
@@ -64,13 +64,13 @@ No modules.
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_cbr_rule.cbr_rule](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/cbr_rule) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_enforcement_mode"></a> [enforcement\_mode](#input\_enforcement\_mode) | (String) The rule enforcement mode | `string` | `"report"` | no |
 | <a name="input_operations"></a> [operations](#input\_operations) | (Optional, List) The operations this rule applies to, by default it will protect all of the service and platform APIs the target service supports. | <pre>list(object({<br/>    api_types = list(object({<br/>      api_type_id = string<br/>    }))<br/>  }))</pre> | <pre>[<br/>  {<br/>    "api_types": [<br/>      {<br/>        "api_type_id": "crn:v1:bluemix:public:context-based-restrictions::::api-type:"<br/>      }<br/>    ]<br/>  }<br/>]</pre> | no |
 | <a name="input_resources"></a> [resources](#input\_resources) | (List) The resources this rule apply to | <pre>list(object({<br/>    attributes = optional(list(object({<br/>      name     = string<br/>      value    = string<br/>      operator = optional(string)<br/>    })))<br/>    tags = optional(list(object({<br/>      name     = string<br/>      value    = string<br/>      operator = optional(string)<br/>    })))<br/>  }))</pre> | n/a | yes |
@@ -80,7 +80,7 @@ No modules.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule crn |
 | <a name="output_rule_description"></a> [rule\_description](#output\_rule\_description) | CBR rule description |
 | <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule href |

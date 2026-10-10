@@ -95,14 +95,14 @@ module "cbr_fscloud" {
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.79.0, < 3.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ../../modules/cbr-rule-module | n/a |
 | <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ../../modules/cbr-zone-module | n/a |
 | <a name="module_cbr_zone_vpcs"></a> [cbr\_zone\_vpcs](#module\_cbr\_zone\_vpcs) | ../../modules/cbr-zone-module | n/a |
@@ -111,13 +111,13 @@ module "cbr_fscloud" {
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_allow_at_to_cos"></a> [allow\_at\_to\_cos](#input\_allow\_at\_to\_cos) | Set rule for Activity Tracker to COS, default is true | `bool` | `true` | no |
 | <a name="input_allow_block_storage_to_kms"></a> [allow\_block\_storage\_to\_kms](#input\_allow\_block\_storage\_to\_kms) | Set rule for block storage to KMS, default is true | `bool` | `true` | no |
 | <a name="input_allow_cos_to_kms"></a> [allow\_cos\_to\_kms](#input\_allow\_cos\_to\_kms) | Set rule for COS to KMS, default is true | `bool` | `true` | no |
@@ -147,7 +147,7 @@ module "cbr_fscloud" {
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_account_id"></a> [account\_id](#output\_account\_id) | Account ID |
 | <a name="output_map_service_ref_name_zoneid"></a> [map\_service\_ref\_name\_zoneid](#output\_map\_service\_ref\_name\_zoneid) | Map of service reference and zone ids |
 | <a name="output_map_target_service_rule_ids"></a> [map\_target\_service\_rule\_ids](#output\_map\_target\_service\_rule\_ids) | Map of target service and rule ids |
