@@ -35,27 +35,27 @@ module "cbr_rule_multi_service_profile" {
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.0, < 3.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ../cbr-rule-module | n/a |
 | <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ../cbr-zone-module | n/a |
 
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_endpoints"></a> [endpoints](#input\_endpoints) | List specific endpoint types for target services, valid values for endpoints are 'public', 'private' or 'direct' | `list(string)` | <pre>[<br/>  "private"<br/>]</pre> | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Prefix to append to all vpc\_zone\_list, service\_ref\_zone\_list and cbr\_rule\_description created by this submodule | `string` | `"serviceprofile"` | no |
 | <a name="input_target_service_details"></a> [target\_service\_details](#input\_target\_service\_details) | (String) Details of the target service for which the rule has to be created | <pre>list(object({<br/>    target_service_name = string<br/>    target_rg           = optional(string)<br/>    enforcement_mode    = string<br/>    tags                = optional(list(string))<br/>  }))</pre> | n/a | yes |
@@ -65,7 +65,7 @@ module "cbr_rule_multi_service_profile" {
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_rule_crns"></a> [rule\_crns](#output\_rule\_crns) | CBR rule crn(s) |
 | <a name="output_rule_hrefs"></a> [rule\_hrefs](#output\_rule\_hrefs) | CBR rule href(s) |
 | <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | CBR rule id(s) |

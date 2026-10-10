@@ -135,27 +135,27 @@ You need the following permissions to run this module.
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.0, < 3.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | ./modules/cbr-rule-module | n/a |
 | <a name="module_cbr_zone"></a> [cbr\_zone](#module\_cbr\_zone) | ./modules/cbr-zone-module | n/a |
 
 ### Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_addresses"></a> [addresses](#input\_addresses) | (List) The list of addresses in the zone | <pre>list(object({<br/>    type  = optional(string)<br/>    value = optional(string)<br/>    ref = optional(object({<br/>      account_id       = string<br/>      location         = optional(string)<br/>      service_instance = optional(string)<br/>      service_name     = optional(string)<br/>      service_type     = optional(string)<br/>    }))<br/>  }))</pre> | `[]` | no |
 | <a name="input_enforcement_mode"></a> [enforcement\_mode](#input\_enforcement\_mode) | (String) The rule enforcement mode | `string` | `"report"` | no |
 | <a name="input_excluded_addresses"></a> [excluded\_addresses](#input\_excluded\_addresses) | (Optional, List) The list of excluded addresses in the zone | <pre>list(object({<br/>    type  = optional(string)<br/>    value = optional(string)<br/>  }))</pre> | `[]` | no |
@@ -169,7 +169,7 @@ You need the following permissions to run this module.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_rule_crn"></a> [rule\_crn](#output\_rule\_crn) | CBR rule crn |
 | <a name="output_rule_href"></a> [rule\_href](#output\_rule\_href) | CBR rule href |
 | <a name="output_rule_id"></a> [rule\_id](#output\_rule\_id) | CBR rule id |
