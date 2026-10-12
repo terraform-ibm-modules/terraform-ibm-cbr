@@ -62,7 +62,7 @@ module "cbr_account_level" {
   source            = "../../modules/fscloud"
   prefix            = var.prefix
   zone_vpc_crn_list = [ibm_is_vpc.example_vpc.crn]
-  # Demonstrates how to target either key-protect, hpcs, or both. Both in this fictional example.
+  # Demonstrates how to target Key Protect for pre-wired rules
   kms_service_targeted_by_prewired_rules = ["key-protect"]
 
   # Demonstrates how zone creation will be skipped for these two service references ["user-management", "iam-groups"]
