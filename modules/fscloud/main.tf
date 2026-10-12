@@ -157,7 +157,7 @@ check "warn_hpcs_deprecation" {
       !contains(var.kms_service_targeted_by_prewired_rules, "hs-crypto") &&
       !lookup(var.appconfig_aggregator_service_access, "hs-crypto", false)
     )
-    error_message = "WARNING (Non-fatal, execution will continue): Hyper Protect Crypto Services (hs-crypto) is enabled in the configuration. IBM Cloud HPCS is deprecated. Consider migrating to Key Protect and disabling HPCS configuration."
+    error_message = "WARNING (Non-fatal, execution will continue): Hyper Protect Crypto Services (hs-crypto) is enabled in the configuration. Note that IBM Cloud Hyper Protect Crypto Services is deprecated. Consider migrating to a supported alternative."
   }
 }
 
