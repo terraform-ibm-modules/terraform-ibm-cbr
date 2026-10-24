@@ -53,7 +53,7 @@ module "cbr_zone_vpc" {
 
 module "cos_instance_and_bucket" {
   source                        = "terraform-ibm-modules/cos/ibm"
-  version                       = "11.1.4"
+  version                       = "11.1.5"
   resource_group_id             = module.resource_group.resource_group_id
   region                        = var.region
   create_cos_instance           = true
